@@ -26,7 +26,7 @@ dQuery = (function() {
 
   dQuery.prototype.triggers = [];
 
-  dQuery.prototype.events = ['click', 'keydown', 'keyup', 'submit'];
+  dQuery.prototype.events = ['click', 'keydown', 'keyup', 'submit', 'keypress'];
 
   dQuery.prototype.entities = {
     "&": "&amp;",
@@ -64,6 +64,7 @@ dQuery = (function() {
       this.triggers[name[0]] = {};
     }
     this.triggers[name[0]][name[1]] = cb;
+    return this;
   };
 
   dQuery.prototype.off = function(name) {
@@ -73,6 +74,7 @@ dQuery = (function() {
     } else {
       delete this.triggers[name[0]][name[1]];
     }
+    return this;
   };
 
   dQuery.prototype.trigger = function(name, args) {
@@ -82,6 +84,7 @@ dQuery = (function() {
       callback = _ref[i];
       callback(args);
     }
+    return this;
   };
 
   dQuery.prototype.attr = function(name, value) {
@@ -98,6 +101,7 @@ dQuery = (function() {
         return el.setAttribute(name, value);
       });
     }
+    return this;
   };
 
   dQuery.prototype.parent = function(selector) {
@@ -193,6 +197,7 @@ dQuery = (function() {
     this.each(function(el) {
       el.removeAttribute(name);
     });
+    return this;
   };
 
   dQuery.prototype.hasClass = function(name) {
@@ -209,6 +214,7 @@ dQuery = (function() {
     this.each(function(el) {
       el.classList.add(name);
     });
+    return this;
   };
 
   dQuery.prototype.removeClass = function(name) {
@@ -218,6 +224,7 @@ dQuery = (function() {
     this.each(function(el) {
       el.classList.remove(name);
     });
+    return this;
   };
 
   dQuery.prototype.toggleClass = function(name) {
@@ -227,6 +234,7 @@ dQuery = (function() {
     this.each(function(el) {
       el.classList.toggle(name);
     });
+    return this;
   };
 
   dQuery.prototype.each = function(cb) {
@@ -234,6 +242,7 @@ dQuery = (function() {
       return false;
     }
     $.each(this.elements, cb);
+    return this;
   };
 
   dQuery.prototype.html = function(text) {
@@ -246,6 +255,7 @@ dQuery = (function() {
     this.each(function(el) {
       el.innerHTML = text;
     });
+    return this;
   };
 
   dQuery.prototype.text = function(text) {
@@ -266,6 +276,7 @@ dQuery = (function() {
         el.innerHTML = escaped;
       });
     }
+    return this;
   };
 
   dQuery.prototype.replaceWith = function(obj) {
@@ -287,7 +298,7 @@ dQuery = (function() {
     if (!(obj instanceof dQuery) || obj.length < 1 || this.length < 1) {
       return false;
     }
-    return new dQuery([this.elements[0].appendChild(job.elements[0])]);
+    return new dQuery([this.elements[0].appendChild(obj.elements[0])]);
   };
 
   dQuery.prototype.first = function() {
@@ -313,6 +324,22 @@ dQuery = (function() {
     } else {
       return this.elements[0].value;
     }
+  };
+
+  dQuery.prototype.appendTo = function(obj) {
+    if (!(obj instanceof dQuery) || obj.length < 1 || this.length < 1) {
+      return false;
+    }
+    obj.elements[0].appendChild(this.elements[0]);
+    return this;
+  };
+
+  dQuery.prototype.prependTo = function(obj) {
+    if (!(obj instanceof dQuery) || obj.length < 1 || this.length < 1) {
+      return false;
+    }
+    obj.elements[0].insertBefore(this.elements[0], obj.elements[0].firstChild);
+    return this;
   };
 
   return dQuery;

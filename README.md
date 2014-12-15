@@ -46,6 +46,8 @@ Because dQuery just rewrites user input to built-in commands, It's way faster th
  * dQuery.first
  * dQuery.last
  * dQuery.val
+ * dQuery.appendTo
+ * dQuery.prependTo
  * $.extend
  * $.each
 

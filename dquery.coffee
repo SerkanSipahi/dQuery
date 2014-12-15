@@ -18,7 +18,7 @@ class dQuery
         return
       return
   triggers:[]
-  events:['click','keydown','keyup','submit']
+  events:['click','keydown','keyup','submit','keypress']
   entities: {
     "&": "&amp;",
     "<": "&lt;",
@@ -46,18 +46,18 @@ class dQuery
     if typeof name[1] is 'undefined' then name[1] = (Math.random() + 1).toString(36).substring(7)
     if typeof @triggers[name[0]] is 'undefined' then @triggers[name[0]] = {}
     @triggers[name[0]][name[1]] = cb
-    return
+    return this
   off:(name)->
     name = name.split '.'
     if typeof name[1] is 'undefined'
       delete @triggers[name[0]]
     else
       delete @triggers[name[0]][name[1]]
-    return
+    return this
   trigger:(name,args)->
     for i,callback of @triggers[name]
       callback(args)
-    return
+    return this
   attr:(name,value)->
     if typeof value is undefined
       if @length is 0 then return ''
@@ -66,7 +66,7 @@ class dQuery
       if @length is 0 then return
       @each (el)->
         el.setAttribute name,value
-    return
+    return this
   # Select could be an array
   parent:(selector)->
     # Similar to jQuery's Parent Untill
@@ -91,7 +91,7 @@ class dQuery
           else if firstChar is '[' and el.hasAttribute(selector.substr 0,selector.length-1) then parents.push el
         else
         if el.tagName.toLowerCase() is selector
-            parents.push el
+          parents.push el
     return new dQuery parents
   closest:(selector)->
     # Similar to jQuery's Parent Until
@@ -125,7 +125,7 @@ class dQuery
     @each (el)->
       el.removeAttribute name
       return
-    return
+    return this
   hasClass:(name)->
     if @length is 0 then return false
     return @elements[0].classList.contains name
@@ -134,23 +134,23 @@ class dQuery
     @each (el)->
       el.classList.add name
       return
-    return
+    return this
   removeClass:(name)->
     if @length is 0 then return false
     @each (el)->
       el.classList.remove name
       return
-    return
+    return this
   toggleClass:(name)->
     if @length is 0 then return false
     @each (el)->
       el.classList.toggle name
       return
-    return
+    return this
   each:(cb)->
     if @length is 0 then return false
     $.each @elements,cb
-    return
+    return this
   html:(text)->
     if @length is 0 then return false
     if typeof text is 'undefined'
@@ -158,7 +158,7 @@ class dQuery
     @each (el)->
       el.innerHTML = text
       return
-    return
+    return this
   text:(text)->
     me = this
     if @length is 0 then return false
@@ -171,17 +171,17 @@ class dQuery
       @each (el)->
         el.innerHTML = escaped
         return
-    return
+    return this
   replaceWith:(obj)->
     if not(obj instanceof dQuery) or obj.length < 1 or @length < 1 then return false
-    @elements[0].parentNode.replaceChild(obj.elements[0],@elements[0]);
+    @elements[0].parentNode.replaceChild obj.elements[0],@elements[0]
     return new dQuery [obj.elements[0]] # jQuery returns @elements[0] but that behaviour of it forces us to stop chaining at replaceWith
   prepend:(obj)->
     if not(obj instanceof dQuery) or obj.length < 1 or @length < 1 then return false
     return new dQuery [@elements[0].insertBefore obj.elements[0],@elements[0].firstChild]
   append:(obj)->
     if not(obj instanceof dQuery) or obj.length < 1 or @length < 1 then return false
-    return new dQuery [@elements[0].appendChild(job.elements[0])]
+    return new dQuery [@elements[0].appendChild obj.elements[0]]
   first:->
     if @length is 0 then return false
     return new dQuery [@elements[0]]
@@ -195,6 +195,14 @@ class dQuery
     else
       return @elements[0].value
     return
+  appendTo:(obj)->
+    if not(obj instanceof dQuery) or obj.length < 1 or @length < 1 then return false
+    obj.elements[0].appendChild @elements[0]
+    return this
+  prependTo:(obj)->
+    if not(obj instanceof dQuery) or obj.length < 1 or @length < 1 then return false
+    obj.elements[0].insertBefore @elements[0],obj.elements[0].firstChild
+    return this
 
 $ = (selector)->
   return new dQuery selector
