@@ -1,23 +1,24 @@
 class dQuery
   constructor:(selector)->
+    @triggers = {}
     me = this
-    if typeof selector is 'string'
+    if selector instanceof HTMLDocument or selector instanceof HTMLElement
+      @elements = [selector]
+    else if typeof selector is 'string'
       @elements = document.querySelectorAll selector
     else if typeof selector is 'object'
       @elements = selector
     else
       @elements = []
-      console.log(selector)
-      console.log(typeof selector)
     @length = @elements.length
     $.each @events,(event)->
       me.each (obj)->
-        obj.addEventListener event,(e)->
-          me.trigger event,e
+        deEvent = event; # create a local copy of the variable, just in case!
+        obj.addEventListener deEvent,(e)->
+          me.trigger deEvent,e
           return
         return
       return
-  triggers:[]
   events:['click','keydown','keyup','submit','keypress']
   entities: {
     "&": "&amp;",
@@ -212,8 +213,8 @@ $.extend = (a, b)->
       a[key] = b[key]
   return a
 $.each = (obj,cb)->
-  if obj instanceof Array
-    obj.forEach cb
+  if obj instanceof Array or obj instanceof NodeList
+    [].forEach.call obj,cb
   else if typeof obj.length isnt 'undefined'
     i=0
     while i<obj.length and typeof obj[i] isnt 'undefined'

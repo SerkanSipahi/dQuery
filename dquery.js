@@ -4,27 +4,28 @@ var $, dQuery;
 dQuery = (function() {
   function dQuery(selector) {
     var me;
+    this.triggers = {};
     me = this;
-    if (typeof selector === 'string') {
+    if (selector instanceof HTMLDocument || selector instanceof HTMLElement) {
+      this.elements = [selector];
+    } else if (typeof selector === 'string') {
       this.elements = document.querySelectorAll(selector);
     } else if (typeof selector === 'object') {
       this.elements = selector;
     } else {
       this.elements = [];
-      console.log(selector);
-      console.log(typeof selector);
     }
     this.length = this.elements.length;
     $.each(this.events, function(event) {
       me.each(function(obj) {
-        obj.addEventListener(event, function(e) {
-          me.trigger(event, e);
+        var deEvent;
+        deEvent = event;
+        obj.addEventListener(deEvent, function(e) {
+          me.trigger(deEvent, e);
         });
       });
     });
   }
-
-  dQuery.prototype.triggers = [];
 
   dQuery.prototype.events = ['click', 'keydown', 'keyup', 'submit', 'keypress'];
 
@@ -363,8 +364,8 @@ $.extend = function(a, b) {
 
 $.each = function(obj, cb) {
   var i, val;
-  if (obj instanceof Array) {
-    obj.forEach(cb);
+  if (obj instanceof Array || obj instanceof NodeList) {
+    [].forEach.call(obj, cb);
   } else if (typeof obj.length !== 'undefined') {
     i = 0;
     while (i < obj.length && typeof obj[i] !== 'undefined') {
@@ -380,4 +381,3 @@ $.each = function(obj, cb) {
     }
   }
 };
-
