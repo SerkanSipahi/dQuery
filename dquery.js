@@ -4,14 +4,35 @@ var $, dQuery;
 dQuery = (function() {
   function dQuery(selector) {
     var me;
-    this.triggers = {};
     me = this;
-    if (selector instanceof HTMLDocument || selector instanceof HTMLElement) {
+    if (selector instanceof HTMLDocument) {
+      if (typeof selector.dataset === 'undefined') {
+        selector.dataset = {};
+      }
+      if (typeof selector.dataset.uid === 'undefined') {
+        selector.dataset.uid = $.rand();
+        $.each(this.events, function(event) {
+          var deEvent;
+          deEvent = event;
+          selector.addEventListener(deEvent, function(e) {
+            e.stopImmediatePropagation();
+            me.trigger(deEvent, e);
+          });
+        });
+      }
+      this.elements = [selector];
+    } else if (selector instanceof HTMLElement) {
+      if (typeof selector.dataset.uid === 'undefined') {
+        selector.dataset.uid = $.rand();
+      }
       this.elements = [selector];
     } else if (typeof selector === 'string') {
       this.elements = document.querySelectorAll(selector);
     } else if (typeof selector === 'object') {
       this.elements = selector;
+      this.each(function(el) {
+        return el.dataset.uid = $.rand();
+      });
     } else {
       this.elements = [];
     }
@@ -59,32 +80,50 @@ dQuery = (function() {
   dQuery.prototype.on = function(name, cb) {
     name = name.split('.');
     if (typeof name[1] === 'undefined') {
-      name[1] = (Math.random() + 1).toString(36).substring(7);
+      name[1] = $.rand();
     }
-    if (typeof this.triggers[name[0]] === 'undefined') {
-      this.triggers[name[0]] = {};
-    }
-    this.triggers[name[0]][name[1]] = cb;
+    this.each(function(el) {
+      if (typeof $.triggers[el.dataset.uid] === 'undefined') {
+        $.triggers[el.dataset.uid] = {};
+      }
+      if (typeof $.triggers[el.dataset.uid][name[0]] === 'undefined') {
+        $.triggers[el.dataset.uid][name[0]] = {};
+      }
+      return $.triggers[el.dataset.uid][name[0]][name[1]] = cb;
+    });
     return this;
   };
 
   dQuery.prototype.off = function(name) {
     name = name.split('.');
     if (typeof name[1] === 'undefined') {
-      delete this.triggers[name[0]];
+      this.each(function(el) {
+        if (typeof $.triggers[el.dataset.uid] !== 'undefined') {
+          return delete $.triggers[el.dataset.uid][name[0]];
+        }
+      });
     } else {
-      delete this.triggers[name[0]][name[1]];
+      this.each(function(el) {
+        if ((typeof $.triggers[el.dataset.uid] !== 'undefined') && (typeof $.triggers[el.dataset.uid][name[0]] !== 'undefined')) {
+          return delete $.triggers[el.dataset.uid][name[0]][name[1]];
+        }
+      });
     }
     return this;
   };
 
   dQuery.prototype.trigger = function(name, args) {
-    var callback, i, _ref;
-    _ref = this.triggers[name];
-    for (i in _ref) {
-      callback = _ref[i];
-      callback(args);
-    }
+    this.each(function(el) {
+      var callback, i, _ref;
+      if ((typeof $.triggers[el.dataset.uid] !== 'undefined') && (typeof $.triggers[el.dataset.uid][name] !== 'undefined')) {
+        _ref = $.triggers[el.dataset.uid][name];
+        for (i in _ref) {
+          callback = _ref[i];
+          callback(args);
+        }
+      }
+      return this;
+    });
     return this;
   };
 
@@ -351,6 +390,10 @@ $ = function(selector) {
   return new dQuery(selector);
 };
 
+$.rand = function() {
+  return (Math.random() + 1).toString(36).substring(7);
+};
+
 $.extend = function(a, b) {
   var key, _i, _len;
   for (_i = 0, _len = b.length; _i < _len; _i++) {
@@ -361,6 +404,8 @@ $.extend = function(a, b) {
   }
   return a;
 };
+
+$.triggers = {};
 
 $.each = function(obj, cb) {
   var i, val;

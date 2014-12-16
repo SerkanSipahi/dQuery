@@ -1,13 +1,28 @@
 class dQuery
   constructor:(selector)->
-    @triggers = {}
     me = this
-    if selector instanceof HTMLDocument or selector instanceof HTMLElement
+    if selector instanceof HTMLDocument
+      if typeof selector.dataset is 'undefined' then selector.dataset = {};
+      if typeof selector.dataset.uid is 'undefined'
+        selector.dataset.uid = $.rand()
+        $.each @events,(event)->
+          deEvent = event; # create a local copy of the variable, just in case!
+          selector.addEventListener deEvent,(e)->
+            e.stopImmediatePropagation() # spent my whole night on that!
+            me.trigger(deEvent,e)
+            return
+          return
+      @elements = [selector]
+    else if selector instanceof HTMLElement
+      if typeof selector.dataset.uid is 'undefined'
+        selector.dataset.uid = $.rand()
       @elements = [selector]
     else if typeof selector is 'string'
       @elements = document.querySelectorAll selector
     else if typeof selector is 'object'
       @elements = selector
+      @each (el)->
+        el.dataset.uid = $.rand()
     else
       @elements = []
     @length = @elements.length
@@ -44,20 +59,29 @@ class dQuery
     return
   on:(name,cb)->
     name = name.split('.')
-    if typeof name[1] is 'undefined' then name[1] = (Math.random() + 1).toString(36).substring(7)
-    if typeof @triggers[name[0]] is 'undefined' then @triggers[name[0]] = {}
-    @triggers[name[0]][name[1]] = cb
+    if typeof name[1] is 'undefined' then name[1] = $.rand()
+    @each (el)->
+      if typeof $.triggers[el.dataset.uid] is 'undefined' then $.triggers[el.dataset.uid] = {}
+      if typeof $.triggers[el.dataset.uid][name[0]] is 'undefined' then $.triggers[el.dataset.uid][name[0]] = {}
+      $.triggers[el.dataset.uid][name[0]][name[1]] = cb
     return this
   off:(name)->
     name = name.split '.'
     if typeof name[1] is 'undefined'
-      delete @triggers[name[0]]
+      @each (el)->
+        if (typeof $.triggers[el.dataset.uid] isnt 'undefined')
+          delete $.triggers[el.dataset.uid][name[0]]
     else
-      delete @triggers[name[0]][name[1]]
+      @each (el)->
+        if (typeof $.triggers[el.dataset.uid] isnt 'undefined') and (typeof $.triggers[el.dataset.uid][name[0]] isnt 'undefined')
+          delete $.triggers[el.dataset.uid][name[0]][name[1]]
     return this
   trigger:(name,args)->
-    for i,callback of @triggers[name]
-      callback(args)
+    @each (el)->
+      if (typeof $.triggers[el.dataset.uid] isnt 'undefined') and (typeof $.triggers[el.dataset.uid][name] isnt 'undefined')
+        for i,callback of $.triggers[el.dataset.uid][name]
+          callback(args)
+      return this
     return this
   attr:(name,value)->
     if typeof value is undefined
@@ -207,11 +231,14 @@ class dQuery
 
 $ = (selector)->
   return new dQuery selector
+$.rand = ->
+  return (Math.random() + 1).toString(36).substring(7)
 $.extend = (a, b)->
   for key in b
     if b.hasOwnProperty key
       a[key] = b[key]
   return a
+$.triggers = {}
 $.each = (obj,cb)->
   if obj instanceof Array or obj instanceof NodeList
     [].forEach.call obj,cb
