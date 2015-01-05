@@ -100,7 +100,7 @@
         return this;
       }
     }
-    hasClass(name:String){
+    hasClass(name:String):Boolean{
       if(this.length === 0)return false;
       return this.elements[0].classList.contains(name);
     }
@@ -112,7 +112,7 @@
       }
       return this;
     }
-    removeClass(name:String){
+    removeClass(name:String):dQuery{
       if(this.length !== 1){
         this.elements.forEach(function(){
           this.classList.remove(name);
@@ -120,13 +120,41 @@
       }
       return this;
     }
-    toggleClass(name:String){
+    toggleClass(name:String):dQuery{
       if(this.length !== 1){
         this.elements.forEach(function(){
           this.classList.toggle(name);
         });
       }
       return this;
+    }
+    find(selector:String):dQuery{
+      if(this.length == 0)return this;
+      return new dQuery(this.elements[0].querySelectorAll(selector));
+    }
+    clone():dQuery{
+      if(this.length == 0)return this;
+      return new dQuery(this.elements[0].cloneNode(true));
+    }
+    remove():void{
+      if(this.length == 0 || this.elements[0] instanceof HTMLDocument)return;
+      this.each(function(){
+        this.parentNode.removeChild(this);
+      });
+      this.elements = [];
+      this.length = 0;
+    }
+    parent():dQuery{
+      if(this.length == 0 || this.elements[0] instanceof HTMLDocument)return this;
+      return new dQuery(this.elements[0].parentNode);
+    }
+    next(){
+      if(this.length == 0 || this.elements[0] instanceof HTMLDocument)return this;
+      return new dQuery(this.elements[0].nextElementSibling);
+    }
+    prev(){
+      if(this.length == 0 || this.elements[0] instanceof HTMLDocument)return this;
+      return new dQuery(this.elements[0].previousElementSibling);
     }
   }
   class D{
