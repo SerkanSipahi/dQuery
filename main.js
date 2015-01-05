@@ -34,6 +34,27 @@
       });
       return this;
     }
+    trigger(type:String,args:Object):dQuery{
+      var event;
+      if(typeof args === 'undefined'){
+        event = document.createEvent('HTMLEvents');
+        event.initEvent(type, true, false);
+        this.each(function(){
+          this.dispatchEvent(event);
+        });
+      } else {
+        if (window.CustomEvent) {
+          event = new CustomEvent(type, {data: args});
+        } else {
+          event = document.createEvent('CustomEvent');
+          event.initCustomEvent(type, true, true, args);
+        }
+        this.each(function(){
+          this.dispatchEvent(event);
+        });
+      }
+      return this;
+    }
     contains(object:dQuery):Boolean{
       if(this.length === 0 || object.length === 0)return false;
       return this.elements[0] !== object.elements[0] && this.elements[0].contains(object.elements[0]);
