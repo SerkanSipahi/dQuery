@@ -20,6 +20,8 @@ Because dQuery just rewrites user input to built-in commands, It's way faster th
 ## List of Supported Functions
 - [x] $.rand
 - [x] $.validate
+- [x] $.extend
+- [x] $.each
 - [x] dQuery.removeAttr
 - [x] dQuery.clone
 - [x] dQuery.remove
@@ -30,8 +32,6 @@ Because dQuery just rewrites user input to built-in commands, It's way faster th
 - [x] dQuery.contains
 - [x] dQuery.empty
 - [x] dQuery.is
-- [x] $.extend
-- [x] $.each
 - [x] dQuery.ready
 - [x] dQuery.on
 - [x] dQuery.off
