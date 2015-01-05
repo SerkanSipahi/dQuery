@@ -1,12 +1,5 @@
 (function(w){
-  var instances = [],$,entities = {
-    "&": "&amp;",
-    "<": "&lt;",
-    ">": "&gt;",
-    '"': '&quot;',
-    "'": '&#39;',
-    "/": '&#x2F;'
-  };
+  var $,events={};
   class dQuery{
     elements:Array;
     length:Number;
@@ -24,6 +17,28 @@
       }
       this.elements = elements;
       this.length = elements.length;
+    }
+    ready(callback:Function):dQuery{
+      this.on('DOMContentLoaded',callback);
+      return this;
+    }
+    contains(object:dQuery):Boolean{
+      if(this.length === 0 || object.length === 0)return false;
+      return this.elements[0] !== object.elements[0] && this.elements[0].contains(object.elements[0]);
+    }
+    empty():void{
+      if(this.elements.length !== 0){
+        this.elements[0].innerHTML = '';
+      }
+    }
+    is(object):Boolean{
+      if(this.length === 0 || object.length === 0)return false;
+      if(object instanceof dQuery){
+        return this.elements[0] === object.elements[0];
+      } else {
+        var el = this.elements[0];
+        return (el.matches || el.matchesSelector || el.msMatchesSelector || el.mozMatchesSelector || el.webkitMatchesSelector || el.oMatchesSelector).call(el, object);
+      }
     }
     each(callback:Function):dQuery{
       $.each(this.elements,callback);
@@ -62,15 +77,10 @@
     text(text:String){
       if(this.length === 0)return ;
       if(typeof text === 'undefined'){
-        return this.elements[0].innerHTML.replace(/[&<>"'\/]/g,function(s){
-          return entities[s];
-        });
+        return this.elements[0].textContent
       } else {
-        var escaped = text.replace(/[&<>"'\/]/g,function(s){
-          return entities[s];
-        });
         this.each(function(){
-          this.innerHTML = escaped;
+          this.textContent = text;
         });
       }
       return this;
@@ -88,14 +98,14 @@
     }
     first(){
       if(this.length > 1){
-        return new dQuery(this.elements[0]);
+        return $(this.elements[0]);
       } else {
         return this;
       }
     }
     last(){
       if(this.length > 1){
-        return new dQuery(this.elements[this.length-1]);
+        return $(this.elements[this.length-1]);
       } else {
         return this;
       }
@@ -130,11 +140,11 @@
     }
     find(selector:String):dQuery{
       if(this.length === 0)return this;
-      return new dQuery(this.elements[0].querySelectorAll(selector));
+      return $(this.elements[0].querySelectorAll(selector));
     }
     clone():dQuery{
       if(this.length === 0)return this;
-      return new dQuery(this.elements[0].cloneNode(true));
+      return $(this.elements[0].cloneNode(true));
     }
     remove():void{
       if(this.length === 0 || this.elements[0] instanceof HTMLDocument)return ;
@@ -146,15 +156,15 @@
     }
     parent():dQuery{
       if(this.length === 0 || this.elements[0] instanceof HTMLDocument)return this;
-      return new dQuery(this.elements[0].parentNode);
+      return $(this.elements[0].parentNode);
     }
     next():dQuery{
       if(this.length === 0 || this.elements[0] instanceof HTMLDocument)return this;
-      return new dQuery(this.elements[0].nextElementSibling);
+      return $(this.elements[0].nextElementSibling);
     }
     prev():dQuery{
       if(this.length === 0 || this.elements[0] instanceof HTMLDocument)return this;
-      return new dQuery(this.elements[0].previousElementSibling);
+      return $(this.elements[0].previousElementSibling);
     }
     prepend(object:dQuery):dQuery{
       if(this.length === 0) return ;
@@ -191,7 +201,7 @@
     }
     closest(selector:String):dQuery{
       if(this.length === 0) return ;
-      if(typeof selector === 'undefined' || selector.length === 0)return new dQuery(this.elements[0].parentNode);
+      if(typeof selector === 'undefined' || selector.length === 0)return $(this.elements[0].parentNode);
       var Type = (selector.charAt(0) === '.' || selector.charAt(0) === '#' || selector.charAt(0) === '[') ? selector.charAt(0) : null;
       if(Type !== null){
         selector = selector.substr(1);
@@ -202,11 +212,11 @@
           break;
         } else {
           if($.validate(Type,selector,el)){
-            return new dQuery(el);
+            return $(el);
           }
         }
       }
-      return new dQuery;
+      return $();
     }
     parents(selector:String):dQuery {
       if (this.length === 0) return;
@@ -227,11 +237,11 @@
           }
         }
       }
-      return new dQuery(elements);
+      return $(elements);
     }
     parentsUntil(selector:String):dQuery{
       if(this.length === 0) return ;
-      if(typeof selector === 'undefined' || selector.length === 0)return new dQuery(this.elements[0].parentNode);
+      if(typeof selector === 'undefined' || selector.length === 0)return $(this.elements[0].parentNode);
       var Type = (selector.charAt(0) === '.' || selector.charAt(0) === '#' || selector.charAt(0) === '[') ? selector.charAt(0) : null;
       if(Type !== null){
         selector = selector.substr(1);
@@ -243,11 +253,11 @@
         } else {
           elements.push(el);
           if($.validate(Type,selector,el)){
-            return new dQuery(elements);
+            return $(elements);
           }
         }
       }
-      return new dQuery;
+      return $();
     }
   }
   class D{
