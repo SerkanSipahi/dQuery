@@ -176,6 +176,19 @@
       }
       return this;
     }
+    appendTo(object:dQuery):dQuery{
+      object.append(this);
+      return this;
+    }
+    prependTo(object:dQuery):dQuery{
+      object.prepend(this);
+      return this;
+    }
+    replaceWith(object:dQuery):dQuery{
+      if(this.length === 0 || object.length === 0) return ;
+      this.elements[0].parentNode.replaceChild(object.elements[0],this.elements[0]);
+      return this;
+    }
   }
   class D{
     static constructor(args):dQuery{
