@@ -16,45 +16,42 @@ it's written in CoffeeScript.
 Lower dQuery size means faster page load times!
 ### - Performance
 Because dQuery just rewrites user input to built-in commands, It's way faster than the jQuery itself.
-### - Size
-
-| jQuery                | dQuery                   |
-|-----------------------|--------------------------|
-| 247KB Uncompressed    | 8.3KB Uncompressed       |
-| 84.3KB Minified       | 4.1KB Minified           |
-| 29 KB Minified & Gzip | 1.3KB Minified & Gzipped |
 
 ## List of Supported Functions
- * dQuery.ready
- * dQuery.on
- * dQuery.off
- * dQuery.trigger
- * dQuery.attr
- * dQuery.parent
- * dQuery.closest
- * dQuery.find
- * dQuery.hasClass
- * dQuery.addClass
- * dQuery.removeClass
- * dQuery.toggleClass
- * dQuery.each
- * dQuery.html
- * dQuery.text
- * dQuery.prepend
- * dQuery.append
- * dQuery.replaceWith
- * dQuery.first
- * dQuery.last
- * dQuery.val
- * dQuery.appendTo
- * dQuery.prependTo
- * $.extend
- * $.each
-
-## License
-
-[MIT](http://opensource.org/licenses/MIT) © steelbrain
-
-[1]:https://github.com/steelbrain/dquery/issues/1
-[2]:https://github.com/steelbrain/dquery/issues/2
-[3]:https://github.com/steelbrain/dquery/issues/3
+- [x] $.rand
+- [x] $.validate
+- [x] dQuery.removeAttr
+- [x] dQuery.clone
+- [x] dQuery.remove
+- [x] dQuery.next
+- [x] dQuery.prev
+- [x] dQuery.parents
+- [x] dQuery.parentsUntil
+- [x] dQuery.contains
+- [x] dQuery.empty
+- [x] dQuery.is
+- [x] $.extend
+- [x] $.each
+- [x] dQuery.ready
+- [x] dQuery.on
+- [x] dQuery.off
+- [x] dQuery.trigger
+- [x] dQuery.attr
+- [x] dQuery.parent
+- [x] dQuery.closest
+- [x] dQuery.find
+- [x] dQuery.hasClass
+- [x] dQuery.addClass
+- [x] dQuery.removeClass
+- [x] dQuery.toggleClass
+- [x] dQuery.each
+- [x] dQuery.html
+- [x] dQuery.text
+- [x] dQuery.prepend
+- [x] dQuery.append
+- [x] dQuery.replaceWith
+- [x] dQuery.first
+- [x] dQuery.last
+- [x] dQuery.val
+- [x] dQuery.appendTo
+- [x] dQuery.prependTo
