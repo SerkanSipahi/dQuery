@@ -43,6 +43,17 @@
       });
       return this;
     }
+    html(text){
+      if(this.length === 0)return;
+      if(typeof text === 'undefined'){
+        return this.elements[0].innerHTML;
+      } else {
+        this.each(function(){
+          this.innerHTML = text;
+        });
+      }
+      return this;
+    }
   }
   class D{
     static constructor(args):dQuery{
