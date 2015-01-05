@@ -88,6 +88,22 @@
       }
       return this;
     }
+    first(){
+      if(this.length === 0)return;
+      if(this.length === 1){
+        return this;
+      } else {
+        return new dQuery(this.elements[0]);
+      }
+    }
+    last(){
+      if(this.length === 0)return;
+      if(this.length === 1){
+        return this;
+      } else {
+        return new dQuery(this.elements[this.length-1]);
+      }
+    }
   }
   class D{
     static constructor(args):dQuery{
