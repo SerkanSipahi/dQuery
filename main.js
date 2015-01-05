@@ -30,7 +30,7 @@
       return this;
     }
     attr(name:String,value:String){
-      if(this.length === 0)return;
+      if(this.length === 0)return ;
       if(typeof value === 'undefined'){
         return this.elements[0].getAttribute(name);
       } else {
@@ -49,7 +49,7 @@
       return this;
     }
     html(text:String){
-      if(this.length === 0)return;
+      if(this.length === 0)return ;
       if(typeof text === 'undefined'){
         return this.elements[0].innerHTML;
       } else {
@@ -60,7 +60,7 @@
       return this;
     }
     text(text:String){
-      if(this.length === 0)return;
+      if(this.length === 0)return ;
       if(typeof text === 'undefined'){
         return this.elements[0].innerHTML.replace(/[&<>"'\/]/g,function(s){
           return entities[s];
@@ -76,7 +76,7 @@
       return this;
     }
     val(text:String){
-      if(this.length === 0)return;
+      if(this.length === 0)return ;
       if(typeof text === 'undefined'){
         return this.elements[0].value;
       } else {
@@ -129,15 +129,15 @@
       return this;
     }
     find(selector:String):dQuery{
-      if(this.length == 0)return this;
+      if(this.length === 0)return this;
       return new dQuery(this.elements[0].querySelectorAll(selector));
     }
     clone():dQuery{
-      if(this.length == 0)return this;
+      if(this.length === 0)return this;
       return new dQuery(this.elements[0].cloneNode(true));
     }
     remove():void{
-      if(this.length == 0 || this.elements[0] instanceof HTMLDocument)return;
+      if(this.length === 0 || this.elements[0] instanceof HTMLDocument)return ;
       this.each(function(){
         this.parentNode.removeChild(this);
       });
@@ -145,16 +145,36 @@
       this.length = 0;
     }
     parent():dQuery{
-      if(this.length == 0 || this.elements[0] instanceof HTMLDocument)return this;
+      if(this.length === 0 || this.elements[0] instanceof HTMLDocument)return this;
       return new dQuery(this.elements[0].parentNode);
     }
-    next(){
-      if(this.length == 0 || this.elements[0] instanceof HTMLDocument)return this;
+    next():dQuery{
+      if(this.length === 0 || this.elements[0] instanceof HTMLDocument)return this;
       return new dQuery(this.elements[0].nextElementSibling);
     }
-    prev(){
-      if(this.length == 0 || this.elements[0] instanceof HTMLDocument)return this;
+    prev():dQuery{
+      if(this.length === 0 || this.elements[0] instanceof HTMLDocument)return this;
       return new dQuery(this.elements[0].previousElementSibling);
+    }
+    prepend(object:dQuery):dQuery{
+      if(this.length === 0) return ;
+      if(object.length > 0){
+        var self = this;
+        $.each(object.elements.reverse(),function(){
+          self.elements[0].insertBefore(this,self.elements[0].firstChild);
+        });
+      }
+      return this;
+    }
+    append(object:dQuery):dQuery{
+      if(this.length === 0) return ;
+      if(object.length > 0){
+        var self = this;
+        $.each(object.elements,function(){
+          self.elements[0].appendChild(this);
+        })
+      }
+      return this;
     }
   }
   class D{
