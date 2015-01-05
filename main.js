@@ -22,6 +22,18 @@
       this.on('DOMContentLoaded',callback);
       return this;
     }
+    on(type:String,callback:Function):Function{
+      this.each(function(){
+        this.addEventListener(type,callback);
+      });
+      return callback;
+    }
+    off(type:String,callback:Function):dQuery{
+      this.each(function(){
+        this.removeEventListener(type,callback);
+      });
+      return this;
+    }
     contains(object:dQuery):Boolean{
       if(this.length === 0 || object.length === 0)return false;
       return this.elements[0] !== object.elements[0] && this.elements[0].contains(object.elements[0]);
