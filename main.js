@@ -11,19 +11,16 @@
     elements:Array;
     length:Number;
     constructor(selector){
-      var elements;
+      var elements = [];
       if(selector instanceof HTMLDocument || selector instanceof HTMLElement){
-        elements = [selector];
+        elements.push(selector);
       } else if(typeof selector === 'string'){
         elements = document.querySelectorAll(selector);
       } else if(typeof selector === 'object'){
-        elements = [];
         $.each(selector,function(entry){
           if(entry instanceof HTMLDocument || entry instanceof HTMLElement)
             elements.push(entry);
         });
-      } else {
-        throw new Error("No Elements provided");
       }
       this.elements = elements;
       this.length = elements.length;
@@ -44,13 +41,14 @@
       }
     }
     removeAttr(name:String):dQuery{
-      if(this.length === 0)return this;
-      this.each(function(){
-        this.removeAttribute(name);
-      });
+      if(this.length !== 0){
+        this.each(function(){
+          this.removeAttribute(name);
+        });
+      }
       return this;
     }
-    html(text){
+    html(text:String){
       if(this.length === 0)return;
       if(typeof text === 'undefined'){
         return this.elements[0].innerHTML;
@@ -61,7 +59,7 @@
       }
       return this;
     }
-    text(text){
+    text(text:String){
       if(this.length === 0)return;
       if(typeof text === 'undefined'){
         return this.elements[0].innerHTML.replace(/[&<>"'\/]/g,function(s){
@@ -77,7 +75,7 @@
       }
       return this;
     }
-    val(text){
+    val(text:String){
       if(this.length === 0)return;
       if(typeof text === 'undefined'){
         return this.elements[0].value;
@@ -89,20 +87,46 @@
       return this;
     }
     first(){
-      if(this.length === 0)return;
-      if(this.length === 1){
-        return this;
-      } else {
+      if(this.length > 1){
         return new dQuery(this.elements[0]);
+      } else {
+        return this;
       }
     }
     last(){
-      if(this.length === 0)return;
-      if(this.length === 1){
-        return this;
-      } else {
+      if(this.length > 1){
         return new dQuery(this.elements[this.length-1]);
+      } else {
+        return this;
       }
+    }
+    hasClass(name:String){
+      if(this.length === 0)return false;
+      return this.elements[0].classList.contains(name);
+    }
+    addClass(name:String){
+      if(this.length !== 1){
+        this.elements.forEach(function(){
+          this.classList.add(name);
+        });
+      }
+      return this;
+    }
+    removeClass(name:String){
+      if(this.length !== 1){
+        this.elements.forEach(function(){
+          this.classList.remove(name);
+        });
+      }
+      return this;
+    }
+    toggleClass(name:String){
+      if(this.length !== 1){
+        this.elements.forEach(function(){
+          this.classList.toggle(name);
+        });
+      }
+      return this;
     }
   }
   class D{
