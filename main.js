@@ -54,6 +54,17 @@
       }
       return this;
     }
+    val(text){
+      if(this.length === 0)return;
+      if(typeof text === 'undefined'){
+        return this.elements[0].value;
+      } else {
+        this.each(function(){
+          this.value = text;
+        });
+      }
+      return this;
+    }
   }
   class D{
     static constructor(args):dQuery{
