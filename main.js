@@ -1,5 +1,12 @@
 (function(w){
-  var instances = [],$;
+  var instances = [],$,entities = {
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': '&quot;',
+    "'": '&#39;',
+    "/": '&#x2F;'
+  };
   class dQuery{
     elements:Array;
     length:Number;
@@ -50,6 +57,22 @@
       } else {
         this.each(function(){
           this.innerHTML = text;
+        });
+      }
+      return this;
+    }
+    text(text){
+      if(this.length === 0)return;
+      if(typeof text === 'undefined'){
+        return this.elements[0].innerHTML.replace(/[&<>"'\/]/g,function(s){
+          return entities[s];
+        });
+      } else {
+        var escaped = text.replace(/[&<>"'\/]/g,function(s){
+          return entities[s];
+        });
+        this.each(function(){
+          this.innerHTML = escaped;
         });
       }
       return this;
