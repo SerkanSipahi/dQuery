@@ -189,10 +189,88 @@
       this.elements[0].parentNode.replaceChild(object.elements[0],this.elements[0]);
       return this;
     }
+    closest(selector:String):dQuery{
+      if(this.length === 0) return ;
+      if(typeof selector === 'undefined' || selector.length === 0)return new dQuery(this.elements[0].parentNode);
+      var Type = (selector.charAt(0) === '.' || selector.charAt(0) === '#' || selector.charAt(0) === '[') ? selector.charAt(0) : null;
+      if(Type !== null){
+        selector = selector.substr(1);
+      }
+      var el = this.elements[0];
+      while(el = el.parentNode){
+        if(el instanceof HTMLDocument){
+          break;
+        } else {
+          if($.validate(Type,selector,el)){
+            return new dQuery(el);
+          }
+        }
+      }
+      return new dQuery;
+    }
+    parents(selector:String):dQuery {
+      if (this.length === 0) return;
+      var skip = (typeof selector === 'undefined' || selector.length === 0),Type = null;
+      if(!skip) {
+        if(selector.charAt(0) === '.' || selector.charAt(0) === '#' || selector.charAt(0) === '['){
+          Type = selector.charAt(0);
+          selector = selector.substr(1);
+        }
+      }
+      var el = this.elements[0],elements=[];
+      while(el = el.parentNode){
+        if(el instanceof HTMLDocument){
+          break;
+        } else {
+          if(skip || $.validate(Type,selector,el)){
+            elements.push(el);
+          }
+        }
+      }
+      return new dQuery(elements);
+    }
+    parentsUntil(selector:String):dQuery{
+      if(this.length === 0) return ;
+      if(typeof selector === 'undefined' || selector.length === 0)return new dQuery(this.elements[0].parentNode);
+      var Type = (selector.charAt(0) === '.' || selector.charAt(0) === '#' || selector.charAt(0) === '[') ? selector.charAt(0) : null;
+      if(Type !== null){
+        selector = selector.substr(1);
+      }
+      var el = this.elements[0],elements=[];
+      while(el = el.parentNode){
+        if(el instanceof HTMLDocument){
+          break;
+        } else {
+          elements.push(el);
+          if($.validate(Type,selector,el)){
+            return new dQuery(elements);
+          }
+        }
+      }
+      return new dQuery;
+    }
   }
   class D{
+    static validate(type:String,Selector:String,element:HTMLElement):Boolean{
+      if(type === null){
+        return element.tagName.toLowerCase() === Selector.toLowerCase();
+      } else {
+        if(type === '.'){
+          return element.classList.contains(Selector);
+        } else if(type === '#'){
+          return element.id === Selector;
+        } else if(type === '['){
+          var Chunks = Selector.substr(0,Selector.length-1).split('=');
+          if(typeof Chunks === 'undefined'){
+            return element.hasAttribute(Chunks[0]);
+          } else {
+            return element.hasAttribute(Chunks[0]) && (element.getAttribute(Chunks[0]) === Chunks[1])
+          }
+        }
+      }
+      return false;
+    }
     static constructor(args):dQuery{
-      // check if it already exists in the instances array
       return new dQuery(args);
     }
     static rand():String{
