@@ -6,10 +6,10 @@ it's written in CoffeeScript.
 
 ## What's not Supported?
  * Older Browsers (wontfix)
- * Element Creation ( see [bug#1][1])
- * Plugins (see [bug #2][2])
- * .click , .submit (use .on, might change in the future)
- * Ajax (see [bug #3][3])
+ * Element Creation (wontfix)
+ * Plugins (see bug #2)
+ * dQuery.click , dQuery.submit etc (use .on instead)
+ * Ajax (see bug #3)
 
 ## What's the gain of this?
 ### - Speed
