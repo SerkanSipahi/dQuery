@@ -55,3 +55,7 @@ Because dQuery just rewrites user input to built-in commands, It's way faster th
 - [x] dQuery.val
 - [x] dQuery.appendTo
 - [x] dQuery.prependTo
+
+## License
+
+[QuickPress License](https://raw.githubusercontent.com/raeesiqbal/QuickPress/master/license.txt) © steelbrain
