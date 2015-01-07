@@ -2,7 +2,8 @@ dQuery
 ===================
 
 dQuery is my jQuery rewrite, jQuery was all too heavy and included support for the things that I didn't want to. I only targeted the `latest` browsers. Because the People running latest browsers shouldn't suffer because of some people who still use older browsers.
-it's written in CoffeeScript.
+
+It's written in JSX harmony, the transpiled version can be found in build/main.js
 
 ## What's not Supported?
  * Older Browsers (wontfix)
