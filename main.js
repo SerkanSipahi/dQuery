@@ -22,9 +22,15 @@
       this.on('DOMContentLoaded',callback);
       return this;
     }
-    on(type:String,callback:Function):Function{
+    on(type:String,b,c):Function{
+      var callback;
+      if(arguments.length === 3) {
+        callback = function(e){if($.validate(b,e.target)){c.apply(e.target,arguments);}};
+      } else {
+        callback = b;
+      }
       this.each(function(){
-        this.addEventListener(type,callback);
+        this.addEventListener(type, callback);
       });
       return callback;
     }
@@ -235,16 +241,12 @@
     closest(selector:String):dQuery{
       if(this.length === 0) return ;
       if(typeof selector === 'undefined' || selector.length === 0)return $(this.elements[0].parentNode);
-      var Type = (selector.charAt(0) === '.' || selector.charAt(0) === '#' || selector.charAt(0) === '[') ? selector.charAt(0) : null;
-      if(Type !== null){
-        selector = selector.substr(1);
-      }
       var el = this.elements[0];
       while(el = el.parentNode){
         if(el instanceof HTMLDocument){
           break;
         } else {
-          if($.validate(Type,selector,el)){
+          if($.validate(selector,el)){
             return $(el);
           }
         }
@@ -253,19 +255,13 @@
     }
     parents(selector:String):dQuery {
       if (this.length === 0) return;
-      var skip = (typeof selector === 'undefined' || selector.length === 0),Type = null;
-      if(!skip) {
-        if(selector.charAt(0) === '.' || selector.charAt(0) === '#' || selector.charAt(0) === '['){
-          Type = selector.charAt(0);
-          selector = selector.substr(1);
-        }
-      }
+      var skip = (typeof selector === 'undefined' || selector.length === 0);
       var el = this.elements[0],elements=[];
       while(el = el.parentNode){
         if(el instanceof HTMLDocument){
           break;
         } else {
-          if(skip || $.validate(Type,selector,el)){
+          if(skip || $.validate(selector,el)){
             elements.push(el);
           }
         }
@@ -275,17 +271,13 @@
     parentsUntil(selector:String):dQuery{
       if(this.length === 0) return ;
       if(typeof selector === 'undefined' || selector.length === 0)return $(this.elements[0].parentNode);
-      var Type = (selector.charAt(0) === '.' || selector.charAt(0) === '#' || selector.charAt(0) === '[') ? selector.charAt(0) : null;
-      if(Type !== null){
-        selector = selector.substr(1);
-      }
       var el = this.elements[0],elements=[];
       while(el = el.parentNode){
         if(el instanceof HTMLDocument){
           break;
         } else {
           elements.push(el);
-          if($.validate(Type,selector,el)){
+          if($.validate(selector,el)){
             return $(elements);
           }
         }
@@ -294,24 +286,8 @@
     }
   }
   class D{
-    static validate(type:String,Selector:String,element:HTMLElement):Boolean{
-      if(type === null){
-        return element.tagName.toLowerCase() === Selector.toLowerCase();
-      } else {
-        if(type === '.'){
-          return element.classList.contains(Selector);
-        } else if(type === '#'){
-          return element.id === Selector;
-        } else if(type === '['){
-          var Chunks = Selector.substr(0,Selector.length-1).split('=');
-          if(typeof Chunks === 'undefined'){
-            return element.hasAttribute(Chunks[0]);
-          } else {
-            return element.hasAttribute(Chunks[0]) && (element.getAttribute(Chunks[0]) === Chunks[1])
-          }
-        }
-      }
-      return false;
+    static validate(Selector:String,el:HTMLElement):Boolean{
+      return (el.matches || el.matchesSelector || el.msMatchesSelector || el.mozMatchesSelector || el.webkitMatchesSelector || el.oMatchesSelector).call(el, Selector);
     }
     static constructor(args):dQuery{
       return new dQuery(args);
