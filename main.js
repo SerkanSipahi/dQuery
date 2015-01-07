@@ -353,5 +353,7 @@
     }
   }
   w.$ = $ = D;
-  w.$$ = d.querySelector;
+  w.$$ = function(){
+    return d.querySelector.apply(d,arguments);
+  };
 })(window,document);
