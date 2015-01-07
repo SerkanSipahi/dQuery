@@ -19,43 +19,7 @@ Lower dQuery size means faster page load times!
 Because dQuery just rewrites user input to built-in commands, It's way faster than the jQuery itself.
 
 ## List of Supported Functions
-- [x] $.rand
-- [x] $.validate
-- [x] $.extend
-- [x] $.each
-- [x] dQuery.removeAttr
-- [x] dQuery.clone
-- [x] dQuery.remove
-- [x] dQuery.next
-- [x] dQuery.prev
-- [x] dQuery.parents
-- [x] dQuery.parentsUntil
-- [x] dQuery.contains
-- [x] dQuery.empty
-- [x] dQuery.is
-- [x] dQuery.ready
-- [x] dQuery.on
-- [x] dQuery.off
-- [x] dQuery.trigger
-- [x] dQuery.attr
-- [x] dQuery.parent
-- [x] dQuery.closest
-- [x] dQuery.find
-- [x] dQuery.hasClass
-- [x] dQuery.addClass
-- [x] dQuery.removeClass
-- [x] dQuery.toggleClass
-- [x] dQuery.each
-- [x] dQuery.html
-- [x] dQuery.text
-- [x] dQuery.prepend
-- [x] dQuery.append
-- [x] dQuery.replaceWith
-- [x] dQuery.first
-- [x] dQuery.last
-- [x] dQuery.val
-- [x] dQuery.appendTo
-- [x] dQuery.prependTo
+See [this bug][https://github.com/steelbrain/dQuery/issues/12]
 
 ## License
 
