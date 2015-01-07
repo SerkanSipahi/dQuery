@@ -1,17 +1,21 @@
-(function(w){
-  var $,events={};
+(function(w,d){
+  var
+    $ ,
+    events = {} ,
+    Element = HTMLElement ,
+    Document = HTMLDocument;
   class dQuery{
     elements:Array;
     length:Number;
     constructor(selector){
       var elements = [];
-      if(selector instanceof HTMLDocument || selector instanceof HTMLElement){
+      if(selector instanceof Document || selector instanceof Element){
         elements.push(selector);
       } else if(typeof selector === 'string'){
-        elements = document.querySelectorAll(selector);
+        elements = d.querySelectorAll(selector);
       } else if(typeof selector === 'object'){
         $.each(selector,function(entry){
-          if(entry instanceof HTMLDocument || entry instanceof HTMLElement)
+          if(entry instanceof Document || entry instanceof Element)
             elements.push(entry);
         });
       }
@@ -47,13 +51,13 @@
     trigger(type:String,args:Object):dQuery{
       var event;
       if(typeof args === 'undefined'){
-        event = document.createEvent('HTMLEvents');
+        event = d.createEvent('HTMLEvents');
         event.initEvent(type, true, false);
       } else {
         if (window.CustomEvent) {
           event = new CustomEvent(type, {detail: args});
         } else {
-          event = document.createEvent('CustomEvent');
+          event = d.createEvent('CustomEvent');
           event.initCustomEvent(type, true, true, args);
         }
       }
@@ -187,7 +191,7 @@
       return $(this.elements[0].cloneNode(true));
     }
     remove():void{
-      if(this.length === 0 || this.elements[0] instanceof HTMLDocument)return ;
+      if(this.length === 0 || this.elements[0] instanceof Document)return ;
       this.each(function(){
         this.parentNode.removeChild(this);
       });
@@ -195,15 +199,15 @@
       this.length = 0;
     }
     parent():dQuery{
-      if(this.length === 0 || this.elements[0] instanceof HTMLDocument)return this;
+      if(this.length === 0 || this.elements[0] instanceof Document)return this;
       return $(this.elements[0].parentNode);
     }
     next():dQuery{
-      if(this.length === 0 || this.elements[0] instanceof HTMLDocument)return this;
+      if(this.length === 0 || this.elements[0] instanceof Document)return this;
       return $(this.elements[0].nextElementSibling);
     }
     prev():dQuery{
-      if(this.length === 0 || this.elements[0] instanceof HTMLDocument)return this;
+      if(this.length === 0 || this.elements[0] instanceof Document)return this;
       return $(this.elements[0].previousElementSibling);
     }
     prepend(object:dQuery):dQuery{
@@ -244,7 +248,7 @@
       if(typeof selector === 'undefined' || selector.length === 0)return $(this.elements[0].parentNode);
       var el = this.elements[0];
       while(el = el.parentNode){
-        if(el instanceof HTMLDocument){
+        if(el instanceof Document){
           break;
         } else {
           if($.validate(selector,el)){
@@ -259,7 +263,7 @@
       var skip = (typeof selector === 'undefined' || selector.length === 0);
       var el = this.elements[0],elements=[];
       while(el = el.parentNode){
-        if(el instanceof HTMLDocument){
+        if(el instanceof Document){
           break;
         } else {
           if(skip || $.validate(selector,el)){
@@ -274,7 +278,7 @@
       if(typeof selector === 'undefined' || selector.length === 0)return $(this.elements[0].parentNode);
       var el = this.elements[0],elements=[];
       while(el = el.parentNode){
-        if(el instanceof HTMLDocument){
+        if(el instanceof Document){
           break;
         } else {
           elements.push(el);
@@ -308,7 +312,7 @@
     }
   }
   class D{
-    static validate(Selector:String,el:HTMLElement):Boolean{
+    static validate(Selector:String,el:Element):Boolean{
       return (el.matches || el.matchesSelector || el.msMatchesSelector || el.mozMatchesSelector || el.webkitMatchesSelector || el.oMatchesSelector).call(el, Selector);
     }
     static constructor(args):dQuery{
@@ -349,4 +353,5 @@
     }
   }
   w.$ = $ = D;
-})(window);
+  w.$$ = d.querySelector;
+})(window,document);
