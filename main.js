@@ -285,6 +285,27 @@
       }
       return $();
     }
+    serializeAssoc():Object{
+      if(this.length === 0)return {};
+      var
+        self = this.elements[0],
+        BRFix = /\r?\n/g,
+        toReturn = {};
+      $.each(self.elements,function(){
+        if(!this.name || ((this.type === 'checkbox' || this.type === 'radio') && !this.checked))
+          return ;
+        toReturn[this.name] = this.value.replace(BRFix,"\n");
+      });
+      return toReturn;
+    }
+    serialize():String{
+      if(this.length === 0)return '';
+      var data = [],spaceFix = /%20/g;
+      $.each(this.serializeAssoc(),function(value,key){
+        data.push((key+'='+value).replace(spaceFix,'+'));
+      });
+      return data.join('&');
+    }
   }
   class D{
     static validate(Selector:String,el:HTMLElement):Boolean{
