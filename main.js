@@ -25,12 +25,16 @@
     on(type:String,b,c):Function{
       var callback;
       if(arguments.length === 3) {
-        callback = function(e){if($.validate(b,e.target)){c.apply(e.target,arguments);}};
+        callback = function(e){
+          if($.validate(b,e.target)){
+            c.apply(e.target,arguments);
+          }
+        };
       } else {
         callback = b;
       }
       this.each(function(){
-        this.addEventListener(type, callback);
+        this.addEventListener(type, callback,true);
       });
       return callback;
     }
@@ -45,20 +49,17 @@
       if(typeof args === 'undefined'){
         event = document.createEvent('HTMLEvents');
         event.initEvent(type, true, false);
-        this.each(function(){
-          this.dispatchEvent(event);
-        });
       } else {
         if (window.CustomEvent) {
-          event = new CustomEvent(type, {data: args});
+          event = new CustomEvent(type, {detail: args});
         } else {
           event = document.createEvent('CustomEvent');
           event.initCustomEvent(type, true, true, args);
         }
-        this.each(function(){
-          this.dispatchEvent(event);
-        });
       }
+      this.each(function(){
+        this.dispatchEvent(event);
+      });
       return this;
     }
     contains(object:dQuery):Boolean{
