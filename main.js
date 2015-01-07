@@ -1,7 +1,6 @@
 (function(w,d){
   var
     $ ,
-    events = {} ,
     Element = HTMLElement ,
     Document = HTMLDocument;
   class dQuery{
