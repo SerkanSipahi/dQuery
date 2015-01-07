@@ -1,0 +1,23 @@
+{
+  "name": "dQuery",
+  "version": "0.0.1",
+  "homepage": "https://github.com/steelbrain/dQuery",
+  "authors": [
+    "steelbrain <aneesiqbalbhatti@gmail.com>"
+  ],
+  "description": "A user friendly rewrite of jQuery",
+  "main": "build/main.js",
+  "keywords": [
+    "jquery",
+    "events",
+    "dom"
+  ],
+  "license": "QuickPress <https://github.com/raeesiqbal/QuickPress/blob/master/license.txt>",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
