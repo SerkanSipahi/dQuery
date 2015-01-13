@@ -59,7 +59,7 @@
       var callback;
       if(arguments.length === 3) {
         callback = function(e){
-          if($.validate(b,e.target)){
+          if($.validate(b,e.target) || $(e.target).hasParent(b)){
             c.apply(e.target,arguments);
           }
         };
