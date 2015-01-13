@@ -2,7 +2,10 @@
   var
     $ ,
     Element = HTMLElement ,
-    Document = HTMLDocument;
+    Document = HTMLDocument,
+    $$ = function(){
+      return d.querySelector.apply(d,arguments);
+    };
   class dQuery{
     elements:Array;
     length:Number;
@@ -25,6 +28,33 @@
       this.on('DOMContentLoaded',callback);
       return this;
     }
+    children(Selector:String):dQuery{
+      if(this.length === 0) return this;
+      if(typeof Selector === 'undefined'){
+        return $(this.elements[0].childNodes);
+      } else {
+        var toReturn = [];
+        $.each(this.elements[0].childNodes,function(){
+          if($.validate(Selector,this)){
+            toReturn.push(this);
+          }
+        });
+        return $(toReturn);
+      }
+    }
+    child(Number:Number):dQuery{
+      if(this.length === 0) return this;
+      if(typeof Number === 'undefined'){
+        Number = 1;
+      }
+      --Number;
+      var target = this.elements[0].childNodes[Number];
+      if(typeof target === 'undefined'){
+        return $();
+      } else {
+        return $(target);
+      }
+    }
     on(type:String,b,c):Function{
       var callback;
       if(arguments.length === 3) {
@@ -43,7 +73,7 @@
     }
     off(type:String,callback:Function):dQuery{
       this.each(function(){
-        this.removeEventListener(type,callback);
+        this.removeEventListener(type,callback,true);
       });
       return this;
     }
@@ -288,6 +318,10 @@
       }
       return $();
     }
+    hasParent(selector:String):Boolean{
+      if(this.length === 0) return false;
+      return this.closest(selector).length > 0;
+    }
     serializeAssoc():Object{
       if(this.length === 0)return {};
       var
@@ -334,6 +368,7 @@
     }
     static each(object,callback:Function):void{
       var i;
+      if(typeof object == 'undefined') return ;
       if(object instanceof Array || object instanceof NodeList){
         [].forEach.call(object,function(element,index,array){
           callback.call(element,element,index,array);
@@ -352,7 +387,5 @@
     }
   }
   w.$ = $ = D;
-  w.$$ = function(){
-    return d.querySelector.apply(d,arguments);
-  };
+  w.$$ = $$;
 })(window,document);
