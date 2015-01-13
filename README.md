@@ -19,7 +19,7 @@ Lower dQuery size means faster page load times!
 Because dQuery just rewrites user input to built-in commands, It's way faster than the jQuery itself.
 
 ## List of Supported Functions
-See [this bug][https://github.com/steelbrain/dQuery/issues/12]
+See [this bug](https://github.com/steelbrain/dQuery/issues/12)
 
 ## License
 
