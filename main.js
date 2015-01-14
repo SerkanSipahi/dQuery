@@ -240,7 +240,7 @@
       return $(this.elements[0].previousElementSibling);
     }
     prepend(object:dQuery):dQuery{
-      if(object.length > 0){
+      if(object.length > 0 && this.length > 0){
         var self = this;
         $.each(object.elements.reverse(),function(){
           self.elements[0].insertBefore(this,self.elements[0].firstChild);
@@ -249,7 +249,7 @@
       return this;
     }
     append(object:dQuery):dQuery{
-      if(object.length > 0){
+      if(object.length > 0 && this.length > 0){
         var self = this;
         $.each(object.elements,function(){
           self.elements[0].appendChild(this);
