@@ -35,7 +35,7 @@
       } else {
         var toReturn = [];
         $.each(this.elements[0].childNodes,function(){
-          if($.validate(Selector,this)){
+          if($.validate(this,Selector)){
             toReturn.push(this);
           }
         });
