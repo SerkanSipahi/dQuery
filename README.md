@@ -1,7 +1,7 @@
 dQuery
 ===================
 
-dQuery is a jQuery rewrite. It aims to be API compatible with jQuery as much as possible.
+dQuery is a lightweight jQuery alternative. It aims to be API compatible with jQuery as much as possible.
 It's very lightweight. Because dQuery uses Native aka Vanilla APIs to do the difficult part, It's extremely fast,
 See the performance section of [VanillaJS][1].
 
