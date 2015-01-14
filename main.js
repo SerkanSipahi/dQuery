@@ -386,6 +386,12 @@
       }
     }
   }
+  D.fn = {};
+  Object.observe(D.fn,function(changes){
+    $.each(changes[0].object,function(callback,name){
+      dQuery.prototype[name] = callback;
+    });
+  });
   w.$ = $ = D;
   w.$$ = $$;
 })(window,document);
