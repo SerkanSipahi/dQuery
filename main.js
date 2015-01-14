@@ -35,7 +35,7 @@
       } else {
         var toReturn = [];
         $.each(this.elements[0].childNodes,function(){
-          if($.validate(this,Selector)){
+          if($.validate(Selector,this)){
             toReturn.push(this);
           }
         });
@@ -109,7 +109,7 @@
       if(object instanceof dQuery){
         return this.elements[0] === object.elements[0];
       } else {
-        return $.validate(this.elements[0],object);
+        return $.validate(object,this.elements[0]);
       }
     }
     each(callback:Function):dQuery{
@@ -345,7 +345,7 @@
   }
   class D{
     static validate(Selector:String,el:Element):Boolean{
-      return (el.matches || el.matchesSelector || el.msMatchesSelector || el.mozMatchesSelector || el.webkitMatchesSelector || el.oMatchesSelector).call(el, Selector);
+      return (el instanceof HTMLElement || el instanceof HTMLDocument) && (el.matches || el.matchesSelector || el.msMatchesSelector || el.mozMatchesSelector || el.webkitMatchesSelector || el.oMatchesSelector).call(el, Selector);
     }
     static constructor(args):dQuery{
       return new dQuery(args);
