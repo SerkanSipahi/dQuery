@@ -5,7 +5,8 @@
     Document = HTMLDocument,
     $$ = function(){
       return d.querySelector.apply(d,arguments);
-    };
+    },
+    regexID = /^[A-Za-z]+[\w-:.]*$/;
   class dQuery{
     elements:Array;
     length:Number;
@@ -348,7 +349,18 @@
       return (el instanceof HTMLElement || el instanceof HTMLDocument) && (el.matches || el.matchesSelector || el.msMatchesSelector || el.mozMatchesSelector || el.webkitMatchesSelector || el.oMatchesSelector).call(el, Selector);
     }
     static constructor(args):dQuery{
-      return new dQuery(args);
+      if(typeof args === 'string'){
+        var
+          first = args.substr(0,1),
+          rest = args.substr(1);
+        if(first === '#' && regexID.test(rest)){
+          return new dQuery($$(rest));
+        } else {
+          return new dQuery(args);
+        }
+      } else {
+        return new dQuery(args);
+      }
     }
     static rand():String{
       return (Math.random() + 1).toString(36).substring(7)
