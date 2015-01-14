@@ -22,7 +22,7 @@ A list of supported functions can be found [here](https://github.com/dQuery/dQue
 
 ## License
 
-[QuickPress License](https://raw.githubusercontent.com/raeesiqbal/QuickPress/master/license.txt) © steelbrain
+MIT © steelbrain
 
 [1]:http://vanilla-js.com/
 [2]:https://github.com/jdarling/Object.observe
