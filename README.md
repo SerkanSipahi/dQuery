@@ -5,7 +5,7 @@ dQuery is a jQuery rewrite. It aims to be API compatible with jQuery as much as 
 It's very lightweight. Because dQuery uses Native aka Vanilla APIs to do the difficult part, It's extremely fast,
 See the performance section of [VanillaJS][1].
 
-Vanilla JS uses Object.observe, which is not yet natively supported in all browsers. Therefore, We use the shim from [KapIT][2].
+dQuery uses Object.observe, which is not yet natively supported in all browsers. Therefore, We use the shim from [KapIT][2].
 The `build/main-with-shim.js` includes the shim as well.
 
 ## What's not Supported?
