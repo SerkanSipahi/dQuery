@@ -240,7 +240,6 @@
       return $(this.elements[0].previousElementSibling);
     }
     prepend(object:dQuery):dQuery{
-      if(this.length === 0) return ;
       if(object.length > 0){
         var self = this;
         $.each(object.elements.reverse(),function(){
@@ -250,7 +249,6 @@
       return this;
     }
     append(object:dQuery):dQuery{
-      if(this.length === 0) return ;
       if(object.length > 0){
         var self = this;
         $.each(object.elements,function(){
@@ -273,7 +271,7 @@
       return this;
     }
     closest(selector:String):dQuery{
-      if(this.length === 0) return ;
+      if(this.length === 0) return $();
       if(typeof selector === 'undefined' || selector.length === 0)return $(this.elements[0].parentNode);
       var el = this.elements[0];
       while(el = el.parentNode){
@@ -288,7 +286,7 @@
       return $();
     }
     parents(selector:String):dQuery {
-      if (this.length === 0) return;
+      if (this.length === 0) return $();
       var skip = (typeof selector === 'undefined' || selector.length === 0);
       var el = this.elements[0],elements=[];
       while(el = el.parentNode){
@@ -303,7 +301,7 @@
       return $(elements);
     }
     parentsUntil(selector:String):dQuery{
-      if(this.length === 0) return ;
+      if(this.length === 0) return $();
       if(typeof selector === 'undefined' || selector.length === 0)return $(this.elements[0].parentNode);
       var el = this.elements[0],elements=[];
       while(el = el.parentNode){
