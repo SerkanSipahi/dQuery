@@ -109,8 +109,7 @@
       if(object instanceof dQuery){
         return this.elements[0] === object.elements[0];
       } else {
-        var el = this.elements[0];
-        return (el.matches || el.matchesSelector || el.msMatchesSelector || el.mozMatchesSelector || el.webkitMatchesSelector || el.oMatchesSelector).call(el, object);
+        return $.validate(this.elements[0],object);
       }
     }
     each(callback:Function):dQuery{
