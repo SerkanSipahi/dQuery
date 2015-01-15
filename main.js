@@ -43,6 +43,18 @@
         return $(toReturn);
       }
     }
+    click(Callback:Function):dQuery{
+      return this.on('click',Callback);
+    }
+    submit(Callback:Function):dQuery{
+      return this.on('submit',Callback);
+    }
+    focus():dQuery{
+      if(this.length > 0){
+        this.elements[0].focus();
+      }
+      return this;
+    }
     child(Number:Number):dQuery{
       if(this.length === 0) return this;
       if(typeof Number === 'undefined'){
