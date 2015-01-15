@@ -50,8 +50,14 @@
       return this.on('submit',Callback);
     }
     focus():dQuery{
-      if(this.length > 0){
-        this.elements[0].focus();
+      var self = this;
+      if(self.length > 0){
+        for(var i in self.elements){
+          if(self.elements[i] instanceof Element || self.elements[i] instanceof Document){
+            self.elements[i].focus();
+            break;
+          }
+        }
       }
       return this;
     }
