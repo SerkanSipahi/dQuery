@@ -6,7 +6,8 @@
     $$ = function(){
       return d.querySelector.apply(d,arguments);
     },
-    regexID = /^[A-Za-z]+[\w-:.]*$/;
+    regexID = /^[A-Za-z]+[\w-:.]*$/,
+    Parser = document.createElement('div');
   class dQuery{
     elements:Array;
     length:Number;
@@ -15,12 +16,13 @@
       if(selector instanceof Document || selector instanceof Element){
         elements.push(selector);
       } else if(typeof selector === 'string'){
-        elements = d.querySelectorAll(selector);
+        if(selector.trim().substr(0,1) === '<'){
+          elements = $.fromHTML(selector);
+        } else {
+          elements = d.querySelectorAll(selector);
+        }
       } else if(typeof selector === 'object'){
-        $.each(selector,function(entry){
-          if(entry instanceof Document || entry instanceof Element)
-            elements.push(entry);
-        });
+        elements = $.elements(selector);
       }
       this.elements = elements;
       this.length = elements.length;
@@ -35,9 +37,9 @@
         return $(this.elements[0].childNodes);
       } else {
         var toReturn = [];
-        $.each(this.elements[0].childNodes,function(){
-          if($.validate(Selector,this)){
-            toReturn.push(this);
+        $.each(this.elements[0].childNodes,function(n:Node){
+          if($.validate(Selector,n)){
+            toReturn.push(n);
           }
         });
         return $(toReturn);
@@ -50,11 +52,11 @@
       return this.on('submit',Callback);
     }
     focus():dQuery{
-      var self = this;
-      if(self.length > 0){
-        for(var i in self.elements){
-          if(self.elements[i] instanceof Element || self.elements[i] instanceof Document){
-            self.elements[i].focus();
+      var el = this.elements;
+      if(this.length > 0){
+        for(var i in el){
+          if(el.hasOwnProperty(i) && [i] instanceof Element || el[i] instanceof Document){
+            el[i].focus();
             break;
           }
         }
@@ -91,8 +93,8 @@
       return callback;
     }
     off(type:String,callback:Function):dQuery{
-      this.each(function(){
-        this.removeEventListener(type,callback,true);
+      this.each(function(n:HTMLElement){
+        n.removeEventListener(type,callback,true);
       });
       return this;
     }
@@ -102,12 +104,8 @@
         event = d.createEvent('HTMLEvents');
         event.initEvent(type, true, false);
       } else {
-        if (window.CustomEvent) {
-          event = new CustomEvent(type, {detail: args});
-        } else {
-          event = d.createEvent('CustomEvent');
-          event.initCustomEvent(type, true, true, args);
-        }
+        event = d.createEvent('CustomEvent');
+        event.initCustomEvent(type, true, true, args);
       }
       this.each(function(){
         this.dispatchEvent(event);
@@ -120,7 +118,9 @@
     }
     empty():void{
       if(this.elements.length !== 0){
-        this.elements[0].innerHTML = '';
+        this.each(function(n:HTMLElement){
+          n.innerHTML = '';
+        });
       }
     }
     is(object):Boolean{
@@ -140,16 +140,16 @@
       if(typeof value === 'undefined'){
         return this.elements[0].getAttribute(name);
       } else {
-        this.each(function(){
-          this.setAttribute(name,value);
+        this.each(function(n:HTMLElement){
+          n.setAttribute(name,value);
         });
         return this;
       }
     }
     removeAttr(name:String):dQuery{
       if(this.length !== 0){
-        this.each(function(){
-          this.removeAttribute(name);
+        this.each(function(n:HTMLElement){
+          n.removeAttribute(name);
         });
       }
       return this;
@@ -159,8 +159,8 @@
       if(typeof text === 'undefined'){
         return this.elements[0].innerHTML;
       } else {
-        this.each(function(){
-          this.innerHTML = text;
+        this.each(function(n:HTMLElement){
+          n.innerHTML = text;
         });
       }
       return this;
@@ -170,8 +170,8 @@
       if(typeof text === 'undefined'){
         return this.elements[0].textContent
       } else {
-        this.each(function(){
-          this.textContent = text;
+        this.each(function(n:HTMLElement){
+          n.textContent = text;
         });
       }
       return this;
@@ -181,8 +181,8 @@
       if(typeof text === 'undefined'){
         return this.elements[0].value;
       } else {
-        this.each(function(){
-          this.value = text;
+        this.each(function(n:HTMLInputElement){
+          n.value = text;
         });
       }
       return this;
@@ -207,24 +207,24 @@
     }
     addClass(name:String){
       if(this.length !== 1){
-        this.elements.forEach(function(){
-          this.classList.add(name);
+        this.each(function(n:HTMLElement){
+          n.classList.add(name);
         });
       }
       return this;
     }
     removeClass(name:String):dQuery{
       if(this.length !== 1){
-        this.elements.forEach(function(){
-          this.classList.remove(name);
+        this.each(function(n:HTMLElement){
+          n.classList.remove(name);
         });
       }
       return this;
     }
     toggleClass(name:String):dQuery{
       if(this.length !== 1){
-        this.elements.forEach(function(){
-          this.classList.toggle(name);
+        this.each(function(n:HTMLElement){
+          n.classList.toggle(name);
         });
       }
       return this;
@@ -239,8 +239,8 @@
     }
     remove():void{
       if(this.length === 0 || this.elements[0] instanceof Document)return ;
-      this.each(function(){
-        this.parentNode.removeChild(this);
+      this.each(function(n:Node){
+        n.parentNode.removeChild(n);
       });
       this.elements = [];
       this.length = 0;
@@ -257,40 +257,56 @@
       if(this.length === 0 || this.elements[0] instanceof Document)return this;
       return $(this.elements[0].previousElementSibling);
     }
-    prepend(object:dQuery):dQuery{
-      if(object.length > 0 && this.length > 0){
-        var self = this;
-        $.each(object.elements.reverse(),function(){
-          self.elements[0].insertBefore(this,self.elements[0].firstChild);
+    prepend(object):dQuery{
+      if(this.length > 0){
+        var target = this.elements[0];
+        $.each($.elements(object).reverse(),function(n:Node){
+          target.insertBefore(n,target.firstChild);
         });
       }
       return this;
     }
-    append(object:dQuery):dQuery{
+    append(object):dQuery{
       if(object.length > 0 && this.length > 0){
-        var self = this;
-        $.each(object.elements,function(){
-          self.elements[0].appendChild(this);
+        var element = this.elements[0];
+        $.each($.elements(object).reverse(),function(n:Node){
+          element.appendChild(n);
         })
       }
       return this;
     }
-    appendTo(object:dQuery):dQuery{
-      object.append(this);
+    appendTo(object):dQuery{
+      if(this.length > 0){
+        $.each($.elements(object),function(n:HTMLElement){
+          $.each(this.elements.reverse(),function(nn:HTMLElement){
+            n.appendChild(nn);
+          });
+        }.bind(this));
+      }
       return this;
     }
-    prependTo(object:dQuery):dQuery{
-      object.prepend(this);
+    prependTo(object):dQuery{
+      if(this.length > 0){
+        $.each($.elements(object),function(n:HTMLElement){
+          $.each(this.elements.reverse(),function(nn:HTMLElement){
+            n.insertBefore(nn,n.firstChild);
+          });
+        }.bind(this));
+      }
       return this;
     }
-    replaceWith(object:dQuery):dQuery{
-      if(this.length === 0 || object.length === 0) return ;
-      this.elements[0].parentNode.replaceChild(object.elements[0],this.elements[0]);
+    replaceWith(object):dQuery{
+      if(this.length === 0) return this;
+      var elements = $.elements(object);
+      if(elements.length > 0){
+        this.elements[0].parentNode.replaceChild(elements[0],this.elements[0]);
+      }
       return this;
     }
     closest(selector:String):dQuery{
       if(this.length === 0) return $();
-      if(typeof selector === 'undefined' || selector.length === 0)return $(this.elements[0].parentNode);
+      if(typeof selector === 'undefined' || selector.length === 0)
+        return $(this.elements[0].parentNode);
       var el = this.elements[0];
       while(el = el.parentNode){
         if(el instanceof Document){
@@ -305,8 +321,9 @@
     }
     parents(selector:String):dQuery {
       if (this.length === 0) return $();
-      var skip = (typeof selector === 'undefined' || selector.length === 0);
-      var el = this.elements[0],elements=[];
+      var
+        skip = (typeof selector === 'undefined' || selector.length === 0),
+        el = this.elements[0],elements=[];
       while(el = el.parentNode){
         if(el instanceof Document){
           break;
@@ -320,7 +337,8 @@
     }
     parentsUntil(selector:String):dQuery{
       if(this.length === 0) return $();
-      if(typeof selector === 'undefined' || selector.length === 0)return $(this.elements[0].parentNode);
+      if(typeof selector === 'undefined' || selector.length === 0)
+        return $(this.elements[0].parentNode);
       var el = this.elements[0],elements=[];
       while(el = el.parentNode){
         if(el instanceof Document){
@@ -345,16 +363,34 @@
         BRFix = /\r?\n/g,
         toReturn = {};
       $.each(self.elements,function(){
-        if(!this.name || ((this.type === 'checkbox' || this.type === 'radio') && !this.checked))
-          return ;
-        toReturn[this.name] = this.value.replace(BRFix,"\n");
+        if(!(!this.name || ((this.type === 'checkbox' || this.type === 'radio') && !this.checked))) {
+          toReturn[this.name] = this.value.replace(BRFix, "\n");
+        }
       });
       return toReturn;
+    }
+    insertBefore(element):dQuery{
+      var el = $.elements(element);
+      if(el.length > 0 && this.length > 0){
+        $.each(this.elements.reverse(),function(n:Node){
+          el[0].parentNode.insertBefore(n,el[0]);
+        });
+      }
+      return this;
+    }
+    insertAfter(element):dQuery{
+      var el = $.elements(element);
+      if(el.length > 0 && this.length > 0){
+        $.each(this.elements.reverse(),function(n:Node){
+          el[0].parentNode.insertBefore(n,el[0].nextSibling);
+        });
+      }
+      return this;
     }
     serialize():String{
       if(this.length === 0)return '';
       var data = [],spaceFix = /%20/g;
-      $.each(this.serializeAssoc(),function(value,key){
+      $.each(this.serializeAssoc(),function(value:String,key:String){
         data.push((key+'='+value).replace(spaceFix,'+'));
       });
       return data.join('&');
@@ -375,8 +411,8 @@
         return new dQuery(args);
       }
     }
-    static validate(Selector:String,el:Element):Boolean{
-      return (el instanceof HTMLElement || el instanceof HTMLDocument) && (el.matches || el.matchesSelector || el.msMatchesSelector || el.mozMatchesSelector || el.webkitMatchesSelector || el.oMatchesSelector).call(el, Selector);
+    static validate(Selector:String,el:HTMLElement):Boolean{
+      return (el instanceof Element || el instanceof Document) && (el.matches || el.matchesSelector || el.msMatchesSelector || el.mozMatchesSelector || el.webkitMatchesSelector || el.oMatchesSelector).call(el, Selector);
     }
     static rand():String{
       return (Math.random() + 1).toString(36).substring(7)
@@ -394,23 +430,57 @@
       return a;
     }
     static each(object,callback:Function):void{
-      var i;
+      var i,ret;
       if(typeof object == 'undefined') return ;
-      if(object instanceof Array || object instanceof NodeList){
-        [].forEach.call(object,function(element,index,array){
-          callback.call(element,element,index,array);
-        });
-      } else if(typeof object.length !== 'undefined'){
-        for(i=0;i<object.length;++i){
-          callback.call(object[i],object[i],i,object);
-        }
-      } else {
-        for(i in object){
-          if(object.hasOwnProperty(i)){
-            callback.call(object[i],object[i],i,object);
+      try{
+        if(object instanceof Array || object instanceof NodeList){
+          Array.prototype.forEach.call(object,function(element,index,array){
+            ret = callback.call(element,element,index,array);
+            if(ret === false)
+              throw null;
+          });
+        } else if(typeof object.length !== 'undefined'){
+          for(i=0;i<object.length;++i){
+            ret = callback.call(object[i],object[i],i,object);
+            if(ret === false)
+              break;
+          }
+        } else {
+          for(i in object){
+            if(object.hasOwnProperty(i)){
+              ret = callback.call(object[i],object[i],i,object);
+              if(ret === false)
+                break;
+            }
           }
         }
+      } catch(e){}
+    }
+    static elements(object):Array{
+      var toReturn = [];
+      if(object instanceof dQuery){
+        toReturn = object.elements;
+      } else if(object instanceof Array || object instanceof NodeList) {
+        $.each(object,function(n:HTMLElement){
+          if(n instanceof Element){
+            toReturn.push(n);
+          }
+        });
+      } else if(object instanceof Element){
+        toReturn.push(object);
+      } else if(typeof object === 'string' && object.trim().substr(0,1) === '<'){
+        toReturn = $.fromHTML(object);
       }
+      return toReturn;
+    }
+    static fromHTML(html:String):Array{
+      var toReturn = [];
+      Parser.innerHTML = html;
+      $.each(Parser.childNodes,function(n:Node){
+        toReturn.push(n.cloneNode(true));
+      });
+      Parser.innerHTML = '';
+      return toReturn;
     }
   }
   D.fn = {};

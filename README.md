@@ -10,7 +10,6 @@ The `build/main-with-shim.js` includes the shim as well.
 
 ## What's not Supported?
  * Older Browsers (wontfix)
- * Element Creation (wontfix)
  * Ajax (see [bug #3][3])
 
 ## What's the gain of this?
