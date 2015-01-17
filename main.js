@@ -37,7 +37,7 @@
         return $(this.elements[0].childNodes);
       } else {
         var toReturn = [];
-        $.each(this.elements[0].childNodes,function(n:Node){
+        $.each(this.elements[0].childNodes,function(n:HTMLElement){
           if($.validate(Selector,n)){
             toReturn.push(n);
           }
@@ -64,7 +64,8 @@
       return this;
     }
     child(Number:Number):dQuery{
-      if(this.length === 0) return this;
+      if(this.length === 0)
+        return this;
       if(typeof Number === 'undefined'){
         Number = 1;
       }
@@ -87,8 +88,8 @@
       } else {
         callback = b;
       }
-      this.each(function(){
-        this.addEventListener(type, callback,true);
+      this.each(function(n:HTMLElement){
+        n.addEventListener(type, callback,true);
       });
       return callback;
     }
@@ -113,7 +114,8 @@
       return this;
     }
     contains(object:dQuery):Boolean{
-      if(this.length === 0 || object.length === 0)return false;
+      if(this.length === 0 || object.length === 0)
+        return false;
       return this.elements[0] !== object.elements[0] && this.elements[0].contains(object.elements[0]);
     }
     empty():void{
@@ -124,7 +126,8 @@
       }
     }
     is(object):Boolean{
-      if(this.length === 0 || object.length === 0)return false;
+      if(this.length === 0 || object.length === 0)
+        return false;
       if(object instanceof dQuery){
         return this.elements[0] === object.elements[0];
       } else {
@@ -136,7 +139,8 @@
       return this;
     }
     attr(name:String,value:String){
-      if(this.length === 0)return ;
+      if(this.length === 0)
+        return ;
       if(typeof value === 'undefined'){
         return this.elements[0].getAttribute(name);
       } else {
@@ -155,7 +159,8 @@
       return this;
     }
     html(text:String){
-      if(this.length === 0)return ;
+      if(this.length === 0)
+        return ;
       if(typeof text === 'undefined'){
         return this.elements[0].innerHTML;
       } else {
@@ -166,7 +171,8 @@
       return this;
     }
     text(text:String){
-      if(this.length === 0)return ;
+      if(this.length === 0)
+        return ;
       if(typeof text === 'undefined'){
         return this.elements[0].textContent
       } else {
@@ -177,7 +183,8 @@
       return this;
     }
     val(text:String){
-      if(this.length === 0)return ;
+      if(this.length === 0)
+        return ;
       if(typeof text === 'undefined'){
         return this.elements[0].value;
       } else {
@@ -197,12 +204,12 @@
     last(){
       if(this.length > 1){
         return $(this.elements[this.length-1]);
-      } else {
-        return this;
       }
+      return this;
     }
     hasClass(name:String):Boolean{
-      if(this.length === 0)return false;
+      if(this.length === 0)
+        return false;
       return this.elements[0].classList.contains(name);
     }
     addClass(name:String){
@@ -234,33 +241,38 @@
       return $(this.elements[0].querySelectorAll(selector));
     }
     clone():dQuery{
-      if(this.length === 0)return this;
+      if(this.length === 0)
+        return this;
       return $(this.elements[0].cloneNode(true));
     }
     remove():void{
-      if(this.length === 0 || this.elements[0] instanceof Document)return ;
-      this.each(function(n:Node){
+      if(this.length === 0 || this.elements[0] instanceof Document)
+        return ;
+      this.each(function(n:HTMLElement){
         n.parentNode.removeChild(n);
       });
       this.elements = [];
       this.length = 0;
     }
     parent():dQuery{
-      if(this.length === 0 || this.elements[0] instanceof Document)return this;
+      if(this.length === 0 || this.elements[0] instanceof Document)
+        return this;
       return $(this.elements[0].parentNode);
     }
     next():dQuery{
-      if(this.length === 0 || this.elements[0] instanceof Document)return this;
+      if(this.length === 0 || this.elements[0] instanceof Document)
+        return this;
       return $(this.elements[0].nextElementSibling);
     }
     prev():dQuery{
-      if(this.length === 0 || this.elements[0] instanceof Document)return this;
+      if(this.length === 0 || this.elements[0] instanceof Document)
+        return this;
       return $(this.elements[0].previousElementSibling);
     }
     prepend(object):dQuery{
       if(this.length > 0){
         var target = this.elements[0];
-        $.each($.elements(object).reverse(),function(n:Node){
+        $.each($.elements(object).reverse(),function(n:HTMLElement){
           target.insertBefore(n,target.firstChild);
         });
       }
@@ -269,7 +281,7 @@
     append(object):dQuery{
       if(object.length > 0 && this.length > 0){
         var element = this.elements[0];
-        $.each($.elements(object).reverse(),function(n:Node){
+        $.each($.elements(object).reverse(),function(n:HTMLElement){
           element.appendChild(n);
         })
       }
@@ -323,7 +335,8 @@
       if (this.length === 0) return $();
       var
         skip = (typeof selector === 'undefined' || selector.length === 0),
-        el = this.elements[0],elements=[];
+        el = this.elements[0],
+        elements = [];
       while(el = el.parentNode){
         if(el instanceof Document){
           break;
@@ -339,7 +352,9 @@
       if(this.length === 0) return $();
       if(typeof selector === 'undefined' || selector.length === 0)
         return $(this.elements[0].parentNode);
-      var el = this.elements[0],elements=[];
+      var
+        el = this.elements[0],
+        elements = [];
       while(el = el.parentNode){
         if(el instanceof Document){
           break;
@@ -353,11 +368,13 @@
       return $();
     }
     hasParent(selector:String):Boolean{
-      if(this.length === 0) return false;
+      if(this.length === 0)
+        return false;
       return this.closest(selector).length > 0;
     }
     serializeAssoc():Object{
-      if(this.length === 0)return {};
+      if(this.length === 0)
+        return {};
       var
         self = this.elements[0],
         BRFix = /\r?\n/g,
@@ -372,7 +389,7 @@
     insertBefore(element):dQuery{
       var el = $.elements(element);
       if(el.length > 0 && this.length > 0){
-        $.each(this.elements.reverse(),function(n:Node){
+        $.each(this.elements.reverse(),function(n:HTMLElement){
           el[0].parentNode.insertBefore(n,el[0]);
         });
       }
@@ -381,14 +398,15 @@
     insertAfter(element):dQuery{
       var el = $.elements(element);
       if(el.length > 0 && this.length > 0){
-        $.each(this.elements.reverse(),function(n:Node){
+        $.each(this.elements.reverse(),function(n:HTMLElement){
           el[0].parentNode.insertBefore(n,el[0].nextSibling);
         });
       }
       return this;
     }
     serialize():String{
-      if(this.length === 0)return '';
+      if(this.length === 0)
+        return '';
       var data = [],spaceFix = /%20/g;
       $.each(this.serializeAssoc(),function(value:String,key:String){
         data.push((key+'='+value).replace(spaceFix,'+'));
@@ -430,7 +448,9 @@
       return a;
     }
     static each(object,callback:Function):void{
-      var i,ret;
+      var
+        i,
+        ret;
       if(typeof object == 'undefined') return ;
       try{
         if(object instanceof Array || object instanceof NodeList){
@@ -476,7 +496,7 @@
     static fromHTML(html:String):Array{
       var toReturn = [];
       Parser.innerHTML = html;
-      $.each(Parser.childNodes,function(n:Node){
+      $.each(Parser.childNodes,function(n:HTMLElement){
         toReturn.push(n.cloneNode(true));
       });
       Parser.innerHTML = '';
