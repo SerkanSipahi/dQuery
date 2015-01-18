@@ -162,10 +162,18 @@
       if(this.length === 0)
         return ;
       if(typeof text === 'undefined'){
-        return this.elements[0].innerHTML;
+        if(this.elements[0] instanceof Text){
+          return this.elements[0].textContent;
+        } else {
+          return this.elements[0].innerHTML;
+        }
       } else {
         this.each(function(n:HTMLElement){
-          n.innerHTML = text;
+          if(n instanceof Text){
+            n.textContent = text;
+          } else {
+            n.innerHTML = text;
+          }
         });
       }
       return this;
