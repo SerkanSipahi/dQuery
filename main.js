@@ -13,7 +13,7 @@
     length:Number;
     constructor(selector){
       var elements = [];
-      if(selector instanceof Document || selector instanceof Element){
+      if(selector instanceof Node){
         elements.push(selector);
       } else if(typeof selector === 'string'){
         if(selector.trim().substr(0,1) === '<'){
@@ -55,7 +55,7 @@
       var el = this.elements;
       if(this.length > 0){
         for(var i in el){
-          if(el.hasOwnProperty(i) && [i] instanceof Element || el[i] instanceof Document){
+          if(el.hasOwnProperty(i) && [i] instanceof Node){
             el[i].focus();
             break;
           }
@@ -482,11 +482,11 @@
         toReturn = object.elements;
       } else if(object instanceof Array || object instanceof NodeList) {
         $.each(object,function(n:HTMLElement){
-          if(n instanceof Element){
+          if(n instanceof Node){
             toReturn.push(n);
           }
         });
-      } else if(object instanceof Element){
+      } else if(object instanceof Node){
         toReturn.push(object);
       } else if(typeof object === 'string' && object.trim().substr(0,1) === '<'){
         toReturn = $.fromHTML(object);
