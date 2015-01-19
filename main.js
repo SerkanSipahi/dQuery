@@ -221,7 +221,7 @@
       return this.elements[0].classList.contains(name);
     }
     addClass(name:String){
-      if(this.length !== 1){
+      if(this.length !== 0){
         this.each(function(n:HTMLElement){
           n.classList.add(name);
         });
@@ -229,7 +229,7 @@
       return this;
     }
     removeClass(name:String):dQuery{
-      if(this.length !== 1){
+      if(this.length !== 0){
         this.each(function(n:HTMLElement){
           n.classList.remove(name);
         });
@@ -237,7 +237,7 @@
       return this;
     }
     toggleClass(name:String):dQuery{
-      if(this.length !== 1){
+      if(this.length !== 0){
         this.each(function(n:HTMLElement){
           n.classList.toggle(name);
         });
