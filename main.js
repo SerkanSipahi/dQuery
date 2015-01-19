@@ -55,7 +55,7 @@
       var el = this.elements;
       if(this.length > 0){
         for(var i in el){
-          if(el.hasOwnProperty(i) && [i] instanceof Node){
+          if(el.hasOwnProperty(i) && el[i] instanceof Node){
             el[i].focus();
             break;
           }
