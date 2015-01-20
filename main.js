@@ -5,23 +5,9 @@
     Document = HTMLDocument,
     Input = HTMLInputElement,
     LeNode = Node,
-    LeRegex = /^[A-Za-z]+[\w\-:]*$/,
+    LeRegex = /^[A-Za-z]*$/,
     Parser = document.createElement('div'),
-    Events = [],
-    QuerySelector = function(Context:Node,Selector:String){
-      var
-        firstChar = Selector.substr(0,1),
-        Rest;
-      if(firstChar === '#' && (Rest = Selector.substr(1)) && LeRegex.test(Rest) && Context instanceof Document){
-        return [Context.getElementById(Rest)];
-      } else if(firstChar === '.' && (Rest = Selector.substr(1)) && LeRegex.test(Rest)){
-        return Context.getElementsByClassName(Rest);
-      } else if(LeRegex.test(Selector)){
-        return Context.getElementsByTagName(Selector);
-      } else {
-        return Context.querySelectorAll(Selector);
-      }
-    };
+    Events = [];
   class dQuery{
     elements:Array;
     length:Number;
@@ -34,10 +20,7 @@
         if(selector.substr(0,1) === '<'){
           elements = $.fromHTML(selector);
         } else {
-          // Converting from NodeList to Array, dQuery/dQuery#17
-          $.each(QuerySelector(d,selector),function(n:Node){
-            elements.push(n);
-          });
+          elements = $.elements(d.querySelectorAll(selector));
         }
       } else if(typeof selector === 'object'){
         elements = $.elements(selector);
@@ -151,7 +134,7 @@
     find(selector:String):dQuery{
       if(!this.length)
         return this;
-      return $(QuerySelector(this.elements[0],selector));
+      return $(this.elements[0].querySelectorAll(selector));
     }
     parent():dQuery{
       if(!this.length || this.elements[0] instanceof Document)
@@ -475,8 +458,20 @@
     }
   }
   class LeDollar{
-    static constructor(selector){
-      return new dQuery(selector);
+    static constructor(args){
+      if(typeof args === 'string'){
+        var
+          first = args.substr(0,1),
+          rest = args.substr(1);
+        if(first === '#' && LeRegex.test(rest)){
+          return new dQuery(d.getElementById(rest));
+        } else if(first === '.' && LeRegex.test(rest)) {
+          return new dQuery(d.getElementsByClassName(rest));
+        } else if(LeRegex.test(rest)){
+          return new dQuery(d.getElementsByTagName(rest))
+        }
+      }
+      return new dQuery(args);
     }
     static each(object,callback){
       var i, ret;
