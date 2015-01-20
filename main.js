@@ -597,22 +597,28 @@
         Opts.url = url;
       return $.ajax(Opts);
     }
-    static getJSON(url,Opts){
-      Opts = Opts || {};
+    static getJSON(url,Data){
+      var Opts = {};
+      if(Data)
+        Opts.data = data;
       if(url)
         Opts.url = url;
       Opts.dataType = 'JSON';
       return $.ajax(Opts);
     }
-    static post(url,Opts){
-      Opts = Opts || {};
+    static post(url,Data){
+      var Opts = {};
+      if(Data)
+        Opts.data = data;
       if(url)
         Opts.url = url;
       Opts.type = 'POST';
       return $.ajax(Opts);
     }
-    static postJSON(url,Opts){
-      Opts = Opts || {};
+    static postJSON(url,Data){
+      var Opts = {};
+      if(Data)
+        Opts.data = data;
       if(url)
         Opts.url = url;
       Opts.type = 'POST';
