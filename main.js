@@ -5,7 +5,8 @@
     Document = HTMLDocument,
     LeNode = Node,
     LeRegex = /^[A-Za-z]+[\w\-:]*$/,
-    Parser = document.createElement('div');
+    Parser = document.createElement('div'),
+    Events = [];
   class dQuery{
     elements:Array;
     length:Number;
@@ -54,15 +55,38 @@
       } else {
         callback = b;
       }
-      this.each(function(n:Node){
-        n.addEventListener(type, callback,true);
-      });
+      if(type.indexOf('.') !== -1){
+        var name = type;
+        type = type.split('.')[0];
+        this.each(function(n:Node){
+          Events.push({node:n,event:callback,name:name});
+          n.addEventListener(type, callback,true);
+        });
+      } else {
+        this.each(function(n:Node){
+          n.addEventListener(type, callback,true);
+        });
+      }
       return callback;
     }
     off(type:String,callback:Function):dQuery{
-      this.each(function(n:HTMLElement){
-        n.removeEventListener(type,callback,true);
-      });
+      if(!callback && type.indexOf('.') !== -1){
+        var name = type;
+        type = type.split('.')[0];
+        this.each(function(n:HTMLElement){
+          $.each(Events,function(obj){
+            if(obj.name === name && obj.node === n){
+              n.removeEventListener(type,obj.event,true);
+              Events.splice(Events.indexOf(obj),1);
+              return false;
+            }
+          });
+        });
+      } else {
+        this.each(function(n:HTMLElement){
+          n.removeEventListener(type,callback,true);
+        });
+      }
       return this;
     }
     trigger(type:String,args:Object):dQuery{
@@ -120,4 +144,57 @@
       return this;
     }
   }
-})(document,window,$);
+  class LeDollar{
+    static constructor(selector){
+      return new dQuery(selector);
+    }
+    static each(object,callback){
+      var i, ret;
+      if(typeof object == 'undefined') return ;
+      try{
+        if(object instanceof Array || object instanceof NodeList){
+          Array.prototype.forEach.call(object,function(element,index,array){
+            if(callback.call(element,element,index,array) === false)
+              throw null;
+          });
+        } else {
+          for(i in object){
+            if(object.hasOwnProperty(i)){
+              if(callback.call(object[i],object[i],i,object) === false)
+                break;
+            }
+          }
+        }
+      } catch(e){
+
+      }
+    }
+    static elements(object, trim = true):Array{
+      var toReturn = [];
+      if(object instanceof dQuery){
+        toReturn = object.elements;
+      } else if(object instanceof Array || object instanceof NodeList) {
+        $.each(object,function(n:HTMLElement){
+          if(n instanceof Node){
+            toReturn.push(n);
+          }
+        });
+      } else if(object instanceof Node){
+        toReturn.push(object);
+      } else if(typeof object === 'string'){
+        if(trim){
+          object = object.trim();
+        }
+        if(object.substr(0,1) === '<'){
+          toReturn = $.fromHTML(object);
+        }
+      }
+      return toReturn;
+    }
+    static validate(Selector:String,el:HTMLElement):Boolean{
+      return (el instanceof Element || el instanceof Document) && (el.matches || el.matchesSelector || el.msMatchesSelector || el.mozMatchesSelector || el.webkitMatchesSelector || el.oMatchesSelector).call(el, Selector);
+    }
+  }
+  $ = w.$ = LeDollar;
+  w.dQuery = dQuery;
+})(document,window,window.$);
