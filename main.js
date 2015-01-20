@@ -13,7 +13,7 @@
         firstChar = Selector.substr(0,1),
         Rest;
       if(firstChar === '#' && (Rest = Selector.substr(1)) && LeRegex.test(Rest) && Context instanceof Document){
-        return Context.getElementById(Rest);
+        return [Context.getElementById(Rest)];
       } else if(firstChar === '.' && (Rest = Selector.substr(1)) && LeRegex.test(Rest)){
         return Context.getElementsByClassName(Rest);
       } else if(LeRegex.test(Selector)){
