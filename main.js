@@ -223,7 +223,9 @@
     addClass(name:String){
       if(this.length !== 0){
         this.each(function(n:HTMLElement){
-          n.classList.add(name);
+          if(n.classList){
+            n.classList.add(name);
+          }
         });
       }
       return this;
@@ -231,7 +233,9 @@
     removeClass(name:String):dQuery{
       if(this.length !== 0){
         this.each(function(n:HTMLElement){
-          n.classList.remove(name);
+          if(n.classList){
+            n.classList.remove(name);
+          }
         });
       }
       return this;
@@ -239,7 +243,9 @@
     toggleClass(name:String):dQuery{
       if(this.length !== 0){
         this.each(function(n:HTMLElement){
-          n.classList.toggle(name);
+          if(n.classList){
+            n.classList.toggle(name);
+          }
         });
       }
       return this;
