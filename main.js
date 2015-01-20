@@ -7,7 +7,21 @@
     LeNode = Node,
     LeRegex = /^[A-Za-z]+[\w\-:]*$/,
     Parser = document.createElement('div'),
-    Events = [];
+    Events = [],
+    QuerySelector = function(Context:Node,Selector:String){
+      var
+        firstChar = Selector.substr(0,1),
+        Rest;
+      if(firstChar === '#' && (Rest = Selector.substr(1)) && LeRegex.test(Rest) && Context instanceof Document){
+        return Context.getElementById(Rest);
+      } else if(firstChar === '.' && (Rest = Selector.substr(1)) && LeRegex.test(Rest)){
+        return Context.getElementsByClassName(Rest);
+      } else if(LeRegex.test(Selector)){
+        return Context.getElementsByTagName(Selector);
+      } else {
+        return Context.querySelectorAll(Selector);
+      }
+    };
   class dQuery{
     elements:Array;
     length:Number;
@@ -21,7 +35,7 @@
           elements = $.fromHTML(selector);
         } else {
           // Converting from NodeList to Array, dQuery/dQuery#17
-          $.each(d.querySelectorAll(selector),function(n:Node){
+          $.each(QuerySelector(d,selector),function(n:Node){
             elements.push(n);
           });
         }
@@ -137,7 +151,7 @@
     find(selector:String):dQuery{
       if(!this.length)
         return this;
-      return $(this.elements[0].querySelectorAll(selector));
+      return $(QuerySelector(this.elements[0],selector));
     }
     parent():dQuery{
       if(!this.length || this.elements[0] instanceof Document)
