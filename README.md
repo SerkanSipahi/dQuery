@@ -17,6 +17,9 @@ Speed, A lot of speed, in both page loading and execution. See the Benchmarks li
 ## List of Supported Functions
 A list of supported functions can be found [here](https://github.com/dQuery/dQuery/issues/12)
 
+### Migration Guide
+If You're using Migrating from jQuery to dQuery and are using $.ajax-like functions in your Website, Please have a look at the [Migration Guide.][4].
+
 ## License
 
 MIT © steelbrain
@@ -24,3 +27,4 @@ MIT © steelbrain
 [1]:https://github.com/dQuery/dQuery/wiki/Benchmarks
 [2]:https://github.com/jdarling/Object.observe
 [3]:https://github.com/dQuery/dQuery/issues/3
+[4]:https://github.com/dQuery/dQuery/blob/master/Migration.md
