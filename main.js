@@ -450,11 +450,7 @@
     serialize(Array):String{
       if(this.length === 0)
         return '';
-      var data = [],spaceFix = /%20/g;
-      $.each(Array || this.serializeAssoc(),function(value:String,key:String){
-        data.push((key+'='+value).replace(spaceFix,'+'));
-      });
-      return data.join('&');
+      return $.serialize(this.serializeAssoc());
     }
   }
   class LeDollar{
@@ -472,6 +468,13 @@
         }
       }
       return new dQuery(args);
+    }
+    static serialize(Array):String{
+      var data = [],spaceFix = /%20/g;
+      $.each(Array,function(value:String,key:String){
+        data.push((key+'='+value).replace(spaceFix,'+'));
+      });
+      return data.join('&');
     }
     static each(object,callback){
       var i, ret;
@@ -554,8 +557,79 @@
       w.$ = Old$;
       return dQuery;
     }
+    // Ajax Stuff
+    static ajax(Opts){
+      return new Promise(function(resolve,reject){
+        Opts = $.extend({},$.ajaxDefaults,Opts);
+        Opts.data = (Opts.data instanceof FormData) ? Opts.data : $.serialize(Opts.data);
+        var XHR = new XMLHttpRequest();
+        XHR.open(Opts.type,Opts.url,true);
+        if(Opts.beforeSend(XHR,Opts) === false){
+          return reject();
+        }
+        if(Opts.withCredentials){
+          XHR.withCredentials = true;
+        }
+        if(Opts.contentType){
+          XHR.setRequestHeader("Content-Type",Opts.contentType);
+        }
+        XHR.onload = function(){
+          if (XHR.status >= 200 && XHR.status < 400) {
+            // Success!
+            if(Opts.dataType.toUpperCase() === 'JSON'){
+              resolve(JSON.parse(XHR.responseText),XHR);
+            } else {
+              resolve(XHR.responseText,XHR);
+            }
+          } else {
+            reject(XHR);
+          }
+        };
+        XHR.onerror = function(){
+          reject(XHR);
+        };
+        XHR.send(Opts.data);
+      });
+    }
+    static get(url,Opts){
+      Opts = Opts || {};
+      if(url)
+        Opts.url = url;
+      return $.ajax(Opts);
+    }
+    static getJSON(url,Opts){
+      Opts = Opts || {};
+      if(url)
+        Opts.url = url;
+      Opts.dataType = 'JSON';
+      return $.ajax(Opts);
+    }
+    static post(url,Opts){
+      Opts = Opts || {};
+      if(url)
+        Opts.url = url;
+      Opts.type = 'POST';
+      return $.ajax(Opts);
+    }
+    static postJSON(url,Opts){
+      Opts = Opts || {};
+      if(url)
+        Opts.url = url;
+      Opts.type = 'POST';
+      Opts.dataType = 'JSON';
+      return $.ajax(Opts);
+    }
   }
   LeDollar.fn = {};
+  LeDollar.ajaxDefaults = {
+    type:"GET",
+    contentType:'application/x-www-form-urlencoded', // set to null to disable
+    url: w.location.href,
+    data: {},
+    dataType: 'text',
+    beforeSend:function(xhr,opts){},
+    withCredentials:false
+  };
   Object.observe(LeDollar.fn,function(changes){
     $.each(changes[0].object,function(callback,name){
       dQuery.prototype[name] = callback;

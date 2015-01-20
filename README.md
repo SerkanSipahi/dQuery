@@ -10,7 +10,6 @@ The `build/main-with-shim.js` includes the shim as well.
 
 ## What's not Supported?
  * Older Browsers (wontfix)
- * Ajax (see [bug #3][3])
 
 ## What's the gain of this?
 Speed, A lot of speed, in both page loading and execution. See the Benchmarks link above for performance graphs.
