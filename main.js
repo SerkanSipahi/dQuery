@@ -532,9 +532,9 @@
     }
     static extend(out) {
       out = out || {};
-      $.each(arguments,function(obj){
+      $.each(Array.prototype.slice.call(arguments,1),function(obj){
         $.each(obj,function(val,key){
-          if(typeof val === 'object'){
+          if(typeof val === 'object' && val !== null){
             out[key] = out[key] || {};
             $.extend(out[key],val);
           } else {
