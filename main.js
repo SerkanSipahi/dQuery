@@ -626,7 +626,7 @@
       return $.ajax(Opts);
     }
   }
-  LeDollar.fn = {};
+  LeDollar.fn = dQuery.prototype;
   LeDollar.ajaxDefaults = {
     type:"GET",
     contentType:'application/x-www-form-urlencoded', // set to null to disable
@@ -636,10 +636,5 @@
     beforeSend:function(xhr,opts){},
     withCredentials:false
   };
-  Object.observe(LeDollar.fn,function(changes){
-    $.each(changes[0].object,function(callback,name){
-      dQuery.prototype[name] = callback;
-    });
-  });
   $ = w.$ = w.dQuery = LeDollar;
 })(document,window,window.$);
