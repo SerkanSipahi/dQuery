@@ -12,7 +12,7 @@
     "events",
     "dom"
   ],
-  "license": "QuickPress <https://github.com/raeesiqbal/QuickPress/blob/master/license.txt>",
+  "license": "MIT",
   "ignore": [
     "**/.*",
     "node_modules",
