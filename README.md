@@ -5,9 +5,6 @@ dQuery is a lightweight jQuery alternative. It aims to be API compatible with jQ
 It's very lightweight. Because dQuery uses Native aka Vanilla APIs to do the difficult part, It's extremely fast,
 say the [Benchmarks][1].
 
-dQuery uses Object.observe, which is not yet natively supported in all browsers. Therefore, We use the shim from [jdarling][2].
-The `build/main-with-shim.js` includes the shim as well.
-
 ## What's not Supported?
  * Older Browsers (wontfix)
 
@@ -18,13 +15,11 @@ Speed, A lot of speed, in both page loading and execution. See the Benchmarks li
 A list of supported functions can be found [here](https://github.com/dQuery/dQuery/issues/12)
 
 ### Migration Guide
-If You're using Migrating from jQuery to dQuery and are using $.ajax-like functions in your Website, Please have a look at the [Migration Guide][4].
+If You're using Migrating from jQuery to dQuery and are using $.ajax-like functions in your Website, Please have a look at the [Migration Guide][2].
 
 ## License
 
 MIT © steelbrain
 
 [1]:https://github.com/dQuery/dQuery/wiki/Benchmarks
-[2]:https://github.com/jdarling/Object.observe
-[3]:https://github.com/dQuery/dQuery/issues/3
-[4]:https://github.com/dQuery/dQuery/blob/master/Migration.md
+[2]:https://github.com/dQuery/dQuery/blob/master/Migration.md
