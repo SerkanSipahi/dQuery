@@ -263,15 +263,13 @@
         return this;
       return $(this[0].cloneNode(true));
     }
-    //TODO: This doesn't work, make it work
     remove():void{
       if(!this.length || this[0] instanceof Document)
         return ;
       this.each(function(n:HTMLElement){
         n.parentNode.removeChild(n);
       });
-      this.elements = [];
-      this.length = 0;
+      $.empty(this);
     }
     prepend(object):dQuery{
       if(this.length){
@@ -478,6 +476,23 @@
         data.push((key+'='+value).replace(spaceFix,'+'));
       });
       return data.join('&');
+    }
+    static empty(object){
+      var i;
+      if(typeof object.length !== 'undefined'){
+        for(i = 0 ; i < object.length; ++i){
+          delete object[i];
+        }
+        object.length = 0;
+      } else if(object instanceof Array){
+        object = [];
+      } else {
+        for(i in object){
+          if(object.hasOwnProperty(i)){
+            delete object[i];
+          }
+        }
+      }
     }
     static each(object,callback){
       var i, ret;
