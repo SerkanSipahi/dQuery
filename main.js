@@ -122,15 +122,17 @@
         return this;
       return $(this[0].childNodes[Index || 0]);
     }
-    //TODO: This doesn't work, make it work
     eq(Index:Number){ // Indexes start at 0
       if(!this.length)
         return this;
-      this.elements =
-        this.elements[Index]
-        ? [this.elements[Index]]
-        : [];
-      this.length = this.elements.length;
+      if(Index >= this.length){
+        $.empty(this);
+      } else{
+        var el = this[Index];
+        $.empty(this);
+        this.length = 1;
+        this[Index] = el;
+      }
       return this;
     }
     find(selector:String):dQuery{
