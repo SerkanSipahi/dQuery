@@ -9,12 +9,11 @@
     Parser = document.createElement('div'),
     Events = [];
   class dQuery{
-    elements:Array;
     length:Number;
     constructor(selector){
-      var elements = [];
+      var elements;
       if(selector instanceof LeNode){
-        elements.push(selector);
+        elements = [selector];
       } else if(typeof selector === 'string'){
         selector = selector.trim();
         if(selector.substr(0,1) === '<'){
@@ -25,7 +24,9 @@
       } else if(typeof selector === 'object'){
         elements = $.elements(selector);
       }
-      this.elements = elements;
+      $.each(elements,function(n:Node,i:Number) {
+        this[i] = n;
+      }.bind(this));
       this.length = elements.length;
     }
     // Callback-kind-of stuff first
@@ -105,10 +106,10 @@
       if(!this.length)
         return this;
       if(typeof Selector === 'undefined'){
-        return $(this.elements[0].childNodes);
+        return $(this[0].childNodes);
       } else {
         var toReturn = [];
-        $.each(this.elements[0].childNodes,function(n:HTMLElement){
+        $.each(this[0].childNodes,function(n:HTMLElement){
           if($.validate(Selector,n)){
             toReturn.push(n);
           }
@@ -119,43 +120,46 @@
     child(Index:Number){ // Indexes start at 0
       if(!this.length)
         return this;
-      return $(this.elements[0].childNodes[Index || 0]);
+      return $(this[0].childNodes[Index || 0]);
     }
     eq(Index:Number){ // Indexes start at 0
       if(!this.length)
         return this;
-      this.elements =
-        this.elements[Index]
-        ? [this.elements[Index]]
-        : [];
-      this.length = this.elements.length;
+      if(Index >= this.length){
+        $.empty(this);
+      } else{
+        var el = this[Index];
+        $.empty(this);
+        this.length = 1;
+        this[Index] = el;
+      }
       return this;
     }
     find(selector:String):dQuery{
       if(!this.length)
         return this;
-      return $(this.elements[0].querySelectorAll(selector));
+      return $(this[0].querySelectorAll(selector));
     }
     parent():dQuery{
-      if(!this.length || this.elements[0] instanceof Document)
+      if(!this.length || this[0] instanceof Document)
         return this;
-      return $(this.elements[0].parentNode);
+      return $(this[0].parentNode);
     }
     next():dQuery{
-      if(!this.length || this.elements[0] instanceof Document)
+      if(!this.length || this[0] instanceof Document)
         return this;
-      return $(this.elements[0].nextElementSibling);
+      return $(this[0].nextElementSibling);
     }
     prev():dQuery{
-      if(!this.length || this.elements[0] instanceof Document)
+      if(!this.length || this[0] instanceof Document)
         return this;
-      return $(this.elements[0].previousElementSibling);
+      return $(this[0].previousElementSibling);
     }
     closest(selector:String):dQuery{
       if(this.length){
         if(!selector || !selector.length)
-          return $(this.elements[0].parentNode);
-        var el = this.elements[0];
+          return $(this[0].parentNode);
+        var el = this[0];
         while(el = el.parentNode){
           if(el instanceof Document){
             break;
@@ -173,7 +177,7 @@
         return $();
       var
         skip = (!selector || !selector.length),
-        el = this.elements[0],
+        el = this[0],
         elements = [];
       while(el = el.parentNode){
         if(el instanceof Document){
@@ -189,9 +193,9 @@
     parentsUntil(selector:String):dQuery{
       if(this.length){
         if(!selector || !selector.length)
-          return $(this.elements[0].parentNode);
+          return $(this[0].parentNode);
         var
-          el = this.elements[0],
+          el = this[0],
           elements = [];
         while(el = el.parentNode){
           if(el instanceof Document){
@@ -208,24 +212,24 @@
     }
     first(){
       if(this.length){
-        return $(this.elements[0]);
+        return $(this[0]);
       } else {
         return this;
       }
     }
     last(){
       if(this.length){
-        return $(this.elements[this.length-1]);
+        return $(this[this.length-1]);
       }
       return this;
     }
     // DOM Operations
     each(Callback:Function):dQuery{
-      $.each(this.elements,Callback);
+      $.each(this,Callback);
       return this;
     }
     eachElement(Callback:Function):dQuery{
-      $.each(this.elements,function(n:Node){
+      $.each(this,function(n:Node){
         if(n instanceof Element){
           return Callback.apply(this,arguments);
         }
@@ -259,20 +263,19 @@
     clone():dQuery{
       if(!this.length)
         return this;
-      return $(this.elements[0].cloneNode(true));
+      return $(this[0].cloneNode(true));
     }
     remove():void{
-      if(!this.length || this.elements[0] instanceof Document)
+      if(!this.length || this[0] instanceof Document)
         return ;
       this.each(function(n:HTMLElement){
         n.parentNode.removeChild(n);
       });
-      this.elements = [];
-      this.length = 0;
+      $.empty(this);
     }
     prepend(object):dQuery{
       if(this.length){
-        var target = this.elements[0];
+        var target = this[0];
         $.each($.elements(object).reverse(),function(n:HTMLElement){
           target.insertBefore(n,target.firstChild);
         });
@@ -281,7 +284,7 @@
     }
     append(object):dQuery{
       if(object.length && this.length){
-        var element = this.elements[0];
+        var element = this[0];
         $.each($.elements(object).reverse(),function(n:HTMLElement){
           element.appendChild(n);
         })
@@ -291,7 +294,7 @@
     appendTo(object):dQuery{
       if(this.length){
         $.each($.elements(object),function(n:HTMLElement){
-          $.each(this.elements.reverse(),function(nn:HTMLElement){
+          $.each($.elements(this).reverse(),function(nn:HTMLElement){
             n.appendChild(nn);
           });
         }.bind(this));
@@ -301,7 +304,7 @@
     prependTo(object):dQuery{
       if(this.length){
         $.each($.elements(object),function(n:HTMLElement){
-          $.each(this.elements.reverse(),function(nn:HTMLElement){
+          $.each($.elements(this).reverse(),function(nn:HTMLElement){
             n.insertBefore(nn,n.firstChild);
           });
         }.bind(this));
@@ -311,7 +314,7 @@
     insertBefore(element):dQuery{
       var el = $.elements(element);
       if(el.length && this.length && !el[0] instanceof Document){
-        $.each(this.elements.reverse(),function(n:HTMLElement){
+        $.each($.elements(this).reverse(),function(n:HTMLElement){
           el[0].parentNode.insertBefore(n,el[0]);
         });
       }
@@ -320,7 +323,7 @@
     insertAfter(element):dQuery{
       var el = $.elements(element);
       if(el.length && this.length && !el[0] instanceof Document){
-        $.each(this.elements.reverse(),function(n:HTMLElement){
+        $.each($.elements(this).reverse(),function(n:HTMLElement){
           el[0].parentNode.insertBefore(n,el[0].nextSibling);
         });
       }
@@ -330,7 +333,7 @@
       if(!this.length) return this;
       var elements = $.elements(object);
       if(elements.length > 0){
-        this.elements[0].parentNode.replaceChild(elements[0],this.elements[0]);
+        this[0].parentNode.replaceChild(elements[0],this[0]);
       }
       return this;
     }
@@ -343,8 +346,8 @@
     contains(object):Boolean{
       var el = $.elements(object);
       return this.length && object.length &&
-        this.elements[0] !== el[0] &&
-        this.elements[0].contains(el[0]);
+        this[0] !== el[0] &&
+        this[0].contains(el[0]);
     }
     empty():void{
       if(this.length){
@@ -355,7 +358,7 @@
     }
     // Boolean Stuff
     hasClass(name:String):Boolean{
-      return this.length && this.elements[0].classList.contains(name);
+      return this.length && this[0].classList.contains(name);
     }
     hasParent(selector:String):Boolean{
       return this.length && this.closest(selector).length > 0;
@@ -365,7 +368,7 @@
       if(!this.length)
         return ;
       if(arguments.length === 1){
-        return this.elements[0].getAttribute(name);
+        return this[0].getAttribute(name);
       } else {
         this.eachElement(function(n:HTMLElement){
           n.setAttribute(name,value);
@@ -402,7 +405,7 @@
       if(!this.length)
         return ;
       if(arguments.length === 0){
-        return this.elements[0].textContent
+        return this[0].textContent
       } else {
         this.each(function(n:HTMLElement){
           n.textContent = text;
@@ -437,17 +440,17 @@
       var
         BRFix = /\r?\n/g,
         toReturn = {};
-      $.each(this.elements[0].elements,function(){
-        if(this.name){
-          if((this.type === 'checkbox' || this.type === 'radio') && !this.checked){
+      $.each(this[0].elements,function(n){
+        if(n.name){
+          if((n.type === 'checkbox' || n.type === 'radio') && !n.checked){
             return ;
           }
-          toReturn[this.name] = this.value.replace(BRFix, "\n");
+          toReturn[n.name] = n.value.replace(BRFix, "\n");
         }
       });
       return toReturn;
     }
-    serialize(Array):String{
+    serialize():String{
       if(this.length === 0)
         return '';
       return $.serialize(this.serializeAssoc());
@@ -476,6 +479,23 @@
       });
       return data.join('&');
     }
+    static empty(object){
+      var i;
+      if(typeof object.length !== 'undefined'){
+        for(i = 0 ; i < object.length; ++i){
+          delete object[i];
+        }
+        object.length = 0;
+      } else if(object instanceof Array){
+        object = [];
+      } else {
+        for(i in object){
+          if(object.hasOwnProperty(i)){
+            delete object[i];
+          }
+        }
+      }
+    }
     static each(object,callback){
       var i, ret;
       if(!object) return ;
@@ -498,9 +518,7 @@
             }
           }
         }
-      } catch(e){
-
-      }
+      } catch(e){}
     }
     static elements(object, trim = true):Array{
       var toReturn = [];
