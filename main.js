@@ -429,7 +429,7 @@
         return val;
       } else {
         this.eachElement(function(n:HTMLElement){
-          if(n instanceof Input){
+          if(n instanceof Input || n.tagName === 'TEXTAREA'){
             n.value = text;
           }
         });
