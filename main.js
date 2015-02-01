@@ -315,7 +315,7 @@
     }
     insertBefore(element):dQuery{
       var el = $.elements(element);
-      if(el.length && this.length && !el[0] instanceof Document){
+      if(el.length && this.length && !(el[0] instanceof Document)){
         $.each($.elements(this).reverse(),function(n:HTMLElement){
           el[0].parentNode.insertBefore(n,el[0]);
         });
@@ -324,7 +324,7 @@
     }
     insertAfter(element):dQuery{
       var el = $.elements(element);
-      if(el.length && this.length && !el[0] instanceof Document){
+      if(el.length && this.length && !(el[0] instanceof Document)){
         $.each($.elements(this).reverse(),function(n:HTMLElement){
           el[0].parentNode.insertBefore(n,el[0].nextSibling);
         });
@@ -526,7 +526,7 @@
     }
     static elements(object, trim = true):Array{
       var toReturn = [];
-      if(object instanceof Array || object instanceof NodeList) {
+      if(object instanceof Array || object instanceof NodeList || object instanceof dQuery || object instanceof w.jQuery) {
         $.each(object,function(n:HTMLElement){
           if(n instanceof Node){
             toReturn.push(n);
