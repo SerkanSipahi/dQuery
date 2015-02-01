@@ -421,7 +421,7 @@
       if(arguments.length === 0){
         var val;
         this.eachElement(function(n:HTMLElement){
-          if(n instanceof Input) {
+          if(n instanceof Input || n.tagName === 'TEXTAREA'){
             val = n.value;
             return false;
           }
