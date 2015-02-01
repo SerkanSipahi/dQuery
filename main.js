@@ -23,6 +23,8 @@
         }
       } else if(typeof selector === 'object'){
         elements = $.elements(selector);
+      } else {
+        elements = [];
       }
       $.each(elements,function(n:Node,i:Number) {
         this[i] = n;
@@ -469,6 +471,8 @@
         } else if(LeRegex.test(rest)){
           return new dQuery(d.getElementsByTagName(rest))
         }
+      } else if(args instanceof dQuery){
+        return args
       }
       return new dQuery(args);
     }
@@ -522,9 +526,7 @@
     }
     static elements(object, trim = true):Array{
       var toReturn = [];
-      if(object instanceof dQuery){
-        toReturn = object.elements;
-      } else if(object instanceof Array || object instanceof NodeList) {
+      if(object instanceof Array || object instanceof NodeList) {
         $.each(object,function(n:HTMLElement){
           if(n instanceof Node){
             toReturn.push(n);
