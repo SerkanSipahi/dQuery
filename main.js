@@ -48,8 +48,7 @@
       var callback;
       if(arguments.length === 3) {
         callback = function(e){
-          var target = $(e.target);
-          if($.validate(b,target) || $(target).hasParent(b)){
+          if($.validate(b,e.target) || $(e.target).hasParent(b)){
             c.apply(e.target,arguments);
           }
         };
