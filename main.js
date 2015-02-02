@@ -520,7 +520,7 @@
     }
     static elements(object, trim = true):Array{
       var toReturn = [];
-      if(object instanceof Array || object instanceof NodeList || object instanceof dQuery || (w.jQuery && object instanceof w.jQuery)){
+      if(object instanceof Array || object instanceof NodeList || typeof object.length !== 'undefined'){
         $.each(object,function(n:HTMLElement){
           if(n instanceof Node){
             toReturn.push(n);
