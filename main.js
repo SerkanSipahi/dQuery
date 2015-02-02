@@ -503,16 +503,11 @@
       var i, ret;
       if(!object) return ;
       try{
-        if(object instanceof Array || object instanceof NodeList){
+        if(object instanceof Array || object instanceof NodeList || typeof object.length !== 'undefined'){
           Array.prototype.forEach.call(object,function(element,index,array){
             if(callback.call(element,element,index,array) === false)
               throw null;
           });
-        } else if(typeof object.length !== 'undefined'){
-          for(i=0;i<object.length;++i){
-            if(callback.call(object[i],object[i],i,object) === false)
-              break;
-          }
         } else {
           for(i in object){
             if(object.hasOwnProperty(i)){
