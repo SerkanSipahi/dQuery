@@ -477,12 +477,10 @@
       return data.join('&');
     }
     static each(object,callback){
-      var
-        i, ret,
-        constructor = object.constructor.name;
+      var i, ret;
       if(!object) return ;
       try{
-        if(constructor === 'Array' || constructor === 'NodeList' || typeof object.length !== 'undefined'){
+        if(typeof object.length !== 'undefined'){
           Array.prototype.forEach.call(object,function(element,index,array){
             if(callback.call(element,element,index,array) === false)
               throw null;
@@ -498,9 +496,7 @@
       } catch(e){}
     }
     static elements(object, trim = true):Array{
-      var
-        toReturn = [],
-        constructor;
+      var toReturn = [];
       if(object === null) {
         return toReturn;
       }
@@ -512,15 +508,8 @@
           toReturn = $.fromHTML(object);
         }
       } else if(typeof object === 'object'){
-        constructor = object.constructor.name;
-        if(constructor === 'dQuery'){
+        if(object.constructor.name === 'dQuery'){
           return object.elements;
-        } else if(constructor === 'Array' || constructor === 'NodeList'){
-          object.forEach(function(n:Node){
-            if(n.constructor.name === 'Node'){
-              toReturn.push(n);
-            }
-          });
         } else if(typeof object.length !== 'undefined'){
           Array.prototype.forEach.call(object,function(n:Node){
             if(n.constructor.name === 'Node'){
