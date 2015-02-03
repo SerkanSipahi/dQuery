@@ -536,9 +536,6 @@
     static validate(Selector:String,el:HTMLElement):Boolean{
       return (el instanceof Element || el instanceof Document) && (el.matches || el.matchesSelector || el.msMatchesSelector || el.mozMatchesSelector || el.webkitMatchesSelector || el.oMatchesSelector).call(el, Selector);
     }
-    static rand():String{
-      return (Math.random() + 1).toString(36).substring(7)
-    }
     static extend(out) {
       out = out || {};
       $.each(Array.prototype.slice.call(arguments,1),function(obj){
