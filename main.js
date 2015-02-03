@@ -121,12 +121,11 @@
       if(!this.length)
         return this;
       if(Index >= this.length){
-        $.empty(this);
+        this.elements = [];
+        this.length = 0;
       } else{
-        var el = this[Index];
-        $.empty(this);
+        this.elements = this.elements[Index];
         this.length = 1;
-        this[Index] = el;
       }
       return this;
     }
@@ -266,7 +265,8 @@
       this.each(function(n:HTMLElement){
         n.parentNode.removeChild(n);
       });
-      $.empty(this);
+      this.elements = [];
+      this.length = 0;
     }
     prepend(object):dQuery{
       if(this.length){
@@ -476,28 +476,13 @@
       });
       return data.join('&');
     }
-    static empty(object){
-      var i;
-      if(typeof object.length !== 'undefined'){
-        for(i = 0 ; i < object.length; ++i){
-          delete object[i];
-        }
-        object.length = 0;
-      } else if(object instanceof Array){
-        object = [];
-      } else {
-        for(i in object){
-          if(object.hasOwnProperty(i)){
-            delete object[i];
-          }
-        }
-      }
-    }
     static each(object,callback){
-      var i, ret;
+      var
+        i, ret,
+        constructor = object.constructor.name;
       if(!object) return ;
       try{
-        if(object instanceof Array || object instanceof NodeList || typeof object.length !== 'undefined'){
+        if(constructor === 'Array' || constructor === 'NodeList' || typeof object.length !== 'undefined'){
           Array.prototype.forEach.call(object,function(element,index,array){
             if(callback.call(element,element,index,array) === false)
               throw null;
