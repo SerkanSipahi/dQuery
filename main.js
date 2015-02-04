@@ -517,7 +517,7 @@
           return object.elements;
         } else if(typeof object.length !== 'undefined'){
           Array.prototype.forEach.call(object,function(n:Node){
-            if(n.constructor.name === 'Node'){
+            if(n instanceof Node){
               toReturn.push(n);
             }
           });
