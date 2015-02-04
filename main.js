@@ -523,7 +523,7 @@
       return toReturn;
     }
     static validate(Selector:String,el:HTMLElement):Boolean{
-      return (el instanceof Element || el instanceof Document) && (el.matches || el.matchesSelector || el.msMatchesSelector || el.mozMatchesSelector || el.webkitMatchesSelector || el.oMatchesSelector).call(el, Selector);
+      return (el instanceof Element || el instanceof Document) && el.matches(Selector);
     }
     static extend(out) {
       out = out || {};
