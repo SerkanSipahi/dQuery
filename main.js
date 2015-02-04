@@ -462,7 +462,9 @@
         } else if(first === '.' && LeRegex.test(rest)) {
           return new dQuery(d.getElementsByClassName(rest));
         } else if(LeRegex.test(rest)){
-          return new dQuery(d.getElementsByTagName(rest))
+          return new dQuery(d.getElementsByTagName(rest));
+        } else {
+          return new dQuery(d.querySelectorAll(args));
         }
       } else if(args instanceof dQuery){
         return args
