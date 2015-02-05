@@ -454,6 +454,7 @@
   class LeDollar{
     static constructor(args){
       if(typeof args === 'string'){
+        args = args.trim();
         var
           first = args.substr(0,1),
           rest = args.substr(1);
