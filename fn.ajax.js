@@ -1,4 +1,4 @@
-(function(LePrototype){
+(function(LePrototype,w){
   $.ajaxDefaults = {
     type:"GET",
     contentType:'application/x-www-form-urlencoded', // set to null to disable
@@ -75,4 +75,4 @@
     Opts.dataType = 'JSON';
     return $.ajax(Opts);
   };
-})($.fn);
+})($.fn,window);
