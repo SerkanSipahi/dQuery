@@ -484,12 +484,10 @@
       var i, ret;
       if(!object) return ;
       try{
-        if(typeof object.elements !== 'undefined'){
-          Array.prototype.forEach.call(object.elements,function(element,index,array){
-            if(callback.call(element,element,index,array) === false)
-              throw null;
-          });
-        } else if(typeof object.length !== 'undefined'){
+        if(typeof object.length !== 'undefined'){
+          if(typeof object.elements !== 'undefined'){
+            object = object.elements;
+          }
           Array.prototype.forEach.call(object,function(element,index,array){
             if(callback.call(element,element,index,array) === false)
               throw null;
