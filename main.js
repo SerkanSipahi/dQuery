@@ -463,6 +463,8 @@
           return new dQuery(d.getElementsByClassName(rest));
         } else if(LeRegex.test(rest)){
           return new dQuery(d.getElementsByTagName(rest));
+        } else if(first === '<') {
+          return new dQuery($.fromHTML(args));
         } else {
           return new dQuery(d.querySelectorAll(args));
         }
