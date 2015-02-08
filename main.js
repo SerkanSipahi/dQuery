@@ -284,8 +284,9 @@
       if(this.length){
         var element = this.elements[0];
         if(typeof object === 'string'){
-          element.append(object);
-        } else if(object.length){
+          object = $.fromHTML(object);
+        }
+        if(object.length){
           $.each($.elements(object),function(n:HTMLElement){
             element.appendChild(n);
           })
