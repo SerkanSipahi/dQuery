@@ -271,6 +271,9 @@
     prepend(object):dQuery{
       if(this.length){
         var target = this.elements[0];
+        if(typeof object === 'string'){
+          object = $.fromHTML(object);
+        }
         $.each($.elements(object).reverse(),function(n:HTMLElement){
           target.insertBefore(n,target.firstChild);
         });
@@ -278,18 +281,22 @@
       return this;
     }
     append(object):dQuery{
-      if(object.length && this.length){
+      if(this.length){
         var element = this.elements[0];
-        $.each($.elements(object).reverse(),function(n:HTMLElement){
-          element.appendChild(n);
-        })
+        if(typeof object === 'string'){
+          element.append(object);
+        } else if(object.length){
+          $.each($.elements(object),function(n:HTMLElement){
+            element.appendChild(n);
+          })
+        }
       }
       return this;
     }
     appendTo(object):dQuery{
       if(this.length){
         $.each($.elements(object),function(n:HTMLElement){
-          $.each(this.elements.reverse(),function(nn:HTMLElement){
+          $.each(this.elements,function(nn:HTMLElement){
             n.appendChild(nn);
           });
         }.bind(this));
