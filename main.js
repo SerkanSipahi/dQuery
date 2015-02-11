@@ -34,6 +34,10 @@
       this.on('click',callback);
       return this;
     }
+    change(callback:Function):dQuery{
+      this.on('change',callback);
+      return this;
+    }
     submit(callback:Function):dQuery{
       this.on('submit',callback);
       return this;
