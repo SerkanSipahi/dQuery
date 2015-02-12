@@ -528,7 +528,7 @@
           toReturn = $.fromHTML(object);
         }
       } else if(typeof object === 'object'){
-        if(object.constructor.name === 'dQuery'){
+        if(object instanceof dQuery){
           return object.elements;
         } else if(typeof object.length !== 'undefined'){
           Array.prototype.forEach.call(object,function(n:Node){
