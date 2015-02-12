@@ -1,5 +1,5 @@
 (function(LePrototype,w){
-  $.ajaxDefaults = {
+  LePrototype.ajaxDefaults = {
     type:"GET",
     contentType:'application/x-www-form-urlencoded', // set to null to disable
     url: w.location.href,
@@ -10,7 +10,7 @@
   };
   LePrototype.ajax = function(Opts){
     return new Promise(function(resolve,reject){
-      Opts = $.extend({},$.ajaxDefaults,Opts);
+      Opts = $.extend({},LePrototype.ajaxDefaults,Opts);
       Opts.data = (Opts.data instanceof FormData) ? Opts.data : $.serialize(Opts.data);
       var XHR = new XMLHttpRequest();
       XHR.open(Opts.type,Opts.url,true);
