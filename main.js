@@ -497,7 +497,7 @@
       var i, ret;
       if(!object) return ;
       try{
-        if(typeof object.length !== 'undefined'){
+        if(typeof object.length !== 'undefined' && typeof object !== 'function'){
           if(typeof object.elements !== 'undefined'){
             object = object.elements;
           }
