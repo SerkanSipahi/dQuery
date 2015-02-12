@@ -75,4 +75,4 @@
     Opts.dataType = 'JSON';
     return $.ajax(Opts);
   };
-})($.fn,window);
+})($,window);
