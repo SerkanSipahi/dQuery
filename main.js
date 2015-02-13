@@ -549,7 +549,7 @@
       out = out || {};
       $.each(Array.prototype.slice.call(arguments,1),function(obj){
         $.each(obj,function(val,key){
-          if(typeof val === 'object' && val !== null){
+          if(typeof val === 'object' && val !== null && val.constructor.name !== 'FormData'){
             out[key] = out[key] || {};
             $.extend(out[key],val);
           } else {
