@@ -261,7 +261,14 @@
     clone():dQuery{
       if(!this.length)
         return this;
-      return $(this.elements[0].cloneNode(true));
+      if(this.length === 1){
+        return $(this.elements[0].cloneNode(true));
+      }
+      var LeElements = [];
+      this.each(function(n:Node){
+        LeElements.push(n.cloneNode(true));
+      });
+      return $(LeElements);
     }
     remove():void{
       if(!this.length || this.elements[0] instanceof Document)
