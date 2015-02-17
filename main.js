@@ -128,7 +128,7 @@
         this.elements = [];
         this.length = 0;
       } else{
-        this.elements = this.elements[Index];
+        this.elements = [this.elements[Index]];
         this.length = 1;
       }
       return this;
