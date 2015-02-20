@@ -1,3 +1,4 @@
+// @Compiler-Output "build/fn.ajax.min.js"
 (function(LePrototype,w){
   LePrototype.ajaxDefaults = {
     type:"GET",
