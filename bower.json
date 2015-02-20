@@ -1,12 +1,12 @@
 {
   "name": "dQuery",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "homepage": "https://github.com/steelbrain/dQuery",
   "authors": [
     "steelbrain <aneesiqbalbhatti@gmail.com>"
   ],
   "description": "A user friendly rewrite of jQuery",
-  "main": "build/main.js",
+  "main": "build/main-with-ajax.min.js",
   "keywords": [
     "jquery",
     "events",
