@@ -1,3 +1,5 @@
+// @Compiler-Output "build/main.min.js"
+// @Compiler-Name "ReactTools"
 (function(d,w,Old$){
   var
     $,
@@ -88,14 +90,7 @@
       return this;
     }
     trigger(type:String,args:Object):dQuery{
-      var event;
-      if(typeof args === 'undefined'){
-        event = d.createEvent('HTMLEvents');
-        event.initEvent(type, true, false);
-      } else {
-        event = d.createEvent('CustomEvent');
-        event.initCustomEvent(type, true, true, args);
-      }
+      var event = $.Event(type,args);
       this.each(function(n:Node){
         n.dispatchEvent(event);
       });
@@ -548,6 +543,17 @@
         }
       }
       return toReturn;
+    }
+    static Event(type:String,args:Object):Event{
+      var event;
+      if(typeof args === 'undefined'){
+        event = d.createEvent('HTMLEvents');
+        event.initEvent(type, true, false);
+      } else {
+        event = d.createEvent('CustomEvent');
+        event.initCustomEvent(type, true, true, args);
+      }
+      return event;
     }
     static validate(Selector:String,el:HTMLElement):Boolean{
       return (el instanceof Element || el instanceof Document) && el.matches(Selector);
