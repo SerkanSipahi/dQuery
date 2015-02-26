@@ -1,5 +1,6 @@
 // @Compiler-Output "build/main.min.js"
 // @Compiler-Name "ReactTools"
+// @Compiler-Compress "true"
 (function(d,w,Old$){
   var
     $,
@@ -292,11 +293,9 @@
         if(typeof object === 'string'){
           object = $.fromHTML(object);
         }
-        if(object.length){
-          $.each($.elements(object),function(n:HTMLElement){
-            element.appendChild(n);
-          })
-        }
+        $.each($.elements(object),function(n:HTMLElement){
+          element.appendChild(n);
+        })
       }
       return this;
     }
