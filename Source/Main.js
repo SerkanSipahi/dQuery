@@ -48,13 +48,17 @@ class dQuery{
     }
     return this;
   }
-  // DOM Validation
+  // DOM Events
   ready(Callback){
     if(document.readyState === 'complete'){
       Callback.call(document);
     } else {
       document.addEventListener('DOMContentLoaded', Callback);
     }
+  }
+  // DOM Validation
+  matches(Selector){
+    return this.Elements.length && this.Elements[0].matches(Selector);
   }
   // DOM Manipulation
   css(Key, Value){
