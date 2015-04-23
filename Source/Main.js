@@ -70,6 +70,13 @@ class dQuery{
       return new dQuery(this.Elements[0].previousElementSibling !== null ? [this.Elements[0].previousElementSibling] : []);
     return this;
   }
+  closest(Selector){
+    if(this.Elements.length){
+      let El = this.Elements[0].querySelector(Selector);
+      return new dQuery(El ? [El] : []);
+    }
+    return this;
+  }
   // DOM Events
   ready(Callback){
     if(document.readyState === 'complete'){
