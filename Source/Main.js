@@ -105,6 +105,16 @@ class dQuery{
       });
     return this;
   }
+  remove(){
+    let ToReturn = [];
+    this.each(function(Item){
+      try {
+        ToReturn.push(Item);
+        Item.parentNode.removeChild(Item);
+      } catch(err){}
+    });
+    return ToReturn;
+  }
 }
 
 dQuery.prototype.each = dQuery.prototype.forEach; // each ---> forEach
