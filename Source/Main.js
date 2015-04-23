@@ -248,6 +248,8 @@ function $dQuery(Selector){
     return new dQuery(document.querySelectorAll(Selector));
   }
 }
+$dQuery.fn = dQuery.prototype;
+
 if(typeof module !== 'undefined'){
   module.exports = $dQuery;
 } else if(typeof exports !== 'undefined'){
