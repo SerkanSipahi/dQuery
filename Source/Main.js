@@ -74,6 +74,27 @@ class dQuery{
       return null;
     }
   }
+  addClass(Name){
+    if(this.Elements.length)
+      this.each(function(Item){
+        Item.classList.add(Name);
+      });
+    return this;
+  }
+  removeClass(Name){
+    if(this.Elements.length)
+      this.each(function(Item){
+        Item.classList.remove(Name);
+      });
+    return this;
+  }
+  toggleClass(Name){
+    if(this.Elements.length)
+      this.each(function(Item){
+        item.classList.toggle(Name);
+      });
+    return this;
+  }
 }
 
 dQuery.prototype.each = dQuery.prototype.forEach; // each ---> forEach
