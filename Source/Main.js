@@ -19,6 +19,7 @@ class dQuery{
       this.Elements = Elements ? (Elements.constructor.name === 'NodeList' || Elements.constructor.name === 'HTMLElement' || Elements.constructor.name === 'HTMLCollection' ? Elements : []) : [];
     }
   }
+  // DOM Search and Selection stuff
   eq(Index){
     this.Elements = Index < this.Elements.length ? [this.Elements[Index]] : [];
     return this;
@@ -46,6 +47,20 @@ class dQuery{
       if(err !== null) throw err;
     }
     return this;
+  }
+  // DOM Manipulation
+  css(Key, Value){
+    if(typeof Value !== 'undefined'){
+      if(this.Elements.length)
+        this.each(function(Element){
+          Element.style[Key] = Value;
+        });
+      return this;
+    } else {
+      if(this.Elements.length)
+        return this.Elements[0].style[Key] || getComputedStyle(this.Elements[0])[Key] || null;
+      return null;
+    }
   }
 }
 
