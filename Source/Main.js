@@ -9,13 +9,15 @@ let Regex = {
 class dQuery{
   constructor(Elements){
     if(Elements.constructor.name === 'Array'){
-      let MyElements = this.Elements = [];
-      Elements.forEach(function(Element){
-        if(Element.constructor.name.substr(0,4) === 'HTML'){
-          MyElements.push(Element);
-        }
-      });
-    } else {
+      if(Elements.length){
+        let MyElements = this.Elements = [];
+        Elements.forEach(function(Element){
+          if(Element.constructor.name.substr(0,4) === 'HTML'){
+            MyElements.push(Element);
+          }
+        });
+      } else {
+      }
       this.Elements = Elements ? (Elements.constructor.name === 'NodeList' || Elements.constructor.name === 'HTMLElement' || Elements.constructor.name === 'HTMLCollection' ? Elements : []) : [];
     }
   }
@@ -56,6 +58,16 @@ class dQuery{
   last(){
     if(this.Elements.length)
       return new dQuery([this.Elements[this.Elements.length - 1]]);
+    return this;
+  }
+  next(){
+    if(this.Elements.length)
+      return new dQuery(this.Elements[0].nextElementSibling !== null ? [this.Elements[0].nextElementSibling] : []);
+    return this;
+  }
+  prev(){
+    if(this.Elements.length)
+      return new dQuery(this.Elements[0].previousElementSibling !== null ? [this.Elements[0].previousElementSibling] : []);
     return this;
   }
   // DOM Events
