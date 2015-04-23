@@ -105,31 +105,31 @@ class dQuery{
   }
   addClass(Name){
     if(this.Elements.length)
-      this.each(function(Item){
-        Item.classList.add(Name);
+      this.each(function(Element){
+        Element.classList.add(Name);
       });
     return this;
   }
   removeClass(Name){
     if(this.Elements.length)
-      this.each(function(Item){
-        Item.classList.remove(Name);
+      this.each(function(Element){
+        Element.classList.remove(Name);
       });
     return this;
   }
   toggleClass(Name){
     if(this.Elements.length)
-      this.each(function(Item){
-        item.classList.toggle(Name);
+      this.each(function(Element){
+        Element.classList.toggle(Name);
       });
     return this;
   }
   remove(){
     let ToReturn = [];
-    this.each(function(Item){
+    this.each(function(Element){
       try {
-        ToReturn.push(Item);
-        Item.parentNode.removeChild(Item);
+        ToReturn.push(Element);
+        Element.parentNode.removeChild(Element);
       } catch(err){}
     });
     return ToReturn;
@@ -142,6 +142,24 @@ class dQuery{
   focus(){
     if(this.Elements.length)
       this.Elements[0].focus();
+    return this;
+  }
+  attr(Key, Value){
+    if(typeof Value === 'undefined'){
+      return this.Elements.length && this.Elements[0].getAttribute(Key);
+    } else {
+      Value = String(Value);
+      this.each(function(Element){
+        Element.setAttribute(Key, Value);
+      });
+      return this;
+    }
+  }
+  removeAttr(Key){
+    if(this.Elements.length)
+      this.each(function(Element){
+        Element.removeAttribute(Key);
+      });
     return this;
   }
 }
