@@ -33,7 +33,24 @@ class dQuery{
     ) : [];
     return this;
   }
+  find(Selector){
+    return new dQuery(this.Elements[0].querySelectorAll(Selector));
+  }
+  children(Selector){
+    return this.find(":scope > " + Selector);
+  }
+  forEach(Callback){
+    try {
+      ArrayProto.forEach.call(this.Elements, Callback);
+    } catch(err){
+      if(err !== null) throw err;
+    }
+    return this;
+  }
 }
+
+dQuery.prototype.each = dQuery.prototype.forEach; // each ---> forEach
+
 function $dQuery(Selector){
   if(Regex.ID.test(Selector)){
     return new dQuery([document.getElementById(Selector.substr(1))]);
