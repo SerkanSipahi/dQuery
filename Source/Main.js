@@ -3,7 +3,7 @@
 let ArrayProto = Array.prototype;
 let Regex = {
   ID: /^#\w+$/,
-  Class: /^.\w+$/,
+  Class: /^\.\w+$/,
   TagName: /^\w+$/
 };
 class dQuery{
