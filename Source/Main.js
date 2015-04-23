@@ -9,15 +9,15 @@ let Regex = {
 class dQuery{
   constructor(Elements){
     if(Elements.constructor.name === 'Array'){
+      let MyElements = this.Elements = [];
       if(Elements.length){
-        let MyElements = this.Elements = [];
         Elements.forEach(function(Element){
           if(Element.constructor.name.substr(0,4) === 'HTML'){
             MyElements.push(Element);
           }
         });
-      } else {
       }
+    } else {
       this.Elements = Elements ? (Elements.constructor.name === 'NodeList' || Elements.constructor.name === 'HTMLElement' || Elements.constructor.name === 'HTMLCollection' ? Elements : []) : [];
     }
   }
