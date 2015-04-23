@@ -139,6 +139,11 @@ class dQuery{
       return this.Elements[0].parentNode;
     return this;
   }
+  focus(){
+    if(this.Elements.length)
+      this.Elements[0].focus();
+    return this;
+  }
 }
 
 dQuery.prototype.each = dQuery.prototype.forEach; // each ---> forEach
