@@ -48,6 +48,16 @@ class dQuery{
     }
     return this;
   }
+  first(){
+    if(this.Elements.length)
+      return new dQuery([this.Elements[0]]);
+    return this;
+  }
+  last(){
+    if(this.Elements.length)
+      return new dQuery([this.Elements[this.Elements.length - 1]]);
+    return this;
+  }
   // DOM Events
   ready(Callback){
     if(document.readyState === 'complete'){
