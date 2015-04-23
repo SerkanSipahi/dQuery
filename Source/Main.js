@@ -134,6 +134,11 @@ class dQuery{
     });
     return ToReturn;
   }
+  parent(){
+    if(this.Elements.length)
+      return this.Elements[0].parentNode;
+    return this;
+  }
 }
 
 dQuery.prototype.each = dQuery.prototype.forEach; // each ---> forEach
