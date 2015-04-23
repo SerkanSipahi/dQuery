@@ -16,13 +16,13 @@ class dQuery{
         }
       });
     } else {
-      this.Elements = Elements ? (Elements instanceof NodeList || Elements instanceof HTMLElement ? Elements : []) : [];
+      this.Elements = Elements ? (Elements.constructor.name === 'NodeList' || Elements.constructor.name === 'HTMLElement' || Elements.constructor.name === 'HTMLCollection' ? Elements : []) : [];
     }
   }
 }
 function $dQuery(Selector){
   if(Regex.ID.test(Selector)){
-    return new dQuery(document.getElementById(Selector.substr(1)));
+    return new dQuery([document.getElementById(Selector.substr(1))]);
   } else if(Regex.Class.test(Selector)){
     return new dQuery(document.getElementsByClassName(Selector.substr(1)));
   } else if(Regex.TagName.test(Selector)){
