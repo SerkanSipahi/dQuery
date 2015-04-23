@@ -17,13 +17,18 @@ class dQuery{
           }
         });
       }
-    } else {
+    } else if(typeof Elements !== 'undefined') {
       this.Elements = Elements ? (Elements.constructor.name === 'NodeList' || Elements.constructor.name === 'HTMLElement' || Elements.constructor.name === 'HTMLCollection' ? Elements : []) : [];
+    } else {
+      this.Elements = [];
     }
+  }
+  get length(){
+    return this.Elements.length;
   }
   // DOM Search and Selection stuff
   select(Index){
-    this.Elements = Index < this.Elements.length ? [this.Elements[Index]] : [];
+    this.Elements = Index < this.length ? [this.Elements[Index]] : [];
     return this;
   }
   selectChild(Index, Index2){
@@ -31,7 +36,7 @@ class dQuery{
       Index2 = Index;
       Index = 0;
     }
-    this.Elements = Index < this.Elements.length ? (
+    this.Elements = Index < this.length ? (
       Index2 < this.Elements[Index].childElementCount ? [this.Elements[Index].children[Index2]] : []
     ) : [];
     return this;
@@ -51,27 +56,27 @@ class dQuery{
     return this;
   }
   first(){
-    if(this.Elements.length)
+    if(this.length)
       return new dQuery([this.Elements[0]]);
     return this;
   }
   last(){
-    if(this.Elements.length)
-      return new dQuery([this.Elements[this.Elements.length - 1]]);
+    if(this.length)
+      return new dQuery([this.Elements[this.length - 1]]);
     return this;
   }
   next(){
-    if(this.Elements.length)
+    if(this.length)
       return new dQuery(this.Elements[0].nextElementSibling !== null ? [this.Elements[0].nextElementSibling] : []);
     return this;
   }
   prev(){
-    if(this.Elements.length)
+    if(this.length)
       return new dQuery(this.Elements[0].previousElementSibling !== null ? [this.Elements[0].previousElementSibling] : []);
     return this;
   }
   closest(Selector){
-    if(this.Elements.length){
+    if(this.length){
       let El = this.Elements[0].querySelector(Selector);
       return new dQuery(El ? [El] : []);
     }
@@ -87,45 +92,45 @@ class dQuery{
   }
   // DOM Validation
   matches(Selector){
-    return this.Elements.length && this.Elements[0].matches(Selector);
+    return this.length && this.Elements[0].matches(Selector);
   }
   // DOM Manipulation
   css(Key, Value){
     if(typeof Value !== 'undefined'){
-      if(this.Elements.length)
+      if(this.length)
         this.each(function(Element){
           Element.style[Key] = Value;
         });
       return this;
     } else {
-      if(this.Elements.length)
+      if(this.length)
         return this.Elements[0].style[Key] || getComputedStyle(this.Elements[0])[Key] || null;
       return null;
     }
   }
   addClass(Name){
-    if(this.Elements.length)
+    if(this.length)
       this.each(function(Element){
         Element.classList.add(Name);
       });
     return this;
   }
   removeClass(Name){
-    if(this.Elements.length)
+    if(this.length)
       this.each(function(Element){
         Element.classList.remove(Name);
       });
     return this;
   }
   toggleClass(Name){
-    if(this.Elements.length)
+    if(this.length)
       this.each(function(Element){
         Element.classList.toggle(Name);
       });
     return this;
   }
   hasClass(Name){
-    return this.Elements.length && this.Elements[0].classList.contains(Name);
+    return this.length && this.Elements[0].classList.contains(Name);
   }
   remove(){
     let ToReturn = [];
@@ -138,18 +143,18 @@ class dQuery{
     return ToReturn;
   }
   parent(){
-    if(this.Elements.length)
+    if(this.length)
       return this.Elements[0].parentNode;
     return this;
   }
   focus(){
-    if(this.Elements.length)
+    if(this.length)
       this.Elements[0].focus();
     return this;
   }
   attr(Key, Value){
     if(typeof Value === 'undefined'){
-      return this.Elements.length && this.Elements[0].getAttribute(Key);
+      return this.length && this.Elements[0].getAttribute(Key);
     } else {
       Value = String(Value);
       this.each(function(Element){
@@ -159,11 +164,37 @@ class dQuery{
     }
   }
   removeAttr(Key){
-    if(this.Elements.length)
+    if(this.length)
       this.each(function(Element){
         Element.removeAttribute(Key);
       });
     return this;
+  }
+  parents(Selector){
+    if(!this.length) return this;
+    let Elements = [];
+    let Element = this.Elements[0];
+    while(Element = Element.parentNode){
+      if(Element.constructor.name === 'HTMLDocument'){
+        break ;
+      } else if(!Selector.length || Element.matches(Selector)) {
+        Elements.push(Element);
+      }
+    }
+    return new dQuery(Elements);
+  }
+  parentsUntil(Selector){
+    if(!this.length) return this;
+    let Elements = [];
+    let Element = this.Elements[0];
+    while(Element = Element.parentNode){
+      if(Element.constructor.name === 'HTMLDocument' || !Selector.length || Element.matches(Selector)){
+        break;
+      } else {
+        Elements.push(Element);
+      }
+    }
+    return new dQuery(Elements);
   }
 }
 
