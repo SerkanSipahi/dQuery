@@ -22,7 +22,7 @@ class dQuery{
     }
   }
   // DOM Search and Selection stuff
-  eq(Index){
+  select(Index){
     this.Elements = Index < this.Elements.length ? [this.Elements[Index]] : [];
     return this;
   }
