@@ -8,7 +8,16 @@ let Regex = {
 };
 class dQuery{
   constructor(Elements){
-    this.Elements = Elements ? (Elements instanceof NodeList || Elements instanceof HTMLElement ? Elements : []) : [];
+    if(Elements.constructor.name === 'Array'){
+      let MyElements = this.Elements = [];
+      Elements.forEach(function(Element){
+        if(Element.constructor.name.substr(0,4) === 'HTML'){
+          MyElements.push(Element);
+        }
+      });
+    } else {
+      this.Elements = Elements ? (Elements instanceof NodeList || Elements instanceof HTMLElement ? Elements : []) : [];
+    }
   }
 }
 function $dQuery(Selector){
