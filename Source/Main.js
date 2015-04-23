@@ -196,6 +196,12 @@ class dQuery{
     }
     return new dQuery(Elements);
   }
+  clone(){
+    if(this.length){
+      return new dQuery([this.Elements[0].cloneNode(true)]);
+    }
+    return this;
+  }
 }
 
 dQuery.prototype.each = dQuery.prototype.forEach; // each ---> forEach
