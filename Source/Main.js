@@ -19,6 +19,20 @@ class dQuery{
       this.Elements = Elements ? (Elements.constructor.name === 'NodeList' || Elements.constructor.name === 'HTMLElement' || Elements.constructor.name === 'HTMLCollection' ? Elements : []) : [];
     }
   }
+  eq(Index){
+    this.Elements = Index < this.Elements.length ? [this.Elements[Index]] : [];
+    return this;
+  }
+  selectChild(Index, Index2){
+    if(typeof Index2 === 'undefined'){
+      Index2 = Index;
+      Index = 0;
+    }
+    this.Elements = Index < this.Elements.length ? (
+      Index2 < this.Elements[Index].childElementCount ? [this.Elements[Index].children[Index2]] : []
+    ) : [];
+    return this;
+  }
 }
 function $dQuery(Selector){
   if(Regex.ID.test(Selector)){
