@@ -124,6 +124,9 @@ class dQuery{
       });
     return this;
   }
+  hasClass(Name){
+    return this.Elements.length && this.Elements[0].classList.contains(Name);
+  }
   remove(){
     let ToReturn = [];
     this.each(function(Element){
