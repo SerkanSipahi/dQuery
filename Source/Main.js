@@ -202,6 +202,37 @@ class dQuery{
     }
     return this;
   }
+  empty(){
+    if(this.length)
+      this.forEach(function(Element){
+        try {Element.innerHTML = '';} catch(err){}
+        // Imagine a parent and a child in elements and we try to empty the
+        // child after parent gets emptied
+      });
+    return this;
+  }
+  html(Value){
+    if(typeof Value === 'undefined'){
+      return this.length && this.Elements[0].innerHTML;
+    } else {
+      if(this.length)
+        this.each(function(Element){
+          Element.innerHTML = Value;
+        });
+      return this;
+    }
+  }
+  text(Value){
+    if(typeof Value === 'undefined'){
+      return this.length && this.Elements[0].textContent;
+    } else {
+      if(this.length)
+        this.each(function(Element){
+          Element.textContent = Value;
+        });
+      return this;
+    }
+  }
 }
 
 dQuery.prototype.each = dQuery.prototype.forEach; // each ---> forEach
