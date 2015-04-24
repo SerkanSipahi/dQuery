@@ -236,7 +236,9 @@ class dQuery{
     } else {
       if(this.length)
         this.each(function(Element){
-          Element.innerHTML = Value;
+          try {Element.innerHTML = Value;} catch(err){}
+          // Imagine a parent and a child in elements and we try to empty the
+          // child after parent gets emptied
         });
       return this;
     }
@@ -247,7 +249,9 @@ class dQuery{
     } else {
       if(this.length)
         this.each(function(Element){
-          Element.textContent = Value;
+          try { Element.textContent = Value; } catch(err){}
+          // Imagine a parent and a child in elements and we try to empty the
+          // child after parent gets emptied
         });
       return this;
     }
@@ -387,6 +391,23 @@ class dQuery{
         ArrayProto.forEach.call(this.Elements, function(Element){
           Target.parentNode.insertBefore(Element, Target.nextSibling);
         });
+      }
+    }
+    return this;
+  }
+  replaceWith(Content){
+    if(this.length){
+      if(typeof Content === 'string'){
+        this.each(function(Element){
+          try {Element.outerHTML = Content;} catch(err){}
+          // Imagine a parent and a child in elements and we try to empty the
+          // child after parent gets emptied
+        });
+      } else {
+        Content = $dQuery.Elements(Content)[0];
+        if(Content){
+          this.Elements[0].parentNode.replaceChild(Content, this.Elements[0]);
+        }
       }
     }
     return this;
