@@ -263,6 +263,23 @@ class dQuery{
     });
     return ToReturn;
   }
+  // -- DOM Inserts and stuff
+  after(Content){
+    if(this.length && arguments.length){
+      let Me = this;
+      if(typeof Content === 'string'){
+        Me.each(function(Element){
+          Element.insertAdjacentHTML('afterend', Content);
+        });
+      } else {
+        let Elements = $dQuery.Elements(Content);
+        ArrayProto.forEach.call(Elements, function(ArgumentElement){
+          Me.Elements[0].parentNode.insertBefore(ArgumentElement, Me.Elements[0].nextSibling);
+        });
+      }
+    }
+    return this;
+  }
 }
 
 dQuery.prototype.each = dQuery.prototype.forEach; // each ---> forEach
