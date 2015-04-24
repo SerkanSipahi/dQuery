@@ -335,6 +335,37 @@ class dQuery{
     }
     return this;
   }
+  appendTo(Target){
+    if(this.length){
+      if(typeof Target === 'string'){
+        Target = document.querySelector(Target);
+      } else {
+        Target = $dQuery.Elements(Target)[0];
+      }
+      if(Target){
+        this.each(function(Element){
+          Target.appendChild(Element);
+        });
+      }
+    }
+    return this;
+  }
+  prependTo(Target){
+    if(this.length){
+      if(typeof Target === 'string'){
+        Target = document.querySelector(Target);
+      } else {
+        Target = $dQuery.Elements(Target)[0];
+      }
+      if(Target){
+        let Elements = ArrayProto.reverse.call(this.Elements);
+        ArrayProto.forEach.call(Elements, function(Element){
+          Target.appendChild(Element);
+        });
+      }
+    }
+    return this;
+  }
 }
 
 dQuery.prototype.each = dQuery.prototype.forEach; // each ---> forEach
