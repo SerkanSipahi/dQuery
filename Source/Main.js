@@ -272,7 +272,7 @@ class dQuery{
     } else {
       Value = String(Value);
       this.each(function(Element){
-        Element.setAttribute(Key, Value);
+        Element.setAttribute(Key, String(Value));
       });
       return this;
     }
