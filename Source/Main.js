@@ -265,7 +265,7 @@ class dQuery{
   }
   // -- DOM Inserts and stuff
   after(Content){
-    if(this.length && arguments.length){
+    if(this.length){
       let Me = this;
       if(typeof Content === 'string'){
         Me.each(function(Element){
@@ -281,7 +281,7 @@ class dQuery{
     return this;
   }
   before(Content){
-    if(this.length && arguments.length){
+    if(this.length){
       let Me = this;
       if(typeof Content === 'string'){
         Me.each(function(Element){
@@ -291,6 +291,38 @@ class dQuery{
         let Elements = $dQuery.Elements(Content);
         ArrayProto.forEach.call(Elements, function(ArgumentElement){
           Me.Elements[0].parentNode.insertBefore(ArgumentElement, Me.Elements[0].previousSibling);
+        });
+      }
+    }
+    return this;
+  }
+  append(Content){
+    if(this.length){
+      let Me = this;
+      if(typeof Content === 'string'){
+        Me.each(function(Element){
+          Element.insertAdjacentHTML('beforeend', Content);
+        });
+      } else {
+        let Elements = $dQuery.Elements(Content);
+        ArrayProto.forEach.call(Elements, function(ArgumentElement){
+          Me.Elements[0].appendChild(ArgumentElement);
+        });
+      }
+    }
+    return this;
+  }
+  prepend(Content){
+    if(this.length){
+      let Me = this;
+      if(typeof Content === 'string'){
+        Me.each(function(Element){
+          Element.insertAdjacentHTML('afterbegin', Content);
+        });
+      } else {
+        let Elements = ArrayProto.reverse.call($dQuery.Elements(Content));
+        ArrayProto.forEach.call(Elements, function(ArgumentElement){
+          Me.Elements[0].insertBefore(ArgumentElement, Me.Elements[0].firstChild);
         });
       }
     }
