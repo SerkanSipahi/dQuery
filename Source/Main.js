@@ -28,6 +28,12 @@ class dQuery{
     return this.Elements.length;
   }
   // DOM Search and Selection stuff
+  eq(Index){
+    if(Index < this.length){
+      return new dQuery([this.Elements[Index]]);
+    }
+    return this;
+  }
   select(Index){
     this.Elements = Index < this.length ? [this.Elements[Index]] : [];
     return this;
