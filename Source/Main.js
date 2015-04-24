@@ -17,7 +17,7 @@ class dQuery{
     return this.Elements.length;
   }
   // Events and stuff
-  on(Type, Arg2, Arg3, Arg4){
+  on(Types, Arg2, Arg3, Arg4){
     if(this.length){
       if(typeof Arg3 !== 'undefined'){
         // Event, Selector, Callback
@@ -38,49 +38,57 @@ class dQuery{
           Callback.call(this, e);
         }
       }
-      this.each(function(Element){
-        Element.__events = Element.__events || {};
-        Element.__events[Type] = Element.__events[Type] || {};
-        Element.__events[Type][Arg4] = Arg2;
-        Element.addEventListener(Type, Arg2);
+      let Me = this;
+      Types.split(' ').forEach(function(Type){
+        Me.each(function(Element){
+          Element.__events = Element.__events || {};
+          Element.__events[Type] = Element.__events[Type] || {};
+          Element.__events[Type][Arg4] = Arg2;
+          Element.addEventListener(Type, Arg2);
+        });
       });
     }
     return this;
   }
-  off(Type, Callback){
+  off(Types, Callback){
     if(this.length){
+      let Me = this;
       if(typeof Callback === 'undefined'){
         // Remove all
-        this.each(function(Element){
-          if(!Element.__events || !Element.__events[Type]) return ;
-          for(let Key in Element.__events[Type]){
-            Element.removeEventListener(Type, Element.__events[Type][Key]);
-          }
-          Element.__events[Type] = {};
+        Types.split(' ').forEach(function(Type){
+          Me.each(function(Element){
+            if(!Element.__events || !Element.__events[Type]) return ;
+            for(let Key in Element.__events[Type]){
+              Element.removeEventListener(Type, Element.__events[Type][Key]);
+            }
+            Element.__events[Type] = {};
+          });
         });
       } else if(typeof Callback === 'function') {
         // Remove only one
-        this.each(function(Element){
-          if(!Element.__events || !Element.__events[Type] || !Element.__events[Type][Callback]) return ;
-          Element.removeEventListener(Type, Element.__events[Type][Callback]);
-          delete Element.__events[Type][Callback];
+        Types.split(' ').forEach(function(Type){
+          Me.each(function(Element){
+            if(!Element.__events || !Element.__events[Type] || !Element.__events[Type][Callback]) return ;
+            Element.removeEventListener(Type, Element.__events[Type][Callback]);
+            delete Element.__events[Type][Callback];
+          });
         });
       }
     }
     return this;
   }
-  once(Type, Arg2, Arg3){
+  once(Types, Arg2, Arg3){
     if(this.length){
       let Me = this;
       if(typeof Arg3 !== 'undefined'){
-        this.on(Type, function Callback(e){
+        this.on(Types, function Callback(e){
           Arg2.call(this, e);
-          Me.off(Type, Callback);
+          Me.off(Types, Callback);
         }, Arg3);
       } else {
-        this.on(Type, function Callback(e){
+        this.on(Types, function Callback(e){
           Arg2.call(this, e);
-          Me.off(Type, Callback);
+          Me.off(Types, Callback);
         });
       }
     }
