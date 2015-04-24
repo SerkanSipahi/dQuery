@@ -258,7 +258,7 @@ class dQuery{
   }
   parent(){
     if(this.length)
-      return this.Elements[0].parentNode;
+      return new dQuery(this.Elements[0].parentNode);
     return this;
   }
   focus(){
