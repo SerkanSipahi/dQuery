@@ -16,6 +16,76 @@ class dQuery{
   get length(){
     return this.Elements.length;
   }
+  // Events and stuff
+  on(Type, Arg2, Arg3, Arg4){
+    if(this.length){
+      if(typeof Arg3 !== 'undefined'){
+        // Event, Selector, Callback
+        Arg4 = Arg4 || Arg3;
+        let Selector = Arg2;
+        Arg2 = function(e){
+          e.stopPropagation();
+          if(e.target.matches(Selector) || $(e.target).hasParent(Selector)){
+            Arg3.call(this, e);
+          }
+        };
+      } else {
+        // Event, Callback
+        Arg4 = Arg4 || Arg2;
+        let Callback = Arg2;
+        Arg2 = function(e){
+          e.stopPropagation();
+          Callback.call(this, e);
+        }
+      }
+      this.each(function(Element){
+        Element.__events = Element.__events || {};
+        Element.__events[Type] = Element.__events[Type] || {};
+        Element.__events[Type][Arg4] = Arg2;
+        Element.addEventListener(Type, Arg2);
+      });
+    }
+    return this;
+  }
+  off(Type, Callback){
+    if(this.length){
+      if(typeof Callback === 'undefined'){
+        // Remove all
+        this.each(function(Element){
+          if(!Element.__events || !Element.__events[Type]) return ;
+          for(let Key in Element.__events[Type]){
+            Element.removeEventListener(Type, Element.__events[Type][Key]);
+          }
+          Element.__events[Type] = {};
+        });
+      } else if(typeof Callback === 'function') {
+        // Remove only one
+        this.each(function(Element){
+          if(!Element.__events || !Element.__events[Type] || !Element.__events[Type][Callback]) return ;
+          Element.removeEventListener(Type, Element.__events[Type][Callback]);
+          delete Element.__events[Type][Callback];
+        });
+      }
+    }
+    return this;
+  }
+  once(Type, Arg2, Arg3){
+    if(this.length){
+      let Me = this;
+      if(typeof Arg3 !== 'undefined'){
+        this.on(Type, function Callback(e){
+          Arg2.call(this, e);
+          Me.off(Type, Callback);
+        }, Arg3);
+      } else {
+        this.on(Type, function Callback(e){
+          Arg2.call(this, e);
+          Me.off(Type, Callback);
+        });
+      }
+    }
+    return this;
+  }
   // DOM Search and Selection stuff
   eq(Index){
     if(Index < this.length){
@@ -414,7 +484,11 @@ class dQuery{
   }
 }
 
-dQuery.prototype.each = dQuery.prototype.forEach; // each ---> forEach
+dQuery.prototype.each = dQuery.prototype.forEach;             // each                 ---> forEach
+dQuery.prototype.addListener = dQuery.prototype.on;           // addListener          ---> on
+dQuery.prototype.addEventListener = dQuery.prototype.on;      // addEventListener     ---> on
+dQuery.prototype.removeListener = dQuery.prototype.off;       // removeListener       ---> off
+dQuery.prototype.removeEventListener = dQuery.prototype.off;  // removeEventListener  ---> off
 
 function $dQuery(Selector){
   if(Regex.ID.test(Selector)){
@@ -464,6 +538,7 @@ $dQuery.Elements = function(Elements){
     return [];
   }
 };
+
 $dQuery.FromHTML = function(Content){
   Parser = Parser || document.createElement("span");
   Parser.innerHTML = Content;
