@@ -4,7 +4,8 @@ let ArrayProto = Array.prototype;
 let Regex = {
   ID: /^#\w+$/,
   Class: /^\.\w+$/,
-  TagName: /^\w+$/
+  TagName: /^\w+$/,
+  CRLF: /\r?\n/g
 };
 class dQuery{
   constructor(Elements){
@@ -232,6 +233,24 @@ class dQuery{
         });
       return this;
     }
+  }
+  serialize(){
+    if(!this.length) return '';
+    let ToReturn = [];
+    ArrayProto.forEach.call(this.Elements[0].elements, function(Item){
+      if(!Item.name) return ;
+      ToReturn.push(Item.name + '=' + Item.value.replace(Regex.CRLF, "\n"));
+    });
+    return ToReturn.join('&');
+  }
+  serializeAssoc(){
+    if(!this.length) return '';
+    let ToReturn = {};
+    ArrayProto.forEach.call(this.Elements[0].elements, function(Item){
+      if(!Item.name) return ;
+      ToReturn[Item.name] = Item.value;
+    });
+    return ToReturn;
   }
 }
 
