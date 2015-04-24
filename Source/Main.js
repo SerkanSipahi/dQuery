@@ -279,8 +279,7 @@ class dQuery{
           Element.insertAdjacentHTML('afterend', Content);
         });
       } else {
-        let Elements = $dQuery.Elements(Content);
-        ArrayProto.forEach.call(Elements, function(ArgumentElement){
+        ArrayProto.forEach.call($dQuery.Elements(Content), function(ArgumentElement){
           Me.Elements[0].parentNode.insertBefore(ArgumentElement, Me.Elements[0].nextSibling);
         });
       }
@@ -295,8 +294,7 @@ class dQuery{
           Element.insertAdjacentHTML('beforebegin', Content);
         });
       } else {
-        let Elements = $dQuery.Elements(Content);
-        ArrayProto.forEach.call(Elements, function(ArgumentElement){
+        ArrayProto.forEach.call($dQuery.Elements(Content), function(ArgumentElement){
           Me.Elements[0].parentNode.insertBefore(ArgumentElement, Me.Elements[0].previousSibling);
         });
       }
@@ -311,8 +309,7 @@ class dQuery{
           Element.insertAdjacentHTML('beforeend', Content);
         });
       } else {
-        let Elements = $dQuery.Elements(Content);
-        ArrayProto.forEach.call(Elements, function(ArgumentElement){
+        ArrayProto.forEach.call($dQuery.Elements(Content), function(ArgumentElement){
           Me.Elements[0].appendChild(ArgumentElement);
         });
       }
@@ -327,8 +324,7 @@ class dQuery{
           Element.insertAdjacentHTML('afterbegin', Content);
         });
       } else {
-        let Elements = ArrayProto.reverse.call($dQuery.Elements(Content));
-        ArrayProto.forEach.call(Elements, function(ArgumentElement){
+        ArrayProto.forEach.call(ArrayProto.reverse.call($dQuery.Elements(Content)), function(ArgumentElement){
           Me.Elements[0].insertBefore(ArgumentElement, Me.Elements[0].firstChild);
         });
       }
@@ -358,9 +354,38 @@ class dQuery{
         Target = $dQuery.Elements(Target)[0];
       }
       if(Target){
-        let Elements = ArrayProto.reverse.call(this.Elements);
-        ArrayProto.forEach.call(Elements, function(Element){
+        ArrayProto.forEach.call(ArrayProto.reverse.call(this.Elements), function(Element){
           Target.appendChild(Element);
+        });
+      }
+    }
+    return this;
+  }
+  insertBefore(Target){
+    if(this.length){
+      if(typeof Target === 'string'){
+        Target = document.querySelector(Target);
+      } else {
+        Target = $dQuery.Elements(Target)[0];
+      }
+      if(Target){
+        ArrayProto.forEach.call(ArrayProto.reverse.call(this.Elements), function(Element){
+          Target.parentNode.insertBefore(Element, Target);
+        });
+      }
+    }
+    return this;
+  }
+  insertAfter(Target){
+    if(this.length){
+      if(typeof Target === 'string'){
+        Target = document.querySelector(Target);
+      } else {
+        Target = $dQuery.Elements(Target)[0];
+      }
+      if(Target){
+        ArrayProto.forEach.call(this.Elements, function(Element){
+          Target.parentNode.insertBefore(Element, Target.nextSibling);
         });
       }
     }
@@ -405,7 +430,7 @@ $dQuery.Elements = function(Elements){
       return Elements;
     } else if(Elements.constructor.name.substr(0,4) === 'HTML'){
       if(Elements.length){
-        return Elements;
+        return ArrayProto.slice.call(Elements);
       } else {
         return [Elements];
       }
