@@ -514,6 +514,13 @@ dQuery.prototype.addEventListener = dQuery.prototype.on;      // addEventListene
 dQuery.prototype.removeListener = dQuery.prototype.off;       // removeListener       ---> off
 dQuery.prototype.removeEventListener = dQuery.prototype.off;  // removeEventListener  ---> off
 
+"click submit mousedown mouseup change dblclick keydown keyup keypress input load mousedown mouseenter mouseleave mousemove mouseout mouseover mouseup scroll unload".split(' ').forEach(function(Event){
+  dQuery.prototype[Event] = function(Callback){
+    this.on(Event, Callback);
+    return this;
+  }
+});
+
 function $dQuery(Selector){
   if(Regex.ID.test(Selector)){
     return new dQuery([document.getElementById(Selector.substr(1))]);
