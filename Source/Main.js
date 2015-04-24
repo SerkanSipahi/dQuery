@@ -8,6 +8,7 @@ let Regex = {
   CRLF: /\r?\n/g
 };
 let Parser = null; // Our HTML Parser
+let Old$ = window.$;
 
 class dQuery{
   constructor(Elements){
@@ -540,6 +541,7 @@ function $dQuery(Selector){
 }
 
 $dQuery.fn = dQuery.prototype;
+
 $dQuery.Elements = function(Elements){
   if(Elements.constructor.name === 'Array'){
     let MyElements = [];
@@ -568,6 +570,10 @@ $dQuery.Elements = function(Elements){
   } else {
     return [];
   }
+};
+
+$dQuery.noConflict = function(){
+  window.$ = Old$;
 };
 
 $dQuery.FromHTML = function(Content){
