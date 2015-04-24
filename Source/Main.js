@@ -12,7 +12,7 @@ let Old$ = window.$;
 
 class dQuery{
   constructor(Elements){
-    this.Elements = $dQuery.Elements(Elements);
+    this.Elements = $dQuery.elements(Elements);
   }
   get length(){
     return this.Elements.length;
@@ -100,7 +100,7 @@ class dQuery{
       let Event;
       if(typeof Arg1 === 'string'){
         // Type, Args
-        Event = $dQuery.Event(Arg1, Arg2);
+        Event = $dQuery.event(Arg1, Arg2);
       } else {
         // Event Object
         Event = Arg1;
@@ -378,7 +378,7 @@ class dQuery{
           Element.insertAdjacentHTML('afterend', Content);
         });
       } else {
-        ArrayProto.forEach.call($dQuery.Elements(Content), function(ArgumentElement){
+        ArrayProto.forEach.call($dQuery.elements(Content), function(ArgumentElement){
           Me.Elements[0].parentNode.insertBefore(ArgumentElement, Me.Elements[0].nextSibling);
         });
       }
@@ -393,7 +393,7 @@ class dQuery{
           Element.insertAdjacentHTML('beforebegin', Content);
         });
       } else {
-        ArrayProto.forEach.call($dQuery.Elements(Content), function(ArgumentElement){
+        ArrayProto.forEach.call($dQuery.elements(Content), function(ArgumentElement){
           Me.Elements[0].parentNode.insertBefore(ArgumentElement, Me.Elements[0].previousSibling);
         });
       }
@@ -408,7 +408,7 @@ class dQuery{
           Element.insertAdjacentHTML('beforeend', Content);
         });
       } else {
-        ArrayProto.forEach.call($dQuery.Elements(Content), function(ArgumentElement){
+        ArrayProto.forEach.call($dQuery.elements(Content), function(ArgumentElement){
           Me.Elements[0].appendChild(ArgumentElement);
         });
       }
@@ -423,7 +423,7 @@ class dQuery{
           Element.insertAdjacentHTML('afterbegin', Content);
         });
       } else {
-        ArrayProto.forEach.call(ArrayProto.reverse.call($dQuery.Elements(Content)), function(ArgumentElement){
+        ArrayProto.forEach.call(ArrayProto.reverse.call($dQuery.elements(Content)), function(ArgumentElement){
           Me.Elements[0].insertBefore(ArgumentElement, Me.Elements[0].firstChild);
         });
       }
@@ -435,7 +435,7 @@ class dQuery{
       if(typeof Target === 'string'){
         Target = document.querySelector(Target);
       } else {
-        Target = $dQuery.Elements(Target)[0];
+        Target = $dQuery.elements(Target)[0];
       }
       if(Target){
         this.each(function(Element){
@@ -450,7 +450,7 @@ class dQuery{
       if(typeof Target === 'string'){
         Target = document.querySelector(Target);
       } else {
-        Target = $dQuery.Elements(Target)[0];
+        Target = $dQuery.elements(Target)[0];
       }
       if(Target){
         ArrayProto.forEach.call(ArrayProto.reverse.call(this.Elements), function(Element){
@@ -465,7 +465,7 @@ class dQuery{
       if(typeof Target === 'string'){
         Target = document.querySelector(Target);
       } else {
-        Target = $dQuery.Elements(Target)[0];
+        Target = $dQuery.elements(Target)[0];
       }
       if(Target){
         ArrayProto.forEach.call(ArrayProto.reverse.call(this.Elements), function(Element){
@@ -480,7 +480,7 @@ class dQuery{
       if(typeof Target === 'string'){
         Target = document.querySelector(Target);
       } else {
-        Target = $dQuery.Elements(Target)[0];
+        Target = $dQuery.elements(Target)[0];
       }
       if(Target){
         ArrayProto.forEach.call(this.Elements, function(Element){
@@ -499,7 +499,7 @@ class dQuery{
           // child after parent gets emptied
         });
       } else {
-        Content = $dQuery.Elements(Content)[0];
+        Content = $dQuery.elements(Content)[0];
         if(Content){
           this.Elements[0].parentNode.replaceChild(Content, this.Elements[0]);
         }
@@ -531,7 +531,7 @@ function $dQuery(Selector){
     return new dQuery(document.getElementsByTagName(Selector));
   } else if(typeof Selector === 'string'){
     if(Selector.substr(0,1) === '<'){
-      return new dQuery($dQuery.FromHTML(Selector));
+      return new dQuery($dQuery.fromHTML(Selector));
     } else {
       return new dQuery(document.querySelectorAll(Selector));
     }
@@ -542,7 +542,7 @@ function $dQuery(Selector){
 
 $dQuery.fn = dQuery.prototype;
 
-$dQuery.Elements = function(Elements){
+$dQuery.elements = function(Elements){
   if(Elements.constructor.name === 'Array'){
     let MyElements = [];
     if(Elements.length){
@@ -597,13 +597,13 @@ $dQuery.noConflict = function(){
   window.$ = Old$;
 };
 
-$dQuery.FromHTML = function(Content){
+$dQuery.fromHTML = function(Content){
   Parser = Parser || document.createElement("span");
   Parser.innerHTML = Content;
   return Parser.children;
 };
 
-$dQuery.Event = function(Type, Args){
+$dQuery.event = function(Type, Args){
   var Event;
   if(typeof Args === 'undefined'){
     Event = document.createEvent('HTMLEvents');

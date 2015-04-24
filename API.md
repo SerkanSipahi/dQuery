@@ -63,10 +63,10 @@ class dQuery{
 ```js
 class $dQuery{
   fn:dQuery.prototype
-  Elements(Mixed):HTMLCol
+  elements(Mixed):HTMLCol
   noConflict():void
-  FromHTML(Content:String):HTMLCol
-  Event(Type:String, Args:Object):Event
+  fromHTML(Content:String):HTMLCol
+  event(Type:String, Args:Object):Event
 }
 ```
 
