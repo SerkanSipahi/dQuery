@@ -41,7 +41,14 @@ class dQuery{
     return new dQuery(this.Elements[0].querySelectorAll(Selector));
   }
   children(Selector){
-    return this.find(":scope > " + Selector);
+    if(this.length){
+      if(!Selector){
+        return new dQuery(this.Elements[0].children);
+      } else {
+        return this.find(":scope > " + Selector);
+      }
+    }
+    return this;
   }
   forEach(Callback){
     try {
