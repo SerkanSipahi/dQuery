@@ -101,6 +101,18 @@ class dQuery{
   matches(Selector){
     return this.length && this.Elements[0].matches(Selector);
   }
+  hasParent(Selector){
+    if(!this.length) return false;
+    let Element = this.Elements[0];
+    while(Element = Element.parentNode) {
+      if (Element.constructor.name === 'HTMLDocument'){
+        return false;
+      } else if(!Selector.length || Element.matches(Selector)){
+        return true;
+      }
+    }
+    return false;
+  }
   // DOM Manipulation
   css(Key, Value){
     if(typeof Value !== 'undefined'){
