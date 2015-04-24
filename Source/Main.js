@@ -7,22 +7,11 @@ let Regex = {
   TagName: /^\w+$/,
   CRLF: /\r?\n/g
 };
+let Parser = null; // Our HTML Parser
+
 class dQuery{
   constructor(Elements){
-    if(Elements.constructor.name === 'Array'){
-      let MyElements = this.Elements = [];
-      if(Elements.length){
-        Elements.forEach(function(Element){
-          if(Element.constructor.name.substr(0,4) === 'HTML'){
-            MyElements.push(Element);
-          }
-        });
-      }
-    } else if(typeof Elements !== 'undefined') {
-      this.Elements = Elements ? (Elements.constructor.name === 'NodeList' || Elements.constructor.name === 'HTMLElement' || Elements.constructor.name === 'HTMLCollection' ? Elements : []) : [];
-    } else {
-      this.Elements = [];
-    }
+    this.Elements = $dQuery.Elements(Elements);
   }
   get length(){
     return this.Elements.length;
@@ -285,11 +274,52 @@ function $dQuery(Selector){
     return new dQuery(document.getElementsByClassName(Selector.substr(1)));
   } else if(Regex.TagName.test(Selector)){
     return new dQuery(document.getElementsByTagName(Selector));
+  } else if(typeof Selector === 'string'){
+    if(Selector.substr(0,1) === '<'){
+      return new dQuery($dQuery.FromHTML(Selector));
+    } else {
+      return new dQuery(document.querySelectorAll(Selector));
+    }
   } else {
-    return new dQuery(document.querySelectorAll(Selector));
+    return new dQuery(Selector);
   }
 }
+
 $dQuery.fn = dQuery.prototype;
+$dQuery.Elements = function(Elements){
+  if(Elements.constructor.name === 'Array'){
+    let MyElements = [];
+    if(Elements.length){
+      Elements.forEach(function(Element){
+        if(Element.constructor.name.substr(0,4) === 'HTML'){
+          MyElements.push(Element);
+        }
+      });
+    }
+    return MyElements;
+  } else if(typeof Elements === 'object' && Elements !== null) {
+    if(Elements.constructor.name === 'NodeList') {
+      return Elements;
+    } else if(Elements.constructor.name.substr(0,4) === 'HTML'){
+      if(Elements.length){
+        return Elements;
+      } else {
+        return [Elements];
+      }
+    } else if(Elements instanceof dQuery){
+      return Elements.Elements;
+    } else {
+      return [];
+    }
+  } else {
+    return [];
+  }
+};
+$dQuery.FromHTML = function(Content){
+  Parser = Parser || document.createElement("span");
+  Parser.innerHTML = Content;
+  return Parser.children;
+};
 
 if(typeof module !== 'undefined'){
   module.exports = $dQuery;
