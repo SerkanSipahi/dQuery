@@ -94,6 +94,22 @@ class dQuery{
     }
     return this;
   }
+  trigger(Arg1, Arg2){
+    if(this.length){
+      let Event;
+      if(typeof Arg1 === 'string'){
+        // Type, Args
+        Event = $dQuery.Event(Arg1, Arg2);
+      } else {
+        // Event Object
+        Event = Arg1;
+      }
+      this.each(function(Element){
+        Element.dispatchEvent(Event);
+      });
+    }
+    return this;
+  }
   // DOM Search and Selection stuff
   eq(Index){
     if(Index < this.length){
@@ -551,6 +567,18 @@ $dQuery.FromHTML = function(Content){
   Parser = Parser || document.createElement("span");
   Parser.innerHTML = Content;
   return Parser.children;
+};
+
+$dQuery.Event = function(Type, Args){
+  var Event;
+  if(typeof Args === 'undefined'){
+    Event = document.createEvent('HTMLEvents');
+    Event.initEvent(Type, true, false);
+  } else {
+    Event = document.createEvent('CustomEvent');
+    Event.initCustomEvent(Type, true, true, Args);
+  }
+  return Event;
 };
 
 if(typeof module !== 'undefined'){
