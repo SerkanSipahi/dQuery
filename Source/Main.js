@@ -127,6 +127,10 @@ class dQuery{
       return null;
     }
   }
+  hide(){
+    this.css('display', 'none');
+    return this;
+  }
   addClass(Name){
     if(this.length)
       this.each(function(Element){
