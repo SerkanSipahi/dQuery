@@ -1,5 +1,9 @@
 "use strict";
 
+// @Compiler-Compress "true"
+// @Compiler-Transpile "true"
+// @Compiler-Output "../Dist/Main.js"
+
 let ArrayProto = Array.prototype;
 let Regex = {
   ID: /^#\w+$/,
