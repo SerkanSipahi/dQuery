@@ -507,6 +507,94 @@ class dQuery{
     }
     return this;
   }
+  //
+  // <!-----------------------------DOLLAR---------------------------------->
+  //
+  static $(Selector){
+    if(Regex.ID.test(Selector)){
+      return new dQuery([document.getElementById(Selector.substr(1))]);
+    } else if(Regex.Class.test(Selector)){
+      return new dQuery(document.getElementsByClassName(Selector.substr(1)));
+    } else if(Regex.TagName.test(Selector)){
+      return new dQuery(document.getElementsByTagName(Selector));
+    } else if(typeof Selector === 'string'){
+      if(Selector.substr(0,1) === '<'){
+        return new dQuery($dQuery.fromHTML(Selector));
+      } else {
+        return new dQuery(document.querySelectorAll(Selector));
+      }
+    } else {
+      return new dQuery(Selector);
+    }
+  }
+  static elements(Elements){
+    if(Elements.constructor.name === 'Array'){
+      let MyElements = [];
+      if(Elements.length){
+        Elements.forEach(function(Element){
+          if(Element.constructor.name.substr(0,4) === 'HTML'){
+            MyElements.push(Element);
+          }
+        });
+      }
+      return MyElements;
+    } else if(typeof Elements === 'object' && Elements !== null) {
+      if(Elements.constructor.name === 'NodeList') {
+        return Elements;
+      } else if(Elements.constructor.name.substr(0,4) === 'HTML'){
+        if(Elements.length){
+          return ArrayProto.slice.call(Elements);
+        } else {
+          return [Elements];
+        }
+      } else if(Elements instanceof dQuery){
+        return Elements.Elements;
+      } else {
+        return [];
+      }
+    } else {
+      return [];
+    }
+  }
+  static extend(out){
+    out = out || {};
+
+    for (var i = 1; i < arguments.length; i++) {
+      var obj = arguments[i];
+
+      if (!obj) continue;
+
+      for (var key in obj) {
+        if (obj.hasOwnProperty(key)) {
+          if (typeof obj[key] === 'object')
+            $dQuery.extend(out[key], obj[key]);
+          else
+            out[key] = obj[key];
+        }
+      }
+    }
+
+    return out;
+  }
+  static noConflict(){
+    window.$ = Old$;
+  }
+  static fromHTML(Content){
+    Parser = Parser || document.createElement("span");
+    Parser.innerHTML = Content;
+    return Parser.children;
+  }
+  static event(Type, Args){
+    var Event;
+    if(typeof Args === 'undefined'){
+      Event = document.createEvent('HTMLEvents');
+      Event.initEvent(Type, true, false);
+    } else {
+      Event = document.createEvent('CustomEvent');
+      Event.initCustomEvent(Type, true, true, Args);
+    }
+    return Event;
+  }
 }
 
 dQuery.prototype.each = dQuery.prototype.forEach;             // each                 ---> forEach
@@ -522,98 +610,14 @@ dQuery.prototype.removeEventListener = dQuery.prototype.off;  // removeEventList
   }
 });
 
-function $dQuery(Selector){
-  if(Regex.ID.test(Selector)){
-    return new dQuery([document.getElementById(Selector.substr(1))]);
-  } else if(Regex.Class.test(Selector)){
-    return new dQuery(document.getElementsByClassName(Selector.substr(1)));
-  } else if(Regex.TagName.test(Selector)){
-    return new dQuery(document.getElementsByTagName(Selector));
-  } else if(typeof Selector === 'string'){
-    if(Selector.substr(0,1) === '<'){
-      return new dQuery($dQuery.fromHTML(Selector));
-    } else {
-      return new dQuery(document.querySelectorAll(Selector));
-    }
-  } else {
-    return new dQuery(Selector);
-  }
-}
+let $dQuery = dQuery.$;
 
 $dQuery.fn = dQuery.prototype;
-
-$dQuery.elements = function(Elements){
-  if(Elements.constructor.name === 'Array'){
-    let MyElements = [];
-    if(Elements.length){
-      Elements.forEach(function(Element){
-        if(Element.constructor.name.substr(0,4) === 'HTML'){
-          MyElements.push(Element);
-        }
-      });
-    }
-    return MyElements;
-  } else if(typeof Elements === 'object' && Elements !== null) {
-    if(Elements.constructor.name === 'NodeList') {
-      return Elements;
-    } else if(Elements.constructor.name.substr(0,4) === 'HTML'){
-      if(Elements.length){
-        return ArrayProto.slice.call(Elements);
-      } else {
-        return [Elements];
-      }
-    } else if(Elements instanceof dQuery){
-      return Elements.Elements;
-    } else {
-      return [];
-    }
-  } else {
-    return [];
-  }
-};
-
-$dQuery.extend = function(out){
-  out = out || {};
-
-  for (var i = 1; i < arguments.length; i++) {
-    var obj = arguments[i];
-
-    if (!obj) continue;
-
-    for (var key in obj) {
-      if (obj.hasOwnProperty(key)) {
-        if (typeof obj[key] === 'object')
-          $dQuery.extend(out[key], obj[key]);
-        else
-          out[key] = obj[key];
-      }
-    }
-  }
-
-  return out;
-};
-
-$dQuery.noConflict = function(){
-  window.$ = Old$;
-};
-
-$dQuery.fromHTML = function(Content){
-  Parser = Parser || document.createElement("span");
-  Parser.innerHTML = Content;
-  return Parser.children;
-};
-
-$dQuery.event = function(Type, Args){
-  var Event;
-  if(typeof Args === 'undefined'){
-    Event = document.createEvent('HTMLEvents');
-    Event.initEvent(Type, true, false);
-  } else {
-    Event = document.createEvent('CustomEvent');
-    Event.initCustomEvent(Type, true, true, Args);
-  }
-  return Event;
-};
+$dQuery.elements = dQuery.elements;
+$dQuery.extend = dQuery.extend;
+$dQuery.noConflict = dQuery.noConflict;
+$dQuery.fromHTML = dQuery.fromHTML;
+$dQuery.event = dQuery.event;
 
 if(typeof module !== 'undefined'){
   module.exports = $dQuery;
