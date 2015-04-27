@@ -316,7 +316,13 @@ class dQuery{
   }
   clone(){
     if(this.length){
-      return new dQuery([this.Elements[0].cloneNode(true)]);
+      if(this.length === 1){
+        return new dQuery([this.Elements[0].cloneNode(true)]);
+      } else {
+        return new dQuery(ArrayProto.map.call(this.Elements, function(Item){
+          return Item.cloneNode(true);
+        }))
+      }
     }
     return this;
   }
