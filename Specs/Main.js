@@ -156,5 +156,19 @@ describe("dQuery", function() {
       expect(Element.length).toBe(0);
     });
   });
+  describe('selectChild', function(){
+    it("returns a new dQuery object with that child", function(){
+      let Element = $("<div><div></div></div>");
+      expect(Element.Elements[0].childNodes.length).toBe(1);
+      Element.selectChild(0);
+      expect(Element.Elements[0].childNodes.length).toBe(0);
+    });
+    it("accepts a second argument as well", function(){
+      let Element = $("<div></div><div><div><div></div><div></div></div></div>");
+      expect(Element.Elements[0].childNodes.length).toBe(0);
+      Element.selectChild(1,0);
+      expect(Element.Elements[0].childNodes.length).toBe(2);
+    });
+  });
 });
 });
