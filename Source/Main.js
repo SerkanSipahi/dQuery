@@ -86,8 +86,8 @@ class dQuery{
     if(this.length){
       let Me = this;
       if(typeof Arg3 !== 'undefined'){
-        this.on(Types, function Callback(e){
-          Arg2.call(this, e);
+        this.on(Types, Arg2, function Callback(e){
+          Arg3.call(this, e);
           Me.off(Types, Callback);
         }, Arg3);
       } else {
