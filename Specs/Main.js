@@ -142,5 +142,19 @@ describe("dQuery", function() {
       expect(Derived.length).toBe(0);
     });
   });
+  describe('select', function(){
+    it('selects the specified element', function(){
+      let Element = $("<div></div><div></div>");
+      expect(Element.length).toBe(2);
+      Element.select(0);
+      expect(Element.length).toBe(1);
+    });
+    it('empties the object when invalid index is specified', function(){
+      let Element = $("<div></div><div></div>");
+      expect(Element.length).toBe(2);
+      Element.select(12313);
+      expect(Element.length).toBe(0);
+    });
+  });
 });
 });
