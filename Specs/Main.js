@@ -128,5 +128,19 @@ describe("dQuery", function() {
       });
     });
   });
+  describe('eq',function(){
+    it("returns a new dQuery object with that el", function(){
+      let Parent = $("<div></div><div></div>");
+      let Derived = Parent.eq(0);
+      expect(Parent.length).toBe(2);
+      expect(Derived.length).toBe(1);
+    });
+    it("returns empty on invalid offset", function(){
+      let Parent = $("<div></div><div></div>");
+      let Derived = Parent.eq(4);
+      expect(Parent.length).toBe(2);
+      expect(Derived.length).toBe(0);
+    });
+  });
 });
 });
