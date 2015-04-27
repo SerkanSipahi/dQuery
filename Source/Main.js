@@ -578,10 +578,10 @@ class dQuery{
 
       for (var key in obj) {
         if (obj.hasOwnProperty(key)) {
-          if (typeof obj[key] === 'object' && obj[key] !== null)
+          if (typeof obj[key] === 'object' && obj[key] !== null){
+            out[key] = out[key] || {};
             $dQuery.extend(out[key], obj[key]);
-          else
-            out[key] = obj[key];
+          } else out[key] = obj[key];
         }
       }
     }
