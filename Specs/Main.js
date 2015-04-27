@@ -252,5 +252,49 @@ describe("dQuery", function() {
       expect( $("<div data-yes></div>").matches('div[data-yes]') ).toBe(true);
     });
   });
+  describe("hasParent", function(){
+    it("works", function(){
+      expect( $("<div><c-el></c-el></div>").selectChild(0).hasParent('div') ).toBe(true);
+      expect( $("<div data-yes><c-el></c-el></div>").selectChild(0).hasParent('div[data-no]') ).toBe(false);
+      expect( $("<div data-yes><c-el></c-el></div>").selectChild(0).hasParent('div[data-yes]') ).toBe(true);
+    });
+  });
+  describe("css", function(){
+    let Element = $("<div></div>");
+    it("can get css of an el", function(){
+      expect( $(document.body).css('width') ).toBeTruthy();
+    });
+    it("can set css of an el", function(){
+      expect( Element.css('display', 'none').css('display') ).toBe('none');
+    });
+  });
+  describe("hide", function(){
+    let Element = $("<div>Hey</div>");
+    it("works", function(){
+      $(document.body).append(Element);
+      expect(Element.css('width')).toBeDefined();
+      Element.hide();
+      expect(Element.css('width')).toBe('auto');
+      Element.remove();
+    });
+  });
+  describe("classes", function(){
+    let Element = $("<div></div>");
+    it("can add a class", function(){
+      Element.addClass("test");
+      expect(true).toBeTruthy();
+    });
+    it("can check if a class exists", function(){
+      expect(Element.hasClass('test')).toBe(true);
+    });
+    it("can remove a class", function(){
+      Element.removeClass('test');
+      expect(true).toBeTruthy();
+    });
+    it("can toggle a class", function(){
+      Element.toggleClass('test');
+      expect(Element.hasClass('test')).toBe(true);
+    });
+  });
 });
 });
