@@ -117,8 +117,8 @@ class dQuery{
   }
   // DOM Search and Selection stuff
   eq(Index){
-    if(Index < this.length){
-      return new dQuery([this.Elements[Index]]);
+    if(this.length){
+      return new dQuery(Index < this.length ? [this.Elements[Index]] : []);
     }
     return this;
   }
