@@ -607,6 +607,15 @@ class dQuery{
     }
     return Event;
   }
+  static serialize(Object){
+    let ToReturn = [];
+    for(var Key in Object){
+      if(Object.hasOwnProperty(Key)){
+        ToReturn.push(Key + '=' + String(Object[Key]).replace(Regex.CRLF, "\n"));
+      }
+    }
+    return ToReturn.join('&');
+  }
 }
 
 dQuery.prototype.each = dQuery.prototype.forEach;             // each                 ---> forEach
@@ -636,3 +645,5 @@ if(typeof module !== 'undefined'){
 } else if(typeof window !== 'undefined'){
   window.$ = $dQuery;
 }
+
+// @Compiler-Include "Ajax.js"
