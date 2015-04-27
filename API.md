@@ -23,7 +23,7 @@ class dQuery{
   last():dQuery
   next():dQuery
   prev():dQuery
-  closest():dQuery
+  closest([Selector:String]):dQuery
   ready(Callback:Function):this
   matches(Selector:String):Boolean
   hasParent(Selector:String):Boolean
