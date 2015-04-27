@@ -464,7 +464,7 @@ class dQuery{
       }
       if(Target){
         ArrayProto.forEach.call(ArrayProto.reverse.call(this.Elements), function(Element){
-          Target.appendChild(Element);
+          Target.insertBefore(Element, Target.firstChild);
         });
       }
     }
