@@ -233,5 +233,24 @@ describe("dQuery", function() {
       expect( $("custom-element").prev().Elements[0].tagName ).toBe('INPUT');
     });
   });
+  describe("closest", function(){
+    it("finds the closest first match of the selector", function(){
+      let Element = $("<div><div><custom-element attr='yes'></custom-element><custom-element attr='no'></custom-element></div></div>");
+      expect( Element.closest('custom-element').attr('attr') ).toBe('yes');
+    });
+  });
+  describe("ready", function(){
+    it("works", function(){
+      $(document).ready(function(){
+        expect(true).toBe(true);
+      });
+    })
+  });
+  describe('matches', function(){
+    it('works', function(){
+      expect( $("<div data-yes></div>").matches('div[data-no]') ).toBe(false);
+      expect( $("<div data-yes></div>").matches('div[data-yes]') ).toBe(true);
+    });
+  });
 });
 });
