@@ -186,5 +186,30 @@ describe("dQuery", function() {
       expect( $("<div><div></div><custom-element></custom-element></div>").children('custom-element').length ).toBe(1);
     });
   });
+  describe("forEach", function(){
+    let Element = $("<div></div><div></div><div></div><div></div><div></div>");
+    it("passes the element as the first argument", function(){
+      Element.forEach(function(Element){
+        expect(Element instanceof HTMLElement).toBe(true);
+      });
+    });
+    it("stops when you throw a null exception", function(){
+      let Times = 0;
+      Element.forEach(function(){
+        ++ Times;
+        throw null;
+      });
+      expect(Times).toBe(1);
+    });
+    it("re-throws a non-null exception", function(){
+      let Exception;
+      try {
+        Element.forEach(function(){
+          throw new Error("ERROR!");
+        });
+      } catch(err){Exception = err;}
+      expect(Exception).toBeDefined();
+    });
+  });
 });
 });
