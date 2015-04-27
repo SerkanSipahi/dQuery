@@ -296,5 +296,19 @@ describe("dQuery", function() {
       expect(Element.hasClass('test')).toBe(true);
     });
   });
+  describe("parent", function(){
+    it("works", function(){
+      expect( $("<div><cus-el></cus-el></div>").selectChild(0).parent().Elements[0].tagName ).toBe('DIV');
+    });
+  });
+  describe("focus", function(){
+    it("works", function(){
+      let Element = $("<input type='email' />");
+      $(document.body).prepend(Element);
+      Element.focus();
+      expect(Element.matches(':focus')).toBe(true);
+      Element.remove();
+    });
+  });
 });
 });
