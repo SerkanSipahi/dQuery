@@ -178,5 +178,13 @@ describe("dQuery", function() {
       expect( $(document.body).find("custom-element").length ).toBe(1);
     });
   });
+  describe("children", function(){
+    it("works without a single parameter", function(){
+      expect( $("<div><div></div><div></div></div>").children().length ).toBe(2);
+    });
+    it("accepts a selector as a parameter", function(){
+      expect( $("<div><div></div><custom-element></custom-element></div>").children('custom-element').length ).toBe(1);
+    });
+  });
 });
 });
