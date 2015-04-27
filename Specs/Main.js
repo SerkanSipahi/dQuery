@@ -211,5 +211,27 @@ describe("dQuery", function() {
       expect(Exception).toBeDefined();
     });
   });
+  describe("first", function(){
+    let Element = $("<div data-first='yes'></div><div></div>");
+    it("returns a new dQuery object with the first element", function(){
+      expect( Element.first().attr('data-first') ).toBe('yes');
+    });
+  });
+  describe("last", function(){
+    let Element = $("<div data-first='yes'></div><div></div>");
+    it("returns a new dQuery object with the last element", function(){
+      expect( Element.last().attr('data-first') ).toBeNull();
+    });
+  });
+  describe("next", function(){
+    it("returns a new dQuery object with the next sibling", function(){
+      expect( $("input[name=name]").next().Elements[0].tagName ).toBe('CUSTOM-ELEMENT');
+    });
+  });
+  describe("prev", function(){
+    it("returns a new dQuery object with the prev sibling", function(){
+      expect( $("custom-element").prev().Elements[0].tagName ).toBe('INPUT');
+    });
+  });
 });
 });
