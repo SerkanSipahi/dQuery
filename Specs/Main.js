@@ -1,9 +1,9 @@
 "use strict";
 // Specifications
+document.addEventListener('DOMContentLoaded', function(){
+
 describe("dQuery", function() {
-
   describe("constructor", function(){
-
     it("accepts css selectors", function(){
       expect( $("div[id=Demo]").length ).toBe(1);
     });
@@ -22,7 +22,111 @@ describe("dQuery", function() {
     it("accepts DOMElements", function(){
       expect( $(document.getElementById('Demo')).length ).toBe(1);
     });
-
   });
-
+  describe("events", function(){
+    describe("on", function(){
+      it("triggers events infinite times", function(){
+        var
+          El = $("<div />"),
+          Times = 0,
+          Event = null;
+        El.on('click', function(e){
+          ++Times;
+          e.times = Times;
+        });
+        El.trigger(Event = $.event('click'));
+        expect(Event.times).toBe(1);
+        El.trigger(Event = $.event('click'));
+        expect(Event.times).toBe(2);
+      });
+      it("accepts 3 arguments too", function(){
+        let Listener = null;
+        let Event = $.event('click');
+        $(document).on('click', 'form', Listener = function(e){
+          e.events_on_3args = true;
+        });
+        $("form").trigger(Event);
+        expect(Event.events_on_3args).toBe(true);
+      });
+    });
+    describe("off", function(){
+      it("cancels event listeners with 2 arguments", function(){
+        var
+          El = $("<div />"),
+          Times = 0,
+          Event = null;
+        El.on('click', function(e){
+          ++Times;
+          e.times = Times;
+        });
+        El.trigger(Event = $.event('click'));
+        expect(Event.times).toBe(1);
+        El.off('click');
+        El.trigger(Event = $.event('click'));
+        expect(Event.times).toBeUndefined();
+      });
+      it("cancels event listeners with 3 arguments", function(){
+        let Listener = null;
+        let Event = null;
+        $(document).on('click', 'form', Listener = function(e){
+          e.testing = true;
+        });
+        $("form").trigger(Event = $.event('click'));
+        expect(Event.testing).toBe(true);
+        $(document).off('click', Listener);
+        $("form").trigger(Event = $.event('click'));
+        expect(Event.testing).toBeUndefined();
+      });
+      it("can cancel only one listener", function(){
+        var
+          El = $("<div />"),
+          Times = 0,
+          Event = null,
+          Listener = null;
+        El.on('click', Listener =function(e){
+          ++Times;
+          e.times = Times;
+        });
+        El.on('click', function(e){
+          ++Times;
+          e.times = Times;
+        });
+        El.trigger(Event = $.event('click'));
+        expect(Event.times).toBe(2);
+        El.off('click', Listener);
+        El.trigger(Event = $.event('click'));
+        expect(Event.times).toBe(3);
+      });
+    });
+    describe("once", function(){
+      it("triggers callbacks only once", function(){
+        var
+          El = $("<div />"),
+          Times = 0,
+          Event = null;
+        El.once('click', function(e){
+          ++Times;
+          e.times = Times;
+        });
+        El.trigger(Event = $.event('click'));
+        expect(Event.times).toBe(1);
+        El.trigger(Event = $.event('click'));
+        expect(Event.times).toBeUndefined();
+      });
+      it("expects 3 arguments too", function(){
+        var
+          Listener = null,
+          Event = null;
+        $(document).once('click', 'form', Listener = function(e){
+          e.once_3args = true;
+        });
+        $("form").trigger(Event = $.event('click'));
+        expect(Event.once_3args).toBe(true);
+        $(document).off('click', Listener);
+        $("form").trigger(Event = $.event('click'));
+        expect(Event.times).toBeUndefined();
+      });
+    });
+  });
+});
 });
