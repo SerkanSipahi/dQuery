@@ -532,7 +532,9 @@ class dQuery{
     }
   }
   static elements(Elements){
-    if(Elements.constructor.name === 'Array'){
+    if(Elements === null || typeof Elements !== 'object'){
+      return []
+    } else if(Elements.constructor.name === 'Array'){
       let MyElements = [];
       if(Elements.length){
         Elements.forEach(function(Element){
