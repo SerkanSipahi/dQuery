@@ -170,5 +170,13 @@ describe("dQuery", function() {
       expect(Element.Elements[0].childNodes.length).toBe(2);
     });
   });
+  describe('find', function(){
+    it("works", function(){
+      expect( $(document.body).find("form[id=form]").length ).toBe(1);
+      expect( $(document.body).find("form[id=form]:first-child").length ).toBe(1);
+      expect( $(document.body).find("form[id=form]:last-child").length ).toBe(1);
+      expect( $(document.body).find("custom-element").length ).toBe(1);
+    });
+  });
 });
 });
