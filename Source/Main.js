@@ -623,13 +623,11 @@ dQuery.prototype.removeEventListener = dQuery.prototype.off;  // removeEventList
 });
 
 let $dQuery = dQuery.$;
-
 $dQuery.fn = dQuery.prototype;
-$dQuery.elements = dQuery.elements;
-$dQuery.extend = dQuery.extend;
-$dQuery.noConflict = dQuery.noConflict;
-$dQuery.fromHTML = dQuery.fromHTML;
-$dQuery.event = dQuery.event;
+Object.getOwnPropertyNames(dQuery).forEach(function(Item){
+  if(['length', 'name', 'arguments','caller','prototype'].indexOf(Item) !== -1) return ;
+  $dQuery[Item] = dQuery[Item];
+});
 
 if(typeof module !== 'undefined'){
   module.exports = $dQuery;
