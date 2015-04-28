@@ -51,7 +51,7 @@ $dQuery.get = function(url,Opts){
 $dQuery.getJSON = function(url,Data){
   var Opts = {};
   if(Data)
-    Opts.data = data;
+    Opts.data = Data;
   if(url)
     Opts.url = url;
   Opts.dataType = 'JSON';
@@ -60,7 +60,7 @@ $dQuery.getJSON = function(url,Data){
 $dQuery.post = function(url,Data){
   var Opts = {};
   if(Data)
-    Opts.data = data;
+    Opts.data = Data;
   if(url)
     Opts.url = url;
   Opts.type = 'POST';
@@ -69,7 +69,7 @@ $dQuery.post = function(url,Data){
 $dQuery.postJSON = function(url,Data){
   var Opts = {};
   if(Data)
-    Opts.data = data;
+    Opts.data = Data;
   if(url)
     Opts.url = url;
   Opts.type = 'POST';
