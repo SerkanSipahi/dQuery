@@ -36,6 +36,7 @@ $dQuery.ajax = function(Opts){
         reject(new Error("HTTP Error"), XHR);
       }
     };
+    XHR.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
     XHR.onerror = function(){
       reject(XHR);
     };
