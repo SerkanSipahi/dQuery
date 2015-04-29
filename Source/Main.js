@@ -553,12 +553,10 @@ class dQuery{
     } else if(typeof Elements === 'object' && Elements !== null) {
       if(Elements.constructor.name === 'NodeList') {
         return Elements;
+      } else if(Elements.constructor.name === 'HTMLCollection'){
+        return ArrayProto.slice.call(Elements);
       } else if(Elements.constructor.name.substr(0,4) === 'HTML'){
-        if(Elements.length){
-          return ArrayProto.slice.call(Elements);
-        } else {
-          return [Elements];
-        }
+        return [Elements];
       } else if(Elements instanceof dQuery){
         return Elements.Elements;
       } else {
