@@ -12,7 +12,7 @@ $dQuery.ajaxDefaults = {
 $dQuery.ajax = function(Opts){
   return new Promise(function(resolve,reject){
     Opts = $dQuery.extend({},$dQuery.ajaxDefaults,Opts);
-    Opts.data = (Opts.data instanceof FormData) ? Opts.data : $dQuery.serialize(Opts.data);
+    Opts.data = !Opts.data ? null : (Opts.data instanceof FormData || typeof Opts.data === 'string') ? Opts.data : $dQuery.serialize(Opts.data);
     var XHR = new XMLHttpRequest();
     XHR.open(Opts.type,Opts.url,true);
     if(Opts.beforeSend(XHR,Opts) === false){
