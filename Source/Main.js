@@ -29,7 +29,6 @@ class dQuery{
         Arg4 = Arg4 || Arg3;
         let Selector = Arg2;
         Arg2 = function(e){
-          e.stopPropagation();
           if(e.target.matches(Selector) || $(e.target).hasParent(Selector)){
             Arg3.call(this, e);
           }
@@ -37,11 +36,6 @@ class dQuery{
       } else {
         // Event, Callback
         Arg4 = Arg4 || Arg2;
-        let Callback = Arg2;
-        Arg2 = function(e){
-          e.stopPropagation();
-          Callback.call(this, e);
-        }
       }
       let Me = this;
       Types.split(' ').forEach(function(Type){
