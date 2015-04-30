@@ -10,6 +10,16 @@ document.addEventListener('DOMContentLoaded', function() {
     it("plays well with null in extend #21", function(){
       expect($.extend({},{a:{b:null}},{a:{b:2}}).a.b).toBe(2);
     });
+    it("accepts booleans in $.extend #34", function(){
+      expect($.extend(true, {a:{b:1}}).a.b).toBe(1);
+    });
+    it("passes index as first argument to dQuery.fn.each #35", function(){
+      $("<div></div>").each(function(Index){
+        expect(Index).toBe(0);
+      }).forEach(function(Item, Index){
+        expect(Index).toBe(0);
+      });
+    });
   });
 
 });

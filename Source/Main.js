@@ -39,7 +39,7 @@ class dQuery{
       }
       let Me = this;
       Types.split(' ').forEach(function(Type){
-        Me.each(function(Element){
+        Me.forEach(function(Element){
           Element.__events = Element.__events || {};
           Element.__events[Type] = Element.__events[Type] || {};
           Element.__events[Type][Arg4] = Arg2;
@@ -55,7 +55,7 @@ class dQuery{
       if(typeof Callback === 'undefined'){
         // Remove all
         Types.split(' ').forEach(function(Type){
-          Me.each(function(Element){
+          Me.forEach(function(Element){
             if(!Element.__events || !Element.__events[Type]) return ;
             for(let Key in Element.__events[Type]){
               Element.removeEventListener(Type, Element.__events[Type][Key]);
@@ -66,7 +66,7 @@ class dQuery{
       } else if(typeof Callback === 'function') {
         // Remove only one
         Types.split(' ').forEach(function(Type){
-          Me.each(function(Element){
+          Me.forEach(function(Element){
             if(!Element.__events || !Element.__events[Type] || !Element.__events[Type][Callback]) return ;
             Element.removeEventListener(Type, Element.__events[Type][Callback]);
             delete Element.__events[Type][Callback];
@@ -103,7 +103,7 @@ class dQuery{
         // Event Object
         Event = Arg1;
       }
-      this.each(function(Element){
+      this.forEach(function(Element){
         Element.dispatchEvent(Event);
       });
     }
@@ -146,6 +146,17 @@ class dQuery{
   forEach(Callback){
     try {
       ArrayProto.forEach.call(this.Elements, Callback);
+    } catch(err){
+      if(err !== null) throw err;
+    }
+    return this;
+  }
+  each(Callback){ // I hate you jQuery!!!
+    try {
+      ArrayProto.forEach.call(this.Elements, function(Item, Index, Array){
+        if(Callback.call(Item, Index, Item, Array) === false) // I hate you too!
+          throw null;
+      });
     } catch(err){
       if(err !== null) throw err;
     }
@@ -206,7 +217,7 @@ class dQuery{
   css(Key, Value){
     if(typeof Value !== 'undefined'){
       if(this.length)
-        this.each(function(Element){
+        this.forEach(function(Element){
           Element.style[Key] = Value;
         });
       return this;
@@ -222,21 +233,21 @@ class dQuery{
   }
   addClass(Name){
     if(this.length)
-      this.each(function(Element){
+      this.forEach(function(Element){
         Element.classList.add(Name);
       });
     return this;
   }
   removeClass(Name){
     if(this.length)
-      this.each(function(Element){
+      this.forEach(function(Element){
         Element.classList.remove(Name);
       });
     return this;
   }
   toggleClass(Name){
     if(this.length)
-      this.each(function(Element){
+      this.forEach(function(Element){
         Element.classList.toggle(Name);
       });
     return this;
@@ -246,7 +257,7 @@ class dQuery{
   }
   remove(){
     let ToReturn = [];
-    this.each(function(Element){
+    this.forEach(function(Element){
       try {
         ToReturn.push(Element);
         Element.parentNode.removeChild(Element);
@@ -269,7 +280,7 @@ class dQuery{
       return this.length && this.Elements[0].getAttribute(Key);
     } else {
       Value = String(Value);
-      this.each(function(Element){
+      this.forEach(function(Element){
         Element.setAttribute(Key, String(Value));
       });
       return this;
@@ -277,7 +288,7 @@ class dQuery{
   }
   removeAttr(Key){
     if(this.length)
-      this.each(function(Element){
+      this.forEach(function(Element){
         Element.removeAttribute(Key);
       });
     return this;
@@ -334,7 +345,7 @@ class dQuery{
       return this.length && this.Elements[0].innerHTML;
     } else {
       if(this.length)
-        this.each(function(Element){
+        this.forEach(function(Element){
           try {Element.innerHTML = Value;} catch(err){}
           // Imagine a parent and a child in elements and we try to empty the
           // child after parent gets emptied
@@ -347,7 +358,7 @@ class dQuery{
       return this.length && this.Elements[0].textContent;
     } else {
       if(this.length)
-        this.each(function(Element){
+        this.forEach(function(Element){
           try { Element.textContent = Value; } catch(err){}
           // Imagine a parent and a child in elements and we try to empty the
           // child after parent gets emptied
@@ -378,7 +389,7 @@ class dQuery{
     if(this.length){
       let Me = this;
       if(typeof Content === 'string'){
-        Me.each(function(Element){
+        Me.forEach(function(Element){
           Element.insertAdjacentHTML('afterend', Content);
         });
       } else {
@@ -393,7 +404,7 @@ class dQuery{
     if(this.length){
       let Me = this;
       if(typeof Content === 'string'){
-        Me.each(function(Element){
+        Me.forEach(function(Element){
           Element.insertAdjacentHTML('beforebegin', Content);
         });
       } else {
@@ -408,7 +419,7 @@ class dQuery{
     if(this.length){
       let Me = this;
       if(typeof Content === 'string'){
-        Me.each(function(Element){
+        Me.forEach(function(Element){
           Element.insertAdjacentHTML('beforeend', Content);
         });
       } else {
@@ -423,7 +434,7 @@ class dQuery{
     if(this.length){
       let Me = this;
       if(typeof Content === 'string'){
-        Me.each(function(Element){
+        Me.forEach(function(Element){
           Element.insertAdjacentHTML('afterbegin', Content);
         });
       } else {
@@ -442,7 +453,7 @@ class dQuery{
         Target = $dQuery.elements(Target)[0];
       }
       if(Target){
-        this.each(function(Element){
+        this.forEach(function(Element){
           Target.appendChild(Element);
         });
       }
@@ -497,7 +508,7 @@ class dQuery{
   replaceWith(Content){
     if(this.length){
       if(typeof Content === 'string'){
-        this.each(function(Element){
+        this.forEach(function(Element){
           try {Element.outerHTML = Content;} catch(err){}
           // Imagine a parent and a child in elements and we try to empty the
           // child after parent gets emptied
@@ -561,17 +572,17 @@ class dQuery{
     }
   }
   static extend(out){
-    out = out || {};
+    out = typeof out === 'object' ? out : {};
 
     for (var i = 1; i < arguments.length; i++) {
       var obj = arguments[i];
 
-      if (!obj) continue;
+      if (typeof obj !== 'object') continue;
 
       for (var key in obj) {
         if (obj.hasOwnProperty(key)) {
           if (typeof obj[key] === 'object' && obj[key] !== null){
-            out[key] = out[key] || {};
+            out[key] = typeof out[key] === 'object' ? out[key] : {};
             $dQuery.extend(out[key], obj[key]);
           } else out[key] = obj[key];
         }
@@ -610,7 +621,6 @@ class dQuery{
   }
 }
 
-dQuery.prototype.each = dQuery.prototype.forEach;             // each                 ---> forEach
 dQuery.prototype.addListener = dQuery.prototype.on;           // addListener          ---> on
 dQuery.prototype.addEventListener = dQuery.prototype.on;      // addEventListener     ---> on
 dQuery.prototype.removeListener = dQuery.prototype.off;       // removeListener       ---> off
