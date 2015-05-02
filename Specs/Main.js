@@ -340,5 +340,11 @@ describe("dQuery", function() {
       }, a, "Hey")();
     });
   });
+  describe('isFunction', function(){
+    it('works', function(){
+      expect($.isFunction(null)).toBe(false);
+      expect($.isFunction(function(){})).toBe(true);
+    });
+  });
 });
 });

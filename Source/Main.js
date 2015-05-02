@@ -659,6 +659,9 @@ class dQuery{
   static proxy(func, thisArg){
     return func.bind.apply(func, ArrayProto.slice.call(arguments, 1));
   }
+  static isFunction(func){
+    return typeof func === 'function';
+  }
 }
 
 dQuery.fn = dQuery.prototype;
