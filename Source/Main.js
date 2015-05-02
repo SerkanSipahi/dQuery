@@ -243,25 +243,31 @@ class dQuery{
     this.css('display', 'none');
     return this;
   }
-  addClass(Name){
+  addClass(Names){
     if(this.length)
-      this.forEach(function(Element){
-        Element.classList.add(Name);
-      });
+      Names.split(' ').forEach(function(Name){
+        this.forEach(function(Element){
+          Element.classList.add(Name);
+        });
+      }.bind(this));
     return this;
   }
-  removeClass(Name){
+  removeClass(Names){
     if(this.length)
-      this.forEach(function(Element){
-        Element.classList.remove(Name);
-      });
+      Names.split(' ').forEach(function(Name){
+        this.forEach(function(Element){
+          Element.classList.remove(Name);
+        });
+      }.bind(this));
     return this;
   }
-  toggleClass(Name){
+  toggleClass(Names){
     if(this.length)
-      this.forEach(function(Element){
-        Element.classList.toggle(Name);
-      });
+      Names.split(' ').forEach(function(Name){
+        this.forEach(function(Element){
+          Element.classList.toggle(Name);
+        });
+      }.bind(this));
     return this;
   }
   hasClass(Name){

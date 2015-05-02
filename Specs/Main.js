@@ -294,6 +294,19 @@ describe("dQuery", function() {
     it("can toggle a class", function(){
       Element.toggleClass('test');
       expect(Element.hasClass('test')).toBe(true);
+      Element.removeClass('test');
+    });
+    it("works with multiple classes too", function(){
+      Element.addClass('test test2 test3');
+      expect(Element.hasClass('test')).toBe(true);
+      expect(Element.hasClass('test2')).toBe(true);
+      expect(Element.hasClass('test3')).toBe(true);
+      Element.toggleClass("test test2");
+      expect(Element.hasClass('test')).toBe(false);
+      expect(Element.hasClass('test2')).toBe(false);
+      expect(Element.hasClass('test3')).toBe(true);
+      Element.removeClass('Hey test3');
+      expect(Element.hasClass('test')).toBe(false);
     });
   });
   describe("parent", function(){
