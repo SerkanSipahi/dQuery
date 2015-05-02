@@ -307,6 +307,16 @@ class dQuery{
       return this;
     }
   }
+  prop(Key, Value){
+    if(typeof Value === 'undefined'){
+      return this.length && this.Elements[0][Key];
+    } else {
+      this.forEach(function(Element){
+        Element[Key] = Value;
+      });
+      return this;
+    }
+  }
   removeAttr(Key){
     if(this.length)
       this.forEach(function(Element){
