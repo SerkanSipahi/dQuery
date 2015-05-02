@@ -318,5 +318,14 @@ describe("dQuery", function() {
       expect(Element.prop('disabled')).toBe(false);
     });
   });
+  describe("proxy", function(){
+    it("works", function(){
+      var a = {b: 1};
+      $.proxy(function(c){
+        expect(this.b).toBe(1);
+        expect(c).toBe("Hey");
+      }, a, "Hey")();
+    });
+  });
 });
 });

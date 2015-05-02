@@ -650,6 +650,9 @@ class dQuery{
     }
     return ToReturn.join('&');
   }
+  static proxy(func, thisArg){
+    return func.bind.apply(func, ArrayProto.slice.call(arguments, 1));
+  }
 }
 
 dQuery.fn = dQuery.prototype;
