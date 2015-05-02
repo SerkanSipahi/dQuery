@@ -12,7 +12,13 @@ let Regex = {
   CRLF: /\r?\n/g
 };
 let Parser = null; // Our HTML Parser
+
+if(typeof window === 'undefined'){
+  window = {};
+}
+
 let Old$ = window.$;
+let OldjQuery = window.jQuery;
 
 class dQuery{
   constructor(Elements){
@@ -630,6 +636,7 @@ class dQuery{
   }
   static noConflict(){
     window.$ = Old$;
+    window.jQuery = OldjQuery;
   }
   static fromHTML(Content){
     Parser = Parser || document.createElement("span");
@@ -665,6 +672,7 @@ class dQuery{
 }
 
 dQuery.fn = dQuery.prototype;
+dQuery.fn.jquery = '2.1.3';
 dQuery.fn.addListener = dQuery.fn.on;           // addListener          ---> on
 dQuery.fn.addEventListener = dQuery.fn.on;      // addEventListener     ---> on
 dQuery.fn.removeListener = dQuery.fn.off;       // removeListener       ---> off
@@ -688,8 +696,9 @@ if(typeof module !== 'undefined'){
   module.exports = $dQuery;
 } else if(typeof exports !== 'undefined'){
   exports.$ = $dQuery;
-} else if(typeof window !== 'undefined'){
+} else {
   window.$ = $dQuery;
+  window.jQuery = $dQuery;
 }
 
 // @Compiler-Include "Ajax.js"
