@@ -265,10 +265,19 @@ class dQuery{
     });
     return ToReturn;
   }
-  parent(){
-    if(this.length)
+  parent(Selector){
+    if(!this.length) return this;
+    if(typeof Selector == 'undefined')
       return new dQuery(this.Elements[0].parentNode);
-    return this;
+    let Element = this.Elements[0];
+    while(Element = Element.parentNode) {
+      if (Element.constructor.name === 'HTMLDocument'){
+        break ;
+      } else if(!Selector.length || Element.matches(Selector)){
+        return new dQuery(Element);
+      }
+    }
+    return new dQuery();
   }
   focus(){
     if(this.length)
