@@ -314,7 +314,6 @@ describe("dQuery", function() {
     it("works", function(){
       let Element = $("<input type='email' disabled />");
       expect(Element.prop('disabled')).toBe(true);
-      console.log(Element);
       Element.prop('disabled', false);
       expect(Element.prop('disabled')).toBe(false);
     });

@@ -652,11 +652,12 @@ class dQuery{
   }
 }
 
-dQuery.prototype.addListener = dQuery.prototype.on;           // addListener          ---> on
-dQuery.prototype.addEventListener = dQuery.prototype.on;      // addEventListener     ---> on
-dQuery.prototype.removeListener = dQuery.prototype.off;       // removeListener       ---> off
-dQuery.prototype.removeEventListener = dQuery.prototype.off;  // removeEventListener  ---> off
-dQuery.prototype.is = dQuery.prototype.matches;
+dQuery.fn = dQuery.prototype;
+dQuery.fn.addListener = dQuery.fn.on;           // addListener          ---> on
+dQuery.fn.addEventListener = dQuery.fn.on;      // addEventListener     ---> on
+dQuery.fn.removeListener = dQuery.fn.off;       // removeListener       ---> off
+dQuery.fn.removeEventListener = dQuery.fn.off;  // removeEventListener  ---> off
+dQuery.fn.is = dQuery.fn.matches;
 
 "click submit mousedown mouseup change dblclick keydown keyup keypress input load mousedown mouseenter mouseleave mousemove mouseout mouseover mouseup scroll unload".split(' ').forEach(function(Event){
   dQuery.prototype[Event] = function(Callback){
@@ -666,7 +667,6 @@ dQuery.prototype.is = dQuery.prototype.matches;
 });
 
 let $dQuery = dQuery.$;
-$dQuery.fn = dQuery.prototype;
 Object.getOwnPropertyNames(dQuery).forEach(function(Item){
   if(['length', 'name', 'arguments','caller','prototype'].indexOf(Item) !== -1) return ;
   $dQuery[Item] = dQuery[Item];
