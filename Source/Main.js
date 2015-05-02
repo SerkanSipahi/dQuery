@@ -98,7 +98,7 @@ class dQuery{
       let Event;
       if(typeof Arg1 === 'string'){
         // Type, Args
-        Event = $dQuery.event(Arg1, Arg2);
+        Event = $dQuery.Event(Arg1, Arg2);
       } else {
         // Event Object
         Event = Arg1;
@@ -608,7 +608,7 @@ class dQuery{
     Parser.innerHTML = Content;
     return Parser.children;
   }
-  static event(Type, Args){
+  static Event(Type, Args){
     var Event;
     if(typeof Args === 'undefined'){
       Event = document.createEvent('HTMLEvents');
