@@ -34,14 +34,14 @@ describe("dQuery", function() {
           ++Times;
           e.times = Times;
         });
-        El.trigger(Event = $.event('click'));
+        El.trigger(Event = $.Event('click'));
         expect(Event.times).toBe(1);
-        El.trigger(Event = $.event('click'));
+        El.trigger(Event = $.Event('click'));
         expect(Event.times).toBe(2);
       });
       it("accepts 3 arguments too", function(){
         let Listener = null;
-        let Event = $.event('click');
+        let Event = $.Event('click');
         $(document).on('click', 'form', Listener = function(e){
           e.events_on_3args = true;
         });
@@ -59,10 +59,10 @@ describe("dQuery", function() {
           ++Times;
           e.times = Times;
         });
-        El.trigger(Event = $.event('click'));
+        El.trigger(Event = $.Event('click'));
         expect(Event.times).toBe(1);
         El.off('click');
-        El.trigger(Event = $.event('click'));
+        El.trigger(Event = $.Event('click'));
         expect(Event.times).toBeUndefined();
       });
       it("cancels event listeners with 3 arguments", function(){
@@ -71,10 +71,10 @@ describe("dQuery", function() {
         $(document).on('click', 'form', Listener = function(e){
           e.testing = true;
         });
-        $("form").trigger(Event = $.event('click'));
+        $("form").trigger(Event = $.Event('click'));
         expect(Event.testing).toBe(true);
         $(document).off('click', Listener);
-        $("form").trigger(Event = $.event('click'));
+        $("form").trigger(Event = $.Event('click'));
         expect(Event.testing).toBeUndefined();
       });
       it("can cancel only one listener", function(){
@@ -91,10 +91,10 @@ describe("dQuery", function() {
           ++Times;
           e.times = Times;
         });
-        El.trigger(Event = $.event('click'));
+        El.trigger(Event = $.Event('click'));
         expect(Event.times).toBe(2);
         El.off('click', Listener);
-        El.trigger(Event = $.event('click'));
+        El.trigger(Event = $.Event('click'));
         expect(Event.times).toBe(3);
       });
     });
@@ -108,9 +108,9 @@ describe("dQuery", function() {
           ++Times;
           e.times = Times;
         });
-        El.trigger(Event = $.event('click'));
+        El.trigger(Event = $.Event('click'));
         expect(Event.times).toBe(1);
-        El.trigger(Event = $.event('click'));
+        El.trigger(Event = $.Event('click'));
         expect(Event.times).toBeUndefined();
       });
       it("expects 3 arguments too", function(){
@@ -120,10 +120,10 @@ describe("dQuery", function() {
         $(document).once('click', 'form', Listener = function(e){
           e.once_3args = true;
         });
-        $("form").trigger(Event = $.event('click'));
+        $("form").trigger(Event = $.Event('click'));
         expect(Event.once_3args).toBe(true);
         $(document).off('click', Listener);
-        $("form").trigger(Event = $.event('click'));
+        $("form").trigger(Event = $.Event('click'));
         expect(Event.times).toBeUndefined();
       });
     });

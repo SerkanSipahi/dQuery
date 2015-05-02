@@ -184,8 +184,20 @@ class dQuery{
   }
   closest(Selector){
     if(this.length){
-      let El = this.Elements[0].querySelector(Selector);
-      return new dQuery(El ? [El] : []);
+      let Element = this.Elements[0];
+      if(Element.matches(Selector)) return new dQuery(Element);
+      while(Element = Element.parentNode) {
+        if (Element.constructor.name === 'HTMLDocument'){
+          return new dQuery();
+        } else if(!Selector.length || Element.matches(Selector)){
+          return new dQuery(Element);
+        } else {
+          let Child = Element.querySelector(Selector);
+          if(Child !== null){
+            return new dQuery(Child);
+          }
+        }
+      }
     }
     return this;
   }

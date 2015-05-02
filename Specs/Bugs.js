@@ -20,6 +20,16 @@ document.addEventListener('DOMContentLoaded', function() {
         expect(Index).toBe(0);
       });
     });
+    it("looks for indirect children in dQuery.fn.closest #37", function(){
+      expect($(
+        `<div>
+          <div class="first"></div>
+          <div class="second">
+            <input />
+          </div>
+        </div>`
+      ).find('.first').closest('input').length).toBe(1);
+    });
   });
 
 });
