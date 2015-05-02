@@ -673,6 +673,7 @@ class dQuery{
 
 dQuery.fn = dQuery.prototype;
 dQuery.fn.jquery = '2.1.3';
+dQuery.fn.one = dQuery.fn.once;                 // addListener          ---> on
 dQuery.fn.addListener = dQuery.fn.on;           // addListener          ---> on
 dQuery.fn.addEventListener = dQuery.fn.on;      // addEventListener     ---> on
 dQuery.fn.removeListener = dQuery.fn.off;       // removeListener       ---> off
