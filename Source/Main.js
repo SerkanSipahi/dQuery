@@ -634,6 +634,7 @@ dQuery.prototype.addListener = dQuery.prototype.on;           // addListener    
 dQuery.prototype.addEventListener = dQuery.prototype.on;      // addEventListener     ---> on
 dQuery.prototype.removeListener = dQuery.prototype.off;       // removeListener       ---> off
 dQuery.prototype.removeEventListener = dQuery.prototype.off;  // removeEventListener  ---> off
+dQuery.prototype.is = dQuery.prototype.matches;
 
 "click submit mousedown mouseup change dblclick keydown keyup keypress input load mousedown mouseenter mouseleave mousemove mouseout mouseover mouseup scroll unload".split(' ').forEach(function(Event){
   dQuery.prototype[Event] = function(Callback){
