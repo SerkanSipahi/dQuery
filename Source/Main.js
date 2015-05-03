@@ -7,6 +7,9 @@
 (function(){
 
 let ArrayProto = Array.prototype;
+let ConstructorName = function(Obj){
+  return Obj.constructor.name || (Obj.constructor.name = Obj.constructor.toString().split(/function (.*?)\(\)/)[1] || '');
+};
 let Regex = {
   ID: /^#\w+$/,
   Class: /^\.\w+$/,
@@ -195,7 +198,7 @@ class dQuery{
       let Element = this.Elements[0];
       if(Element.matches(Selector)) return new dQuery(Element);
       while(Element = Element.parentNode) {
-        if (Element.constructor.name === 'HTMLDocument'){
+        if (ConstructorName(Element) === 'HTMLDocument'){
           return new dQuery();
         } else if(!Selector.length || Element.matches(Selector)){
           return new dQuery(Element);
@@ -225,7 +228,7 @@ class dQuery{
     if(!this.length) return false;
     let Element = this.Elements[0];
     while(Element = Element.parentNode) {
-      if (Element.constructor.name === 'HTMLDocument'){
+      if (ConstructorName(Element) === 'HTMLDocument'){
         return false;
       } else if(!Selector.length || Element.matches(Selector)){
         return true;
@@ -297,7 +300,7 @@ class dQuery{
       return new dQuery(this.Elements[0].parentNode);
     let Element = this.Elements[0];
     while(Element = Element.parentNode) {
-      if (Element.constructor.name === 'HTMLDocument'){
+      if (ConstructorName(Element) === 'HTMLDocument'){
         break ;
       } else if(!Selector.length || Element.matches(Selector)){
         return new dQuery(Element);
@@ -361,7 +364,7 @@ class dQuery{
     let Elements = [];
     let Element = this.Elements[0];
     while(Element = Element.parentNode){
-      if(Element.constructor.name === 'HTMLDocument'){
+      if(ConstructorName(Element) === 'HTMLDocument'){
         break ;
       } else if(!Selector.length || Element.matches(Selector)) {
         Elements.push(Element);
@@ -374,7 +377,7 @@ class dQuery{
     let Elements = [];
     let Element = this.Elements[0];
     while(Element = Element.parentNode){
-      if(Element.constructor.name === 'HTMLDocument' || !Selector.length || Element.matches(Selector)){
+      if(ConstructorName(Element) === 'HTMLDocument' || !Selector.length || Element.matches(Selector)){
         break;
       } else {
         Elements.push(Element);
@@ -608,22 +611,22 @@ class dQuery{
   static elements(Elements){
     if(Elements === null || typeof Elements !== 'object'){
       return []
-    } else if(Elements.constructor.name === 'Array'){
+    } else if(ConstructorName(Elements) === 'Array'){
       let MyElements = [];
       if(Elements.length){
         Elements.forEach(function(Element){
-          if(Element.constructor.name.substr(0,4) === 'HTML'){
+          if(ConstructorName(Element).substr(0,4) === 'HTML'){
             MyElements.push(Element);
           }
         });
       }
       return MyElements;
     } else if(typeof Elements === 'object' && Elements !== null) {
-      if(Elements.constructor.name === 'NodeList') {
+      if(ConstructorName(Elements) === 'NodeList') {
         return Elements;
-      } else if(Elements.constructor.name === 'HTMLCollection'){
+      } else if(ConstructorName(Elements) === 'HTMLCollection'){
         return ArrayProto.slice.call(Elements);
-      } else if(Elements.constructor.name.substr(0,4) === 'HTML'){
+      } else if(ConstructorName(Elements).substr(0,4) === 'HTML'){
         return [Elements];
       } else if(Elements instanceof dQuery){
         return Elements.Elements;
@@ -740,4 +743,5 @@ if(typeof module !== 'undefined'){
 
 // @Compiler-Include "Ajax.js"
 
+  window.ConstructorName = ConstructorName;
 })();
