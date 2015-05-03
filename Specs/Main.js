@@ -346,5 +346,17 @@ describe("dQuery", function() {
       expect($.isFunction(function(){})).toBe(true);
     });
   });
+  describe("data", function(){
+    it("reads data-* from elements", function(){
+      expect($("<div data-test='yes' />").data().test).toBe('yes');
+      expect($("<div data-test='yes' />").data('test')).toBe('yes');
+    });
+    it("works normally", function(){
+      expect($("<div />").data('yes', 'yes').data('yes')).toBe('yes');
+    });
+    it("works with objects", function(){
+      expect($("<div />").data('yes', {a:{b:1}}).data('yes').a.b).toBe(1);
+    });
+  });
 });
 });

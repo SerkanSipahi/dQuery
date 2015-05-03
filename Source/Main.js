@@ -308,6 +308,24 @@ class dQuery{
       this.Elements[0].focus();
     return this;
   }
+  data(Key, Value){
+    if(typeof Value === 'undefined'){
+      let Element = this.Elements[0];
+      if(typeof Key !== 'undefined'){
+        if(!this.length) return {};
+        return (Element.dataset && Element.dataset[Key]) || (Element.__data && Element.__data[Key])
+      } else {
+        if(!this.length) return false;
+        return $.extend({}, this.Elements[0].dataset, this.Elements[0].__data);
+      }
+    } else {
+      this.forEach(function(Element){
+        Element.__data = Element.__data || {};
+        Element.__data[Key] = Value;
+      });
+      return this;
+    }
+  }
   attr(Key, Value){
     if(typeof Value === 'undefined'){
       return this.length && this.Elements[0].getAttribute(Key);
