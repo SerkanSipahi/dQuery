@@ -4,6 +4,8 @@
 // @Compiler-Transpile "true"
 // @Compiler-Output "../Dist/Main.js"
 
+(function(){
+
 let ArrayProto = Array.prototype;
 let Regex = {
   ID: /^#\w+$/,
@@ -737,3 +739,5 @@ if(typeof module !== 'undefined'){
 }
 
 // @Compiler-Include "Ajax.js"
+
+})();
