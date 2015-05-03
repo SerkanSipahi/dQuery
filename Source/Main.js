@@ -8,8 +8,12 @@
 
 let ArrayProto = Array.prototype;
 let ConstructorName = function(Obj){
-  return Obj.constructor.name || (Obj.constructor.name = Obj.constructor.toString().split(/function (.*?)\(\)/)[1] || '');
+  return Obj.constructor.name || Obj.constructor.toString().split(/function (.*?)\(\)/)[1] || '';
 };
+let Matches = function(el, selector){
+  return (el.matches || el.matchesSelector || el.msMatchesSelector || el.mozMatchesSelector || el.webkitMatchesSelector || el.oMatchesSelector).call(el, selector);
+
+}
 let Regex = {
   ID: /^#\w+$/,
   Class: /^\.\w+$/,
@@ -40,7 +44,7 @@ class dQuery{
         Arg4 = Arg4 || Arg3;
         let Selector = Arg2;
         Arg2 = function(e){
-          if(e.target.matches(Selector) || $(e.target).hasParent(Selector)){
+          if(Matches(e.target, Selector) || $(e.target).hasParent(Selector)){
             Arg3.call(this, e);
           }
         };
@@ -196,11 +200,11 @@ class dQuery{
   closest(Selector){
     if(this.length){
       let Element = this.Elements[0];
-      if(Element.matches(Selector)) return new dQuery(Element);
+      if(Matches(Element, Selector)) return new dQuery(Element);
       while(Element = Element.parentNode) {
         if (ConstructorName(Element) === 'HTMLDocument'){
           return new dQuery();
-        } else if(!Selector.length || Element.matches(Selector)){
+        } else if(!Selector.length || Matches(Element, Selector)){
           return new dQuery(Element);
         } else {
           let Child = Element.querySelector(Selector);
@@ -222,7 +226,7 @@ class dQuery{
   }
   // DOM Validation
   matches(Selector){
-    return this.length && this.Elements[0].matches(Selector);
+    return this.length && Matches(this.Elements[0], Selector);
   }
   hasParent(Selector){
     if(!this.length) return false;
@@ -230,7 +234,7 @@ class dQuery{
     while(Element = Element.parentNode) {
       if (ConstructorName(Element) === 'HTMLDocument'){
         return false;
-      } else if(!Selector.length || Element.matches(Selector)){
+      } else if(!Selector.length || Matches(Element, Selector)){
         return true;
       }
     }
@@ -302,7 +306,7 @@ class dQuery{
     while(Element = Element.parentNode) {
       if (ConstructorName(Element) === 'HTMLDocument'){
         break ;
-      } else if(!Selector.length || Element.matches(Selector)){
+      } else if(!Selector.length || Matches(Element, Selector)){
         return new dQuery(Element);
       }
     }
@@ -366,7 +370,7 @@ class dQuery{
     while(Element = Element.parentNode){
       if(ConstructorName(Element) === 'HTMLDocument'){
         break ;
-      } else if(!Selector.length || Element.matches(Selector)) {
+      } else if(!Selector.length || Matches(Element, Selector)) {
         Elements.push(Element);
       }
     }
@@ -377,7 +381,7 @@ class dQuery{
     let Elements = [];
     let Element = this.Elements[0];
     while(Element = Element.parentNode){
-      if(ConstructorName(Element) === 'HTMLDocument' || !Selector.length || Element.matches(Selector)){
+      if(ConstructorName(Element) === 'HTMLDocument' || !Selector.length || Matches(Element, Selector)){
         break;
       } else {
         Elements.push(Element);
