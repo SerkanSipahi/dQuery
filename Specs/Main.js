@@ -358,5 +358,17 @@ describe("dQuery", function() {
       expect($("<div />").data('yes', {a:{b:1}}).data('yes').a.b).toBe(1);
     });
   });
+  describe("$.each", function(){
+    it("works", function(){
+      $.each({a: 1}, function(key, value){
+        expect(key).toBe('a');
+        expect(value).toBe(1);
+      });
+      $.each(['1'], function(key, value){
+        expect(key).toBe(0);
+        expect(value).toBe('1');
+      });
+    });
+  });
 });
 });

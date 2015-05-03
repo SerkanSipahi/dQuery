@@ -687,6 +687,22 @@ class dQuery{
   static isFunction(func){
     return typeof func === 'function';
   }
+  static each(Item, Callback){
+    if(Item instanceof dQuery){
+      Item = Item.Elements;
+    }
+    if(typeof Item.length !== 'undefined'){
+      ArrayProto.forEach.call(Item, function(Value, Key){
+        Callback.call(Value, Key, Value, Item);
+      });
+    } else {
+      for(var i in Item){
+        if(Item.hasOwnProperty(i)){
+          Callback.call(Item[i], i, Item[i], Item);
+        }
+      }
+    }
+  }
 }
 
 dQuery.fn = dQuery.prototype;
