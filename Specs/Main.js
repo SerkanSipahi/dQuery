@@ -183,7 +183,7 @@ describe("dQuery", function() {
       expect( $("<div><div></div><div></div></div>").children().length ).toBe(2);
     });
     it("accepts a selector as a parameter", function(){
-      expect( $("<div><div></div><custom-element></custom-element></div>").children('custom-element').length ).toBe(1);
+      expect( $("<div><div></div><div class='hey'></div></div>").children('.hey').length ).toBe(1);
     });
   });
   describe("forEach", function(){
