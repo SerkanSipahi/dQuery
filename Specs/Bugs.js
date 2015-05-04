@@ -30,6 +30,9 @@ document.addEventListener('DOMContentLoaded', function() {
         </div>`
       ).find('.first').closest('input').length).toBe(1);
     });
+    it("retains the object type in $.extend #39", function(){
+      expect($.extend({}, {a:['a']}, {a:['b']}).a.length).toBe(2);
+    });
   });
 
 });
