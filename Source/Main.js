@@ -289,14 +289,12 @@ class dQuery{
     return this.length && this.Elements[0].classList.contains(Name);
   }
   remove(){
-    let ToReturn = [];
     this.forEach(function(Element){
       try {
-        ToReturn.push(Element);
         Element.parentNode.removeChild(Element);
       } catch(err){}
     });
-    return ToReturn;
+    return this;
   }
   parent(Selector){
     if(!this.length) return this;
@@ -720,7 +718,8 @@ class dQuery{
 
 dQuery.fn = dQuery.prototype;
 dQuery.fn.jquery = '2.1.3';
-dQuery.fn.one = dQuery.fn.once;                 // addListener          ---> on
+dQuery.fn.detach = dQuery.fn.remove;            // detch                ---> remove
+dQuery.fn.one = dQuery.fn.once;                 // once                 ---> once
 dQuery.fn.addListener = dQuery.fn.on;           // addListener          ---> on
 dQuery.fn.addEventListener = dQuery.fn.on;      // addEventListener     ---> on
 dQuery.fn.removeListener = dQuery.fn.off;       // removeListener       ---> off
