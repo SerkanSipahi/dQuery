@@ -652,8 +652,12 @@ class dQuery{
       for (var key in obj) {
         if (obj.hasOwnProperty(key)) {
           if (typeof obj[key] === 'object' && obj[key] !== null){
-            out[key] = typeof out[key] === 'object' ? out[key] : {};
-            $dQuery.extend(out[key], obj[key]);
+            out[key] = typeof out[key] === 'object' && out[key] !== null && ConstructorName(out[key]) === ConstructorName(obj[key]) ? out[key] : obj[key].constructor();
+            if(ConstructorName(out[key]) === 'Array'){
+              out[key] = out[key].concat(obj[key]);
+            } else {
+              dQuery.extend(out[key], obj[key]);
+            }
           } else out[key] = obj[key];
         }
       }
